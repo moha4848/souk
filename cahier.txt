@@ -1,0 +1,164 @@
+﻿CAHIER DES CHARGES
+SOUK
+✦
+Plateforme SaaS E-Commerce Multi-Tenant
+Projet de Synthese - 2025
+Encadrante: Professeure Amira
+SOMMAIRE
+(Clic droit sur la table et selectionner "Mettre a jour les champs" pour actualiser)
+1. PRESENTATION GENERALE
+3
+1.1 Contexte
+3
+1.2 Objet du document
+3
+1.3 Equipe projet
+3
+1.4 Stack technique
+4
+2. OBJECTIFS DU PROJET
+5
+3. FONCTIONNALITES DETAILLEES
+6
+3.1 Module Client
+6
+3.2 Module Administrateur
+7
+4. SPECIFICATIONS TECHNIQUES
+8
+4.1 Architecture
+8
+4.2 Base de donnees
+8
+4.3 Securite
+9
+5. ORGANISATION ET PLANNING
+10
+6. ESTIMATION DES COUTS
+11
+7. EXCLUSIONS
+12
+8. SIGNATURES
+13
+1. PRESENTATION GENERALE
+1.1 Contexte
+Dans une ere de forte numerisation du commerce, de nombreux artisans et createurs marocains peinent a se faire une place en ligne en raison des barrieres techniques et des couts lies a la creation d'un site web. Le projet SOUK a ete imagine pour pallier ce probleme. SOUK est une plateforme SaaS (Software as a Service) Multi-tenant (comme Shopify ou YouCan) qui permet a n'importe quel commercant de creer, gerer et propulser sa propre boutique e-commerce instantanement.
+1.2 Objet du document
+Ce document constitue le cahier des charges officiel regissant la conception technique et fonctionnelle du projet SOUK. Il sert de contrat de developpement definissant les specifications a respecter, les technologies a utiliser ainsi que l'horizon de livraison du Minimum Viable Product (MVP).
+1.3 Equipe projet
+Developpeur(s) principal(aux)
+: Conception UI, Integration React, et Developpement de l'API Laravel.
+Encadrant(e) pedagogique
+: Professeure Amira (Validation et suivi academique).
+1.4 Stack technique
+Afin d'assurer une experience luxueuse, rapide et evolutive, le projet repose sur des technologies de pointe :
+Frontend
+: React.js via Vite, React Router DOM, sans librairie CSS lourde (le styling est fait en natif JS Vanilla CSS).
+Backend
+: API REST sous le framework Laravel 11.
+Base de donnees
+: Relationnelle MySQL de haute disponibilite.
+Authentification
+: Gestion par Tokens JWT via Laravel Sanctum.
+2. OBJECTIFS DU PROJET
+Creer une identite Premium
+: Contrairement aux plateformes e-commerce generiques, SOUK doit degager une identite visuelle "Maroc de luxe" (couleurs Gold, Copper, Zellige subtil, typographies soignees).
+Zero barriere technologique
+: Permettre l'onboarding d'un vendeur (Creation de boutique, personnalisation, premier produit publie) en moins de 2 minutes.
+Architecture SaaS robuste
+: L'URL de chaque vendeur (/store/{slug}) doit isoler ses propres donnees et produits pour eviter de melanger son panier ou son catalogue avec le reste des marchands SOUK.
+3. FONCTIONNALITES DETAILLEES
+3.1 Module Client (Acheteur & Marketplace)
+Marketplace (Accueil)
+: Moteur de recherche global pour decouvrir tous les produits des vendeurs SOUK.
+Espace Client Acheteur
+: Les clients peuvent se creer un profil unique valable sur toute la plateforme.
+Systeme de Fidelite (Cadeaux)
+: Chaque achat genere des points cumulables dans l'espace client.
+Visualisation des Promotions
+: Affichage clair des prix barres et des badges "PROMO" sur les articles concernes.
+Stores Personnalises
+: Visiter les URL /store/nom-du-vendeur en beneficiant de filtres par categories locaux.
+Gestion du Panier (CartContext)
+: Le panier reste persistant localement via le localStorage.
+Checkout & Smart Fill
+: Processus de paiement avec pre-remplissage et calcul des points cadeaux.
+3.2 Module Administrateur (Vendeur SaaS)
+Gestion des Forfaits (Business Model) :
+Forfait
+Limites
+Commission
+Gratuit
+9 produits max
+5%
+Pro
+Jusqu'a 50 produits
+2%
+Premium
+Illimite
+0%
+Tableau 1 : Forfaits disponibles pour les vendeurs
+Espace Dashboard Prive
+: Presente les statistiques du store et le suivi de la commission SOUK.
+Gestion d'Inventaire & Promos
+: Possibilite d'activer des prix promotionnels sur chaque produit.
+Gestion des Commandes entrantes
+: Interface de suivi des statuts (Nouvelle, Traitee, Expediee).
+4. SPECIFICATIONS TECHNIQUES
+4.1 Architecture
+Architecture en micro-services logiques : une API Backend (Headless) pure et une Application Page Unique (SPA) sous Vite/React pour la partie cliente. La gestion Multi-tenant s'appuie sur le parametre dynamique du "slug" dans les URLs API (/api/{slug}/products).
+4.2 Base de donnees
+Structuration
+: Relationnelle en base de donnees MySQL.
+Tables maitresses
+: Users (Vendeurs), Stores, Products, Orders, et un repertoire Clients (Acheteurs globaux).
+Isolement des donnees
+: La relation store_id devient la cle etrangere omni-presente pour garantir l'isolement "Tenants".
+4.3 Securite
+Authentification Dual-JWT
+: Utilisation de tokens isoles (l'un d'eux souk_token pour le vendeur, et souk_client_token pour l'acheteur global).
+Protection CSRF/CORS
+: Le Backend autorise uniquement le Frontend SOUK.
+5. ORGANISATION ET PLANNING (8 semaines)
+Le deroulement des travaux adopte une approche agile decoupee sur deux mois :
+Periode
+Activites
+Semaines 1-2
+Cadrage, redaction des documents et modelisation de la base de donnees
+Semaines 3-4
+Maquettage Figma / UI React (Design system luxueux)
+Semaines 5-6
+Developpement Backend Laravel, Endpoints securises et integration
+Semaine 7
+Assemblage complet des flux (Checkout Multi-tenant, Onboarding) et tests intensifs
+Semaine 8
+Preparation a la soutenance, correction d'anomalies et hebergement MVP
+Tableau 2 : Planning de developpement sur 8 semaines
+6. ESTIMATION DES COUTS
+Afin d'estimer un deploiement grandeur nature (budget purement theorique) :
+Element
+Cout
+Frais serveur mutualises VPS PME
+180 MAD / mois
+Nom de domaine .ma
+~200 MAD / an
+Cout homme-jour (React/Laravel)
+0 MAD (Perimetre educatif)
+Tableau 3 : Estimation des couts de deploiement
+7. EXCLUSIONS (NON INCLUS)
+Le Minimum Viable Product presente lors du projet de synthese n'incorpore pas :
+Paiement reel
+: La connexion reelles en Production avec l'architecture CMI pour traiter les vraies cartes bancaires. Le "Paiement en Ligne" fonctionnera en simulation.
+Applications mobiles
+: Le developpement natif Flutter / React Native d'applications mobiles (Le site PWA etant cependant totalement fluide sur telephone).
+8. SIGNATURES
+Signature du Client / Promoteur
+Signature de l'Encadrant / Organisme
+Signature de l'Equipe Realisatrice
+Lu et approuve, le __/__/____
+Lu et approuve, le __/__/____
+Valide pour execution, le __/__/____
+SOUK
+✦
+L'artisanat marocain, en ligne.
+© 2025 - Projet de Synthese

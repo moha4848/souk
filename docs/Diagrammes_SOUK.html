@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOUK ✦ Modélisation Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #c9a84c;
+            --primary-light: #dfc17b;
+            --primary-dark: #a68a3d;
+            --bg: #0b0f1a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(201, 168, 76, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(to bottom, rgba(11, 15, 26, 0.8), var(--bg));
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(to right, #fff, var(--primary), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: -60px auto 100px;
+            padding: 0 20px;
+        }
+
+        .print-nav {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .btn-print {
+            background: var(--primary);
+            color: #000;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(201, 168, 76, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .btn-print:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(201, 168, 76, 0.5);
+            background: var(--primary-light);
+        }
+
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .diagram-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 50px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .diagram-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .card-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            opacity: 0.05;
+            position: absolute;
+            right: 30px;
+            top: 10px;
+            pointer-events: none;
+        }
+
+        .mermaid-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .badge {
+            background: rgba(201, 168, 76, 0.1);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1px solid rgba(201, 168, 76, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+        }
+
+        @media print {
+            body { background: white !important; color: black !important; }
+            .hero, .print-nav, .badge, .number { display: none !important; }
+            .container { margin: 0 !important; width: 100% !important; max-width: none !important; }
+            .diagram-card { 
+                box-shadow: none !important; 
+                border: 2px solid #eee !important; 
+                margin-bottom: 40px !important; 
+                page-break-inside: avoid !important;
+                background: white !important;
+            }
+            .diagram-card h2 { color: black !important; border-bottom: 2px solid var(--primary) !important; padding-bottom: 10px; }
+            .mermaid-container { background: white !important; border: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="badge">Architecture & Modélisation Logique</div>
+        <h1>SOUK ✦ Design Système</h1>
+        <p>Une modélisation rigoureuse reflétant la logique métier réelle du projet : Multi-tenancy SaaS, IA intégrée et Gouvernance RBAC.</p>
+    </section>
+
+    <div class="container">
+        <nav class="print-nav">
+            <button class="btn-print" onclick="window.print()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                Exporter en PDF PRO
+            </button>
+        </nav>
+
+        <div class="diagram-grid">
+            
+            <!-- 1. Use Case Corrected -->
+            <div class="diagram-card">
+                <div class="number">01</div>
+                <div class="card-header">
+                    <h2>Cas d'Utilisation (Logique Métier)</h2>
+                    <span class="badge">UML Use Case</span>
+                </div>
+                <div class="mermaid-container">
+                    <div class="mermaid">
+                    flowchart TD
+                        subgraph SOUK_System [Plateforme SOUK ✦]
+                            direction TB
+                            UC1(Configurer Boutique via IA)
+                            UC2(Gérer Inventaire & SaaS)
+                            UC3(Recherche & Navigation IA)
+                            UC4(Passer & Traiter Commandes)
+                            UC5(Modération des Boutiques)
+                            UC6(Gestion RBAC & Équipes)
+                            UC7(Suivi Financier & Abonnements)
+                        end
+
+                        Admin((SuperAdmin))
+                        Staff((Équipe Interne))
+                        Vendor((Vendeur SaaS))
+                        Customer((Client Final))
+
+                        Admin --> UC6
+                        Admin --> UC5
+                        Staff --> UC5
+                        Staff --> UC7
+                        
+                        Vendor --> UC1
+                        Vendor --> UC2
+                        Vendor --> UC4
+                        
+                        Customer --> UC3
+                        Customer --> UC4
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Classes Corrected -->
+            <div class="diagram-card">
+                <div class="number">02</div>
+                <div class="card-header">
+                    <h2>Diagramme de Classes (Structure)</h2>
+                    <span class="badge">UML Class</span>
+                </div>
+                <div class="mermaid-container">
+                    <div class="mermaid">
+                    classDiagram
+                        class User { +Int id +String role +Boolean is_super_admin +hasPermission() }
+                        class Store { +Int id +String slug +json design_config +applyTenantScope() }
+                        class Product { +String name +Float price +Integer stock }
+                        class Team { +String name +String service }
+                        class Order { +String status +Float total +calculateCommission() }
+
+                        User "1" -- "1" Store : possède (Vendor)
+                        User "1" -- "*" Order : passe (Client)
+                        User "*" -- "*" Team : appartient à
+                        Store "1" -- "*" Product : gère
+                        Store "1" -- "*" Order : reçoit
+                        Order "1" -- "*" OrderItem : contient
+                        Product "1" -- "*" OrderItem : référencé
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Sequence Logic -->
+            <div class="diagram-card">
+                <div class="number">03</div>
+                <div class="card-header">
+                    <h2>Séquence : Isolation des Données</h2>
+                    <span class="badge">Multi-tenancy Flow</span>
+                </div>
+                <div class="mermaid-container">
+                    <div class="mermaid">
+                    sequenceDiagram
+                        participant U as Vendeur
+                        participant R as React Frontend
+                        participant M as JWT/Tenant Middleware
+                        participant C as Controller (Laravel)
+                        participant DB as MySQL Database
+
+                        U->>R: Demande liste produits
+                        R->>M: GET /api/products (Auth Token)
+                        M->>M: Extraire StoreContext
+                        M->>C: Passer Contexte Store
+                        C->>DB: Query with Global Scope (store_id)
+                        DB-->>C: Résultats filtrés (Isolés)
+                        C-->>R: JSON Response
+                        R-->>U: Affichage des données propres
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. ERD Corrected -->
+            <div class="diagram-card">
+                <div class="number">04</div>
+                <div class="card-header">
+                    <h2>Modèle de Données (ERD)</h2>
+                    <span class="badge">Database Logic</span>
+                </div>
+                <div class="mermaid-container">
+                    <div class="mermaid">
+                    erDiagram
+                        USERS ||--|| STORES : "gère (Vendor)"
+                        USERS ||--o{ ORDERS : "passe (Client)"
+                        STORES ||--o{ PRODUCTS : "possède"
+                        STORES ||--o{ ORDERS : "reçoit"
+                        ORDERS ||--|{ ORDER_ITEMS : "contient"
+                        PRODUCTS ||--o{ ORDER_ITEMS : "détaille"
+                        TEAMS ||--o{ TEAM_MEMBERSHIPS : "contient"
+                        USERS ||--o{ TEAM_MEMBERSHIPS : "membre"
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Architecture Logic -->
+            <div class="diagram-card">
+                <div class="number">05</div>
+                <div class="card-header">
+                    <h2>Architecture & Flux de Données</h2>
+                    <span class="badge">System Logic</span>
+                </div>
+                <div class="mermaid-container">
+                    <div class="mermaid">
+                    graph TD
+                        Client[Frontend React] --> |Request + JWT| Mid[Middlewares JWT/Tenant]
+                        Mid --> |Context Validé| API[Laravel Controllers]
+                        API --> |Eloquent Scoped| ORM[Models / ORM]
+                        ORM <--> |SQL| DB[(MySQL Database)]
+                        API <--> |JSON Prompt| AI[AI Engines Gemini/OpenAI]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. WBS Logic -->
+            <div class="diagram-card">
+                <div class="number">06</div>
+                <div class="card-header">
+                    <h2>Structure des Tâches (WBS)</h2>
+                    <span class="badge">Project Management</span>
+                </div>
+                <div class="mermaid-container">
+                    <div class="mermaid">
+                    mindmap
+                      root((Projet SOUK))
+                        Analyse
+                          Cahier PRO
+                          Modélisation UML
+                        Backend
+                          Core Multi-tenant
+                          Moteur RBAC
+                          Integration IA
+                        Frontend
+                          Dashboard Vendeur
+                          Marketplace
+                          Live Customizer
+                        Validation
+                          Tests Unitaires
+                          Déploiement
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 SOUK ✦ Architecture Marketplace. Conception Logique Intégrée.</p>
+    </footer>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#c9a84c',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#c9a84c',
+                lineColor: '#c9a84c',
+                secondaryColor: '#1e293b',
+                tertiaryColor: '#0b0f1a',
+                fontFamily: 'Plus Jakarta Sans'
+            }
+        });
+    </script>
+</body>
+</html>

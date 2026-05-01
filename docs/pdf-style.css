@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #1a202c;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #fff;
+}
+
+h1, h2, h3 {
+    color: #2d3748;
+    margin-top: 2rem;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 0.5rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    color: #4a5568;
+    border-bottom: none;
+    margin-bottom: 3rem;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    margin: 1rem auto;
+}
+
+blockquote {
+    border-left: 4px solid #667eea;
+    padding-left: 1rem;
+    font-style: italic;
+    color: #4a5568;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+}
+
+th, td {
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+th {
+    background-color: #f8fafc;
+    font-weight: 600;
+}
+
+.mermaid {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #e2e8f0;
+    margin: 3rem 0;
+}
+
+@media print {
+    body {
+        padding: 0;
+    }
+    h1, h2 {
+        page-break-before: always;
+    }
+    h1:first-child {
+        page-break-before: avoid;
+    }
+}

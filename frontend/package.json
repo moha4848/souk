@@ -1,0 +1,35 @@
+{
+  "name": "souk-frontend",
+  "version": "1.0.0",
+  "description": "Souk - Gestion boutique en ligne",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "axios": "^1.7.2",
+    "chart.js": "^4.5.1",
+    "i18next": "^26.0.8",
+    "i18next-browser-languagedetector": "^8.2.1",
+    "lucide-react": "^1.14.0",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^17.0.6",
+    "react-router-dom": "^6.23.1",
+    "recharts": "^2.12.7",
+    "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.9",
+    "tailwindcss": "^4.2.2",
+    "vite": "^5.2.13"
+  }
+}

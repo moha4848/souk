@@ -1,0 +1,12 @@
+flowchart TD
+    subgraph Marketplace_SOUK
+        direction TB
+        UC1(Gérer Boutique via IA)
+        UC2(Gérer Inventaire & SaaS)
+        UC3(Achat & Chat Client)
+        UC4(Modération & Audit Staff)
+    end
+    Admin((SuperAdmin)) --> UC4
+    Vendor((Vendeur)) --> UC1
+    Vendor --> UC2
+    Customer((Client)) --> UC3

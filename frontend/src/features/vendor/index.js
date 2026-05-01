@@ -1,0 +1,15 @@
+export { default as AIStoreCreator } from '../../pages/vendor/AIStoreCreator';
+export { default as Analytics } from '../../pages/vendor/Analytics';
+export { default as CustomizationBuilder } from '../../pages/vendor/CustomizationBuilder';
+export { default as Dashboard } from '../../pages/vendor/Dashboard';
+export { default as LoginPage } from '../../pages/vendor/LoginPage';
+export { default as Onboarding } from '../../pages/vendor/Onboarding';
+export { default as OrderDetail } from '../../pages/vendor/OrderDetail';
+export { default as Orders } from '../../pages/vendor/Orders';
+export { default as ProductForm } from '../../pages/vendor/ProductForm';
+export { default as Products } from '../../pages/vendor/Products';
+export { default as ProductsGen } from '../../pages/vendor/ProductsGen';
+export { default as Profile } from '../../pages/vendor/Profile';
+export { default as RegisterPage } from '../../pages/vendor/RegisterPage';
+export { default as SellerDashboard } from '../../pages/vendor/SellerDashboard';
+export { default as SellerPanel } from '../../pages/vendor/SellerPanel';

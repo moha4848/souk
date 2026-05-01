@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cahier de Conception - SOUK</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f9fafb; }
+        .prose h1 { @apply text-4xl font-bold mb-8 text-center text-gray-800; }
+        .prose h2 { @apply text-2xl font-semibold mt-12 mb-4 pb-2 border-b-2 border-purple-100 text-gray-700; }
+        .prose h3 { @apply text-xl font-medium mt-8 mb-2 text-gray-600; }
+        .prose p { @apply mb-4 leading-relaxed text-gray-600; }
+        .prose ul { @apply list-disc pl-6 mb-4; }
+        .prose table { @apply w-full mb-8 border-collapse; }
+        .prose th { @apply bg-gray-50 text-left p-3 border border-gray-200 font-semibold; }
+        .prose td { @apply p-3 border border-gray-200; }
+        .prose hr { @apply my-12 border-gray-200; }
+        .mermaid { @apply flex justify-center my-8 bg-white p-6 rounded-xl shadow-sm; }
+        @media print {
+            .no-print { display: none; }
+            body { background: white; }
+            .prose h1, .prose h2 { page-break-before: always; }
+            .prose h1:first-child { page-break-before: avoid; }
+        }
+    </style>
+</head>
+<body class="p-8 md:p-16">
+    <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-3xl p-8 md:p-16 prose overflow-hidden" id="content">
+        <!-- Content will be injected here -->
+    </div>
+
+    <script>
+        const markdown = `
+# Cahier de Conception et d'Analyse - Projet SOUK ✦
+
+## SOMMAIRE
+1. Contexte du projet
+2. Acteurs et rôles
+3. Fonctionnalités détaillées
+4. Architecture technique
+5. Diagrammes UML
+    5.1 Diagramme de cas d'utilisation
+    5.2 Diagramme de classes
+    5.3 Diagramme d'activité - Processus commande
+    5.4 Diagramme PERT - Planning 8 semaines
+6. Modèle de base de données (ERD)
+7. Composants React principaux
+8. Contraintes techniques et sécurité
+9. Tableau de bord projet
+    9.1 Informations générales
+    9.2 Suivi budgétaire
+    9.3 Planning de suivi
+10. Livrables attendus
+11. Exclusions (non inclus)
+12. Signatures
+
+---
+
+## 1. Contexte du projet
+Le projet **SOUK ✦** est une plateforme révolutionnaire de commerce électronique centralisée (**Marketplace**) combinée à une solution **SaaS Multi-tenant**. Elle a été conçue pour répondre aux défis de la digitalisation de l'artisanat et du commerce de proximité au Maroc.
+
+**SOUK ✦** permet à tout artisan, créateur ou commerçant de générer instantanément sa propre boutique en ligne personnalisée via une URL unique (ex: \`souk.ma/store/artisan-atlas\`), sans aucune connaissance technique préalable. En intégrant l'Intelligence Artificielle au cœur de l'onboarding, la plateforme offre des outils d'une simplicité et d'un luxe inégalés, permettant aux vendeurs de se concentrer sur leur métier tout en bénéficiant d'une présence digitale d'élite.
+
+---
+
+## 2. Acteurs et rôles
+Le système repose sur une structure tripartie sophistiquée, garantissant une séparation claire des responsabilités et une sécurité maximale.
+
+### 2.1 Équipe Interne (SOUK Staff)
+L'administration est divisée en départements opérationnels avec un système de **Role-Based Access Control (RBAC)** granulaire :
+*   👑 **SuperAdmin** : Détenteur des pleins pouvoirs. Supervise les équipes, configure les paramètres globaux du SaaS, gère les rôles/permissions et accède aux logs d'audit.
+*   🛡️ **Équipe Modération** : Filtre et valide les nouvelles boutiques. Responsable de la qualité du contenu et de la suspension des comptes non conformes.
+*   💰 **Équipe Finance** : Gère les flux monétaires, valide les abonnements aux forfaits (Gratuit, Pro, Premium), supervise les commissions et les paiements vendeurs.
+*   🚚 **Équipe Livraison / Logistique** : Supervise le statut des expéditions, gère les zones de livraison et coordonne les partenaires de transport locaux.
+*   🛠️ **Équipe Système / Support** : Assure la maintenance technique, le support utilisateur et la configuration des infrastructures.
+
+### 2.2 Vendeurs (Tenants)
+*   🏪 **Vendeur (SaaS User)** : Entrepreneur gérant son espace de vente. Il dispose d'un tableau de bord complet pour piloter son inventaire, ses commandes, son design de boutique et ses analytics. Il peut exploiter l'IA pour générer ses fiches produits et son identité visuelle.
+
+### 2.3 Clients (Acheteurs)
+*   👤 **Client Final** : Utilisateur de la marketplace. Il bénéficie d'une expérience d'achat fluide, suit ses boutiques favorites, gagne des points de fidélité et interagit directement avec les vendeurs via le chat intégré.
+
+---
+
+## 3. Fonctionnalités détaillées
+La plateforme SOUK ✦ se distingue par un ensemble de fonctionnalités innovantes réparties en piliers stratégiques.
+
+### 3.1. Intelligence Artificielle (AI Suite)
+*   ✨ **AI Store Creator** : Génération automatique de l'identité de marque (Logo, bannières, palettes de couleurs, slogans) basée sur une simple description de projet.
+*   📝 **AI Product Optimizer** : Création assistée de fiches produits SEO-friendly avec génération de titres accrocheurs et de descriptions "Storytelling".
+*   🔍 **Smart Search Engine** : Moteur de recherche sémantique utilisant le Traitement du Langage Naturel (NLP) pour comprendre l'intention réelle de l'acheteur.
+
+### 3.2. Architecture SaaS & Multi-tenancy
+*   🏗️ **Isolation Totale des Données** : Utilisation du \`TenantScope\` pour garantir qu'un vendeur ne voit jamais les données d'un concurrent.
+*   🎨 **Customization Engine** : Éditeur de thème en temps réel (Live Preview) permettant de modifier l'apparence de la boutique sans coder.
+*   📊 **Analytics Dashboard** : Rapports détaillés sur le trafic, les ventes, les produits les plus aimés et les performances globales.
+
+### 3.3. Commerce Social & Engagement
+*   💬 **Real-time Messaging** : Chat bidirectionnel avec support multimédia pour faciliter la négociation et le support client.
+*   🤝 **Social Hub** : Système de "Follow" pour les boutiques et "Like" pour les produits, favorisant la récurrence d'achat.
+*   🔔 **Omni-channel Notifications** : Alertes en temps réel (In-app, Email) pour les commandes, paiements et nouveaux messages.
+
+### 3.4. Gestion Administrative & Sécurité (RBAC)
+*   🏢 **Team Management** : Organisation du staff par équipes avec supervision hiérarchique par les SuperAdmins.
+*   🔑 **Permission-based Security** : Chaque action sensible (ex: valider un remboursement) est soumise à une permission spécifique.
+*   📑 **Audit Trail** : Journalisation exhaustive de toutes les actions administratives pour garantir la traçabilité.
+
+### 3.5. Expérience Client Premium
+*   🛒 **Smart Checkout** : Tunnel d'achat optimisé avec gestion des points de fidélité et calcul dynamique des frais de livraison.
+*   💎 **Loyalty Program** : Système de points accumulables à chaque achat, convertibles en remises immédiates.
+*   🚀 **Affiliate Engine** : Permet aux clients de devenir ambassadeurs et de gagner des commissions sur les ventes générées par leurs liens de partage.
+
+
+## 4. Architecture technique
+La solution SOUK repose sur une architecture moderne, découplée et hautement sécurisée.
+
+### 4.1. Stack Technologique
+* **Frontend** :
+  * **React 18** avec **Vite** pour un bundling ultra-rapide.
+  * **Context API** pour la gestion d'état globale (Auth, Panier, Admin).
+  * **Tailwind CSS** pour une interface responsive et moderne.
+* **Backend** :
+  * **Laravel 11 (PHP 8.2+)** : Framework robuste pour les API REST.
+  * **MySQL** : Base de données relationnelle pour la persistence des données.
+* **Services Tiers** :
+  * **OpenAI / Gemini API** : Pour les fonctionnalités de génération par IA.
+  * **JWT (Tymon/jwt-auth)** : Sécurisation des échanges API via tokens.
+
+### 4.2. Sécurité et Contrôle d'Accès
+* **Authentification Multi-Rôle** : Gestion séparée des types d'utilisateurs (Client, Vendeur, Admin Staff) via des gardes (guards) Laravel dédiés.
+* **Middleware \`CheckPermission\`** : Validation dynamique des droits d'accès basée sur les permissions stockées en base de données pour les équipes administratives.
+* **Isolation Multi-tenant (TenantScope)** : Utilisation de Scopes Eloquent pour garantir que chaque vendeur ne puisse accéder qu'à ses propres données (Produits, Commandes, Analytics).
+* **Validation des Données** : Utilisation systématique de \`FormRequest\` pour la sanitisation et la validation des entrées utilisateur.
+
+
+## 5. Diagrammes UML
+Les diagrammes suivants modélisent la logique métier et le fonctionnement systémique de SOUK ✦.
+
+### 5.1 Diagramme de cas d'utilisation
+<pre class="mermaid">
+flowchart TD
+    subgraph Clients_Acheteurs [Espace Client]
+        C((Client)) --> UC_Shop(Parcourir Marketplace)
+        C --> UC_Cart(Gérer Panier & Checkout)
+        C --> UC_Points(Consulter Fidélité)
+        C --> UC_Chat(Contacter Vendeur)
+    end
+
+    subgraph Vendeurs_SaaS [Espace Vendeur]
+        V((Vendeur)) --> UV_AI(Générer Boutique via IA)
+        V --> UV_Stock(Gérer Inventaire & Prix)
+        V --> UV_Order(Traiter Commandes)
+        V --> UV_Design(Live Customization)
+    end
+
+    subgraph Administration_SOUK [Backoffice Staff]
+        A((Staff)) --> UA_Mod(Modérer Boutiques)
+        A --> UA_Fin(Valider Abonnements)
+        A --> UA_Liv(Suivi Livraison)
+        A --> UA_RBAC(Gérer Permissions)
+        A --> UA_Logs(Audit Système)
+    end
+</pre>
+
+### 5.2 Diagramme de classes (Core)
+<pre class="mermaid">
+classDiagram
+    class User {
+        +String name
+        +String email
+        +String role
+        +String store_slug
+        +Boolean is_super_admin
+        +login()
+        +hasPermission(perm)
+    }
+    class Product {
+        +String name
+        +Float price
+        +Integer stock
+        +Boolean is_digital
+        +applyTenantScope()
+    }
+    class Order {
+        +String status
+        +Float total
+        +calculateCommission()
+    }
+    class Team {
+        +String name
+        +String service
+    }
+    class Permission {
+        +String name
+        +String service
+    }
+
+    User "1" *-- "many" Product : owns
+    User "1" *-- "many" Order : places
+    User "many" .. "many" Team : belongs to
+    Team "1" *-- "many" Permission : grants
+    Product "1" -- "many" OrderItem : part of
+    Order "1" *-- "many" OrderItem : contains
+</pre>
+
+### 5.3 Diagramme d'activité - Workflow Commande
+<pre class="mermaid">
+stateDiagram-v2
+    [*] --> Panier : Ajout Produit
+    Panier --> Authentification : Checkout
+    Authentification --> Adresse_Livraison : Login/Register
+    Adresse_Livraison --> Calcul_Frais : Validation
+    Calcul_Frais --> Paiement_Mock : Confirmation
+    Paiement_Mock --> Succès : Simulation OK
+    Succès --> Notification_Vendeur : Update DB
+    Notification_Vendeur --> [*] : Redirection Dashboard
+</pre>
+
+### 5.4 Diagramme PERT - Planning (8 Semaines)
+<pre class="mermaid">
+gantt
+    title Planning de Développement SOUK ✦
+    dateFormat  YYYY-MM-DD
+    section Analyse & Design
+    CDC & Spécifications :2026-04-01, 7d
+    Maquettes UI/UX :2026-04-08, 7d
+    section Backend
+    Setup & DB :2026-04-01, 7d
+    API Core & Auth :2026-04-08, 14d
+    SaaS & RBAC :2026-04-22, 14d
+    section Frontend
+    Dashboard Vendeur :2026-04-08, 14d
+    Marketplace & Chat :2026-04-22, 14d
+    section Finalisation
+    Tests & QA :2026-05-06, 7d
+    Déploiement :2026-05-13, 7d
+</pre>
+
+## 6. Modèle de base de données (ERD)
+Schéma relationnel optimisé pour le multi-tenant et le RBAC.
+
+<pre class="mermaid">
+erDiagram
+    USERS ||--o{ PRODUCTS : "owns"
+    USERS ||--o{ ORDERS : "buys"
+    USERS ||--o{ SUBSCRIPTIONS : "subscribes"
+    USERS ||--o{ TEAM_MEMBERSHIPS : "belongs to"
+    
+    TEAMS ||--o{ TEAM_MEMBERSHIPS : "contains"
+    TEAMS ||--o{ ROLES : "defines"
+    ROLES ||--o{ ROLE_PERMISSIONS : "grants"
+    PERMISSIONS ||--o{ ROLE_PERMISSIONS : "linked to"
+    
+    PRODUCTS ||--o{ ORDER_ITEMS : "included in"
+    ORDERS ||--o{ ORDER_ITEMS : "details"
+    
+    USERS {
+        int id PK
+        string role "admin|vendor|client"
+        string store_slug
+        int loyalty_points
+    }
+    PRODUCTS {
+        int id PK
+        int user_id FK
+        string name
+        float price
+        boolean is_digital
+    }
+    TEAMS {
+        int id PK
+        string name
+        string service "moderation|finance|marketing|delivery"
+    }
+</pre>
+
+## 7. Architecture React & Composants
+Le frontend est segmenté en trois écosystèmes distincts partageant un design system commun.
+
+### 7.1. Dashboard Administratif (Staff)
+*   **AuditLogs.jsx** : Visualisation des actions système en temps réel.
+*   **ModerationQueue.jsx** : Interface de validation des boutiques (Tinder-like).
+*   **FinanceReview.jsx** : Gestion des commissions et abonnements.
+*   **DeliveryFleet.jsx** : Suivi des expéditions et logistique (Staff).
+*   **RbacManagement.jsx** : Attribution des permissions aux équipes.
+
+### 7.2. Dashboard Vendeur (SaaS)
+*   **AIStoreCreator.jsx** : Assistant de création de boutique par IA.
+*   **CustomizationBuilder.jsx** : Éditeur de thème en direct.
+*   **ProductsGen.jsx** : Générateur de fiches produits par IA.
+*   **Analytics.jsx** : Tableaux de bord de performance commerciale.
+
+### 7.3. Marketplace & Espace Client
+*   **GlobalFeed.jsx** : Fil d'actualité social des boutiques.
+*   **SmartCheckoutFlow.jsx** : Tunnel d'achat intelligent avec fidélité.
+*   **ChatPage.jsx** : Interface de messagerie temps réel.
+*   **StoreFront.jsx** : Vitrine dynamique du vendeur.
+
+
+## 8. Contraintes techniques et sécurité
+Le projet SOUK ✦ impose des normes strictes pour garantir l'intégrité des transactions et la confidentialité des données multi-tenants.
+
+### 8.1. Sécurité de l'Authentification (JWT)
+*   🛡️ **Multi-Guard Strategy** : Utilisation de gardes Laravel distincts pour \`staff\`, \`vendors\`, et \`clients\`. Chaque type d'utilisateur possède un espace de token isolé.
+*   🔑 **RBAC Dynamique** : Les permissions ne sont pas "hard-coded" mais vérifiées dynamiquement via le middleware \`CheckPermission\` qui interroge la relation \`Team -> Role -> Permission\`.
+*   🔒 **Password Hashing** : Utilisation de l'algorithme Argon2id (via Laravel Bcrypt/Hash) pour une résistance maximale aux attaques par force brute.
+
+### 8.2. Isolation Multi-tenant (Data Privacy)
+*   🏗️ **Global Scoping** : Application systématique du \`TenantScope\` au niveau des modèles Eloquent. Toute requête \`Product::all()\` est automatiquement filtrée par le \`user_id\` du vendeur connecté.
+*   📂 **Media Isolation** : Les fichiers (logos, images produits) sont stockés dans des répertoires structurés par tenant (\`storage/app/public/tenants/{tenant_id}/...\`).
+
+### 8.3. Intégration IA & Performance
+*   🤖 **Rate Limiting** : Limitation des appels aux API OpenAI/Gemini pour maîtriser les coûts et éviter les abus.
+*   ⚡ **Vite Optimization** : Utilisation du code-splitting et du lazy loading pour garantir un temps de chargement inférieur à 2 secondes sur les dashboards.
+
+---
+
+## 9. Tableau de bord projet
+
+### 9.1 Informations générales
+*   **Sujet** : SaaS Marketplace Multi-tenant (Synthèse Ingénierie Fullstack).
+*   **Localisation** : École Supérieure de Technologie, Oujda.
+*   **Technologies** : Laravel 11, React 18, Vite, Tailwind CSS, MySQL.
+
+### 9.2 Suivi des Jalons (Progress Tracking)
+| Jalon | Description | Statut | Date Prévue |
+| :--- | :--- | :--- | :--- |
+| **J1** | Analyse, Conception & Maquettage | ✅ Terminé | Semaine 2 |
+| **J2** | Core API & Authentification Multi-rôle | ✅ Terminé | Semaine 4 |
+| **J3** | Module SaaS & Intégration IA | ✅ Terminé | Semaine 5 |
+| **J4** | Social Commerce & Workflow Commande | ✅ Terminé | Semaine 7 |
+| **J5** | Tests QA, Optimisation & Livraison | 🚀 En cours | Semaine 8 |
+
+### 9.3 Budget Prévisionnel (Hébergement)
+*   **Infrastructure** : VPS Cloud (Ubuntu 22.04) - ~150 MAD/mois.
+*   **Domaine** : souk.ma - ~200 MAD/an.
+*   **Services IA** : Gemini API (Free Tier / Pay-as-you-go).
+
+---
+
+## 10. Livrables attendus
+1.  📦 **Code Source Complet** : Dépôts GitHub (Frontend & Backend) structurés.
+2.  💾 **Scripts DB** : Migrations et Seeders pour un environnement prêt à l'emploi.
+3.  📄 **Cahier de Conception (Ce document)** : Version finale PDF/Markdown.
+4.  🎥 **Démo Vidéo** : Walkthrough complet des 3 parcours utilisateurs.
+
+## 11. Exclusions (Périmètre Hors-MVP)
+*   📱 **Applications Mobiles Natives** (Focus sur le Web Responsive).
+*   💳 **Contrat CMI Réel** (Simulation de paiement uniquement).
+*   🚚 **Logistique API** (Pas d'interfaçage avec Aramex/DHL dans la V1).
+
+---
+
+## 12. Signatures et Validation
+
+| Rôle | Nom & Prénom | Signature | Date |
+| :--- | :--- | :--- | :--- |
+| **Concepteur** | ____________________ | | ___/___/2026 |
+| **Encadrant** | ____________________ | | ___/___/2026 |
+| **Jury** | ____________________ | | ___/___/2026 |
+`;
+
+        document.getElementById('content').innerHTML = marked.parse(markdown);
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+</body>
+</html>

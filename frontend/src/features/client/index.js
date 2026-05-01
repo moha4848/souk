@@ -1,0 +1,16 @@
+export { default as ChatPage } from '../../pages/client/ChatPage';
+export { default as ClientApp } from '../../pages/client/ClientApp';
+export { default as ClientBoutique } from '../../pages/client/ClientBoutique';
+export { default as ClientDashboard } from '../../pages/client/ClientDashboard';
+export { default as ClientLogin } from '../../pages/client/ClientLogin';
+export { default as ClientRegister } from '../../pages/client/ClientRegister';
+export { default as GlobalFeed } from '../../pages/client/GlobalFeed';
+export { default as Landing } from '../../pages/client/Landing';
+export { default as NotificationsCenter } from '../../pages/client/NotificationsCenter';
+export { default as SmartCheckoutFlow } from '../../pages/client/SmartCheckoutFlow';
+export { default as SmartSearchBar } from '../../pages/client/SmartSearchBar';
+export { default as StoreCart } from '../../pages/client/StoreCart';
+export { default as StoreCheckout } from '../../pages/client/StoreCheckout';
+export { default as StoreFront } from '../../pages/client/StoreFront';
+export { default as StoreOrderConfirm } from '../../pages/client/StoreOrderConfirm';
+export { default as StoreProduct } from '../../pages/client/StoreProduct';
