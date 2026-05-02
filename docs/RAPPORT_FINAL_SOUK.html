@@ -1,0 +1,197 @@
+<h1>RAPPORT DE PROJET DE SYNTHÈSE : SOUK ✦</h1>
+<p><em>Plateforme SaaS E-commerce Multi-Tenant pour l&#39;artisanat et le commerce au Maroc</em></p>
+<p><strong>Réalisé par :</strong> Akram Sabouni &amp; Yousfi Mohammed</p>
+<hr>
+<h2>SOMMAIRE</h2>
+<ul>
+<li><a href="#remerciements">REMERCIEMENTS</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#1-pr%C3%A9sentation-du-projet">1. PRÉSENTATION DU PROJET</a><ul>
+<li><a href="#11-contexte-du-projet">1.1 Contexte du projet</a></li>
+<li><a href="#12-probl%C3%A9matique">1.2 Problématique</a></li>
+<li><a href="#13-objectifs-du-projet">1.3 Objectifs du projet</a></li>
+<li><a href="#14-p%C3%A9rim%C3%A8tre-du-syst%C3%A8me">1.4 Périmètre du système</a></li>
+</ul>
+</li>
+<li><a href="#2-analyse-des-besoins">2. ANALYSE DES BESOINS</a><ul>
+<li><a href="#21-besoins-fonctionnels">2.1 Besoins fonctionnels</a></li>
+<li><a href="#22-besoins-non-fonctionnels">2.2 Besoins non fonctionnels</a></li>
+</ul>
+</li>
+<li><a href="#3-%C3%A9tude-de-lexistant">3. ÉTUDE DE L’EXISTANT</a></li>
+<li><a href="#4-conception-du-syst%C3%A8me">4. CONCEPTION DU SYSTÈME</a><ul>
+<li><a href="#41-architecture-g%C3%A9n%C3%A9rale">4.1 Architecture générale</a></li>
+<li><a href="#42-diagramme-de-cas-dutilisation">4.2 Diagramme de cas d’utilisation</a></li>
+<li><a href="#43-diagramme-de-classes">4.3 Diagramme de classes</a></li>
+<li><a href="#44-mod%C3%A8le-de-donn%C3%A9es">4.4 Modèle de données</a></li>
+<li><a href="#45-diagramme-de-s%C3%A9quence">4.5 Diagramme de Séquence</a></li>
+</ul>
+</li>
+<li><a href="#5-r%C3%A9alisation-du-projet">5. RÉALISATION DU PROJET</a><ul>
+<li><a href="#51-technologies-et-outils-utilis%C3%A9s">5.1 Technologies et outils utilisés</a></li>
+<li><a href="#52-architecture-technique-laravel--react">5.2 Architecture technique (Laravel / React)</a></li>
+<li><a href="#53-impl%C3%A9mentation-des-fonctionnalit%C3%A9s-principales">5.3 Implémentation des fonctionnalités principales</a></li>
+</ul>
+</li>
+<li><a href="#6-fonctionnalit%C3%A9s-du-syst%C3%A8me">6. FONCTIONNALITÉS DU SYSTÈME</a><ul>
+<li><a href="#61-espace-administrateur">6.1 Espace Administrateur</a></li>
+<li><a href="#62-espace-vendeur">6.2 Espace Vendeur</a></li>
+<li><a href="#63-espace-client">6.3 Espace Client</a></li>
+</ul>
+</li>
+<li><a href="#7-tests-et-validation">7. TESTS ET VALIDATION</a></li>
+<li><a href="#8-difficult%C3%A9s-rencontr%C3%A9es-et-solutions">8. DIFFICULTÉS RENCONTRÉES ET SOLUTIONS</a></li>
+<li><a href="#9-perspectives-d%C3%A9volution">9. PERSPECTIVES D’ÉVOLUTION</a></li>
+<li><a href="#conclusion">CONCLUSION</a></li>
+<li><a href="#annexes">ANNEXES</a><ul>
+<li><a href="#captures-d%C3%A9cran-de-lapplication">Captures d’écran de l’application</a></li>
+<li><a href="#guide-dutilisation">Guide d’utilisation</a></li>
+<li><a href="#installation-et-configuration">Installation et configuration</a></li>
+<li><a href="#diagrammes-uml">Diagrammes UML</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>REMERCIEMENTS</h2>
+<p>Nous tenons à exprimer notre profonde gratitude à notre professeure encadrante, <strong>Professeure Amira</strong>, pour son suivi académique, ses conseils précieux et son orientation tout au long de ce projet de synthèse. Nos remerciements s&#39;étendent également au corps professoral et à toutes les personnes ayant contribué de près ou de loin à l&#39;aboutissement de ce travail.</p>
+<hr>
+<h2>INTRODUCTION</h2>
+<p>Dans une ère de forte numérisation, de nombreux artisans et créateurs marocains peinent à se faire une place en ligne. Le commerce électronique s&#39;impose comme un canal incontournable, mais la transition numérique reste un défi majeur. Face à ce constat, le projet <strong>SOUK ✦</strong> a été conçu. SOUK est une plateforme SaaS (Software as a Service) Multi-tenant (Marketplace hybride), permettant à tout créateur de générer instantanément une boutique e-commerce luxueuse et personnalisée grâce à l&#39;Intelligence Artificielle. Ce rapport détaille le processus de développement de cette solution.</p>
+<hr>
+<h2>1. PRÉSENTATION DU PROJET</h2>
+<h3>1.1 Contexte du projet</h3>
+<p>Ce projet s&#39;inscrit dans le cadre du projet de synthèse de fin d&#39;année. Il vise à répondre à une demande croissante de solutions e-commerce accessibles, scalables et esthétiques, spécifiquement adaptées au marché marocain et à l&#39;écosystème artisanal. </p>
+<h3>1.2 Problématique</h3>
+<p>Les artisans locaux souffrent d&#39;une fracture numérique profonde. Les outils e-commerce classiques sont complexes, coûteux, et inadaptés aux réalités des petites structures artisanales. Cette exclusion numérique freine le développement économique local et la mise en valeur du &quot;Brand Story&quot; marocain.</p>
+<h3>1.3 Objectifs du projet</h3>
+<ul>
+<li><strong>Identité Unique :</strong> Proposer une expérience visuelle 100% &quot;Moroccan Luxury&quot; (Gold, Copper, Zellige).</li>
+<li><strong>Zéro Effort (AI-Powered) :</strong> Génération automatique de la boutique et des produits en moins de 2 minutes.</li>
+<li><strong>Isolation SaaS (Multi-tenancy) :</strong> Chaque vendeur possède son propre domaine logique et ses paramètres sécurisés.</li>
+</ul>
+<h3>1.4 Périmètre du système</h3>
+<p>Le système s&#39;adresse à des cibles (Personas) bien définies :</p>
+<ul>
+<li><strong>L&#39;Artisan Traditionnel :</strong> Maître artisan (Zellige, poterie, cuir) souhaitant une vitrine premium sans complexité.</li>
+<li><strong>Le Designer de Mode :</strong> Créateur cherchant à valoriser son identité.</li>
+<li><strong>Le Vendeur Digital :</strong> Créateur de contenus (e-books, templates) cherchant l&#39;automatisation.</li>
+<li><strong>Le Client &quot;Luxe &amp; Authenticité&quot; :</strong> Acheteur recherchant des produits certifiés avec une expérience d&#39;achat fluide.</li>
+</ul>
+<hr>
+<h2>2. ANALYSE DES BESOINS</h2>
+<h3>2.1 Besoins fonctionnels</h3>
+<p>Le système intègre 25 fonctionnalités clés réparties en catégories :</p>
+<ul>
+<li><strong>IA Features :</strong> AI Store Creator (Génération de Logo, Couleurs, Banner), AI Product Generator, Smart Search AI.</li>
+<li><strong>Marketplace Multi-Store :</strong> Stores indépendants, Dashboard vendeur, Personnalisation totale.</li>
+<li><strong>Social Commerce :</strong> Social Feed (Follow, Like, Share), Trending System, Storytelling.</li>
+<li><strong>Communication &amp; Ventes :</strong> Chat Real-time, Checkout Intelligent, Commandes sur-mesure (Custom Orders).</li>
+<li><strong>Logistique :</strong> Gestion des produits digitaux, Delivery Zones, Géolocalisation.</li>
+<li><strong>Loyauté &amp; Business :</strong> Système de points, Affiliation, Forfaits SaaS (Free, Pro, Premium), Store Ranking.</li>
+<li><strong>Administration &amp; RBAC :</strong> Gestion d&#39;équipe, Activity Logs, Smart Notifications, Gestion des promotions, Analytics avancés.</li>
+</ul>
+<h3>2.2 Besoins non fonctionnels</h3>
+<ul>
+<li><strong>Sécurité :</strong> Authentification JWT avec refresh tokens, OAuth2, RBAC strict, Encryption AES-256 et HTTPS obligatoire.</li>
+<li><strong>Performance :</strong> Caching Redis, Lazy Loading React, CDN pour les assets statiques.</li>
+<li><strong>Coûts &amp; Planning :</strong> Le projet a été planifié sur 3 mois avec un budget global estimé à 94 550 MAD (incluant l&#39;hébergement VPS, les tokens OpenAI et l&#39;effort RH).</li>
+</ul>
+<hr>
+<h2>3. ÉTUDE DE L’EXISTANT</h2>
+<p>Nous avons analysé les leaders du marché (Shopify) ainsi que les solutions locales (YouCan). Notre analyse révèle un vide pour une plateforme qui allie facilité, identité marocaine &quot;Premium&quot; et assistance native par l&#39;Intelligence Artificielle. Le modèle Freemium avec 0% de commission sur les plans premium de SOUK offre une alternative économiquement viable pour les artisans.</p>
+<hr>
+<h2>4. CONCEPTION DU SYSTÈME</h2>
+<h3>4.1 Architecture générale</h3>
+<p>L&#39;architecture adopte un modèle multi-tenant où chaque vendeur dispose d&#39;une isolation logique complète. </p>
+<h3>4.2 Diagramme de cas d’utilisation</h3>
+<p>Ce diagramme présente les interactions entre les différents acteurs du système et les fonctionnalités accessibles selon les rôles RBAC définis. <em>(Figure 1 — Diagramme de Cas d&#39;Utilisation Global SOUK ✦)</em></p>
+<p><img src="./annexes/1_cas_utilisation_officiel.png" alt="Diagramme de Cas d&#39;Utilisation"></p>
+<h3>4.3 Diagramme de classes</h3>
+<p>Architecture orientée objet du backend Laravel 11. Les relations illustrent l&#39;isolation multi-tenant assurée par le TenantScope Eloquent appliqué sur chaque modèle. <em>(Figure 2 — Diagramme de Classes Technique)</em></p>
+<p><img src="./annexes/2_classes_officiel.png" alt="Diagramme de Classes"></p>
+<h3>4.4 Modèle de données</h3>
+<p>La base de données repose sur une architecture à base unique optimisée, structurée par les tables suivantes :</p>
+<ul>
+<li><strong>Utilisateurs et Profils :</strong> <code>users</code> (authentification globale), <code>clients</code>, <code>vendors</code>, <code>staff</code>.</li>
+<li><strong>Produits et Catalogue :</strong> <code>products</code> (liés strictement à un store).</li>
+<li><strong>Commandes et Panier :</strong> <code>orders</code> et <code>order_items</code>.</li>
+<li><strong>Finance et Abonnements :</strong> <code>packages</code> (Forfaits SaaS), <code>subscriptions</code> (abonnements actifs), <code>commissions</code>.</li>
+<li><strong>Gestion des Accès (RBAC) :</strong> <code>teams</code>, <code>roles</code>, <code>permissions</code>, <code>role_permission</code>, <code>user_team_memberships</code>.</li>
+</ul>
+<h3>4.5 Diagramme de Séquence</h3>
+<p>Ce diagramme modélise le flux complet d&#39;une requête authentifiée à travers la chaîne de middlewares, illustrant l&#39;isolation garantie au niveau ORM (Isolation SaaS). <em>(Figures 3 et 4)</em></p>
+<p><img src="./annexes/3_sequence_officiel_1.png" alt="Diagramme de Séquence 1">
+<img src="./annexes/4_sequence_officiel_2.png" alt="Diagramme de Séquence 2"></p>
+<hr>
+<h2>5. RÉALISATION DU PROJET</h2>
+<h3>5.1 Technologies et outils utilisés</h3>
+<p>Afin d&#39;assurer une expérience luxueuse et scalable :</p>
+<ul>
+<li><strong>Backend :</strong> Laravel 11 (Headless API).</li>
+<li><strong>Frontend :</strong> React.js (Vite), Vanilla CSS (Moroccan Luxury Style).</li>
+<li><strong>Intelligence Artificielle :</strong> OpenAI GPT-4 (Contenu), Midjourney (Design).</li>
+<li><strong>Hébergement :</strong> VPS Cloud (DigitalOcean/AWS), MySQL, Redis.</li>
+<li><strong>Outils :</strong> Antigravity (AI Code Architect), VS Code, GitHub, Figma, Postman.</li>
+</ul>
+<h3>5.2 Architecture technique (Laravel / React)</h3>
+<p>Le backend Laravel sert de Headless API sécurisée. Le frontend consomme les endpoints via Axios avec injection dynamique des tokens JWT. L&#39;isolation des données (Multi-tenancy) est assurée au niveau de l&#39;ORM par des Scopes Eloquent (<code>TenantScope</code>), garantissant aucune fuite de données inter-tenant.</p>
+<h3>5.3 Implémentation des fonctionnalités principales</h3>
+<p>Durant les 3 mois de développement :</p>
+<ul>
+<li><strong>Mois 1 :</strong> Architecture, base de données, RBAC et Framework Frontend.</li>
+<li><strong>Mois 2 :</strong> Implémentation des AI Generators (Store &amp; Products), Vendor Dashboard et Social Features.</li>
+<li><strong>Mois 3 :</strong> Marketplace globale, Checkout intelligent, QA et déploiement.</li>
+</ul>
+<hr>
+<h2>6. FONCTIONNALITÉS DU SYSTÈME</h2>
+<h3>6.1 Espace Administrateur</h3>
+<p>L&#39;équipe interne SOUK gère la plateforme via des rôles (SuperAdmin, Support, Finance, Moderator). Ils accèdent aux Activity Logs, gèrent les forfaits SaaS (Free, Pro, Premium) et analysent les conversions globales.</p>
+<h3>6.2 Espace Vendeur</h3>
+<p>L&#39;artisan accède à un Dashboard où il utilise l&#39;<strong>AI Store Creator</strong> pour générer son identité visuelle et l&#39;<strong>AI Product Optimizer</strong> pour générer des descriptions SEO-friendly. Il peut interagir via le Chat Real-time avec ses clients.</p>
+<h3>6.3 Espace Client</h3>
+<p>Les acheteurs naviguent dans une Marketplace luxueuse, utilisent le Smart Search AI, profitent d&#39;un Social Feed (Trending System) pour découvrir les artisans, et finalisent leurs achats via un Checkout intelligent incluant un système de points de fidélité.</p>
+<hr>
+<h2>7. TESTS ET VALIDATION</h2>
+<p>Le système a été éprouvé via des tests QA stricts (Mois 3 du planning) :</p>
+<ul>
+<li><strong>Tests d&#39;isolation :</strong> Validation du <code>TenantScope</code> interdisant l&#39;accès croisé aux bases de données.</li>
+<li><strong>Tests de Charge &amp; Performance :</strong> Validation du Caching Redis et de la rapidité du Lazy Loading React.</li>
+<li><strong>Validation Sécurité :</strong> Tests de pénétration sur les endpoints de l&#39;API Gateway et vérification du Rate Limiting.</li>
+</ul>
+<hr>
+<h2>8. DIFFICULTÉS RENCONTRÉES ET SOLUTIONS</h2>
+<p><strong>Difficultés techniques :</strong></p>
+<ul>
+<li><strong>Architecture de la Base de données Multi-tenant :</strong><ul>
+<li><em>Problème :</em> Isoler les données sans multiplier les coûts d&#39;infrastructure.</li>
+<li><em>Solution :</em> Adoption d&#39;une architecture à base unique (&quot;Shared Database&quot;) avec intégration d&#39;un identifiant <code>tenant_id</code> géré automatiquement par les Scopes d&#39;Eloquent.</li>
+</ul>
+</li>
+<li><strong>Performance du Frontend avec un design riche :</strong><ul>
+<li><em>Problème :</em> Les éléments visuels (Moroccan Luxury) risquaient de ralentir l&#39;application.</li>
+<li><em>Solution :</em> Utilisation de Vanilla CSS combinée à la puissance de Vite et du Lazy Loading.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Limites assumées :</strong></p>
+<ul>
+<li>L&#39;application mobile (iOS/Android) est hors périmètre, le focus étant sur le Web Responsive (PWA).</li>
+<li>Le support multilingue avancé est hors périmètre initial (Arabe et Français implémentés de base).</li>
+<li>L&#39;intégration de paiement est en mode simulation.</li>
+</ul>
+<hr>
+<h2>9. PERSPECTIVES D’ÉVOLUTION</h2>
+<p>L&#39;infrastructure actuelle étant hautement scalable, plusieurs évolutions sont programmées :</p>
+<ol>
+<li><strong>Intégration Réelle du Paiement :</strong> Remplacement de la simulation par des passerelles CMI/Stripe.</li>
+<li><strong>Applications Mobiles :</strong> Développement d&#39;apps natives iOS/Android pour maximiser l&#39;engagement utilisateur.</li>
+<li><strong>Expansion Internationale :</strong> Internationalisation complète du contenu et expédition cross-border pour promouvoir l&#39;artisanat marocain à l&#39;échelle mondiale.</li>
+</ol>
+<hr>
+<h2>CONCLUSION</h2>
+<p>Le projet SOUK ✦ a atteint son objectif : offrir une infrastructure de transformation digitale accessible et luxueuse pour l&#39;écosystème artisanal marocain. Grâce à la combinaison d&#39;une architecture logicielle moderne (Laravel/React) et de l&#39;Intelligence Artificielle, SOUK élimine les barrières techniques tout en respectant une enveloppe budgétaire stricte (94 550 MAD). Ce projet démontre qu&#39;une approche SaaS rigoureusement exécutée peut avoir un impact socio-économique réel.</p>
+<hr>
+<h2>ANNEXES</h2>
+<p><em>(Section réservée pour l&#39;intégration de vos documents visuels)</em></p>
+<h3>Captures d’écran de l’application</h3>
+<p><em>(Insérez ici les captures d&#39;écran de l&#39;Espace Vendeur, Espace Client, Checkout, etc.)</em></p>

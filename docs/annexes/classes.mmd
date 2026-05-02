@@ -1,0 +1,41 @@
+classDiagram
+    class User {
+        +int id
+        +string email
+        +string password
+    }
+    class Vendor {
+        +string store_name
+        +string slug
+    }
+    class Client {
+        +int points
+    }
+    class Product {
+        +int id
+        +string title
+        +float price
+        +int store_id
+    }
+    class Order {
+        +int id
+        +string status
+        +float total
+        +int store_id
+    }
+    class Subscription {
+        +int id
+        +string plan
+        +date expires_at
+    }
+    class Role {
+        +string name
+    }
+
+    User <|-- Vendor : Hérite
+    User <|-- Client : Hérite
+    User "1" -- "*" Role : possède
+    Vendor "1" -- "*" Product : gère (TenantScope)
+    Vendor "1" -- "*" Order : reçoit (TenantScope)
+    Vendor "1" -- "1" Subscription : souscrit
+    Client "1" -- "*" Order : passe

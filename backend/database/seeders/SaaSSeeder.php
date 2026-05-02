@@ -148,17 +148,19 @@ class SaaSSeeder extends Seeder
     private function seedProducts(Vendor $vendor): void
     {
         $data = [
-            'art-atlas'  => [
-                ['name' => 'Vase Zellige',    'price' => 250,  'category' => 'Artisanat', 'image_url' => 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&q=80&w=800'],
-                ['name' => 'Tapis Berbère',   'price' => 1200, 'category' => 'Artisanat', 'image_url' => 'https://images.unsplash.com/photo-1600166898405-da9535204843?auto=format&fit=crop&q=80&w=800'],
-            ],
-            'sanaa-couture' => [
-                ['name' => 'Caftan Royal',       'price' => 3500, 'category' => 'Mode', 'image_url' => 'https://images.unsplash.com/photo-1583391733959-f18306385d85?auto=format&fit=crop&q=80&w=800'],
-                ['name' => 'Djellaba Moderne',   'price' => 650,  'category' => 'Mode', 'image_url' => 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80&w=800'],
+            'emerald-shop'  => [
+                ['name' => 'Vase Zellige Royal', 'price' => 450,  'category' => 'Décoration', 'image_url' => 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&q=80&w=800'],
+                ['name' => 'Tapis Berbère Beni Ourain', 'price' => 2800, 'category' => 'Artisanat', 'image_url' => 'https://images.unsplash.com/photo-1600166898405-da9535204843?auto=format&fit=crop&q=80&w=800'],
+                ['name' => 'Sac en Cuir Atlas', 'price' => 850, 'category' => 'Maroquinerie', 'image_url' => 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&q=80&w=800'],
+                ['name' => 'Caftan Silk Emerald', 'price' => 4200, 'category' => 'Mode Luxe', 'image_url' => 'https://images.unsplash.com/photo-1583391733959-f18306385d85?auto=format&fit=crop&q=80&w=800'],
+                ['name' => 'Smartphone Horizon X1', 'price' => 6499, 'category' => 'Technologie', 'image_url' => 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=800'],
+                ['name' => 'Sérum Éclat Argan', 'price' => 290,  'category' => 'Bien-être', 'image_url' => 'https://images.unsplash.com/photo-1612132384740-4b553e1987d6?auto=format&fit=crop&q=80&w=800'],
+                ['name' => 'Montre Atlas Automatic', 'price' => 3200, 'category' => 'Bijouterie', 'image_url' => 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&q=80&w=800'],
+                ['name' => 'Casque Audio Emerald', 'price' => 1800, 'category' => 'Technologie', 'image_url' => 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800'],
             ],
         ];
 
-        $list = $data[$vendor->store_slug] ?? $data['art-atlas'];
+        $list = $data[$vendor->store_slug] ?? [];
 
         foreach ($list as $p) {
             Product::create(array_merge($p, [

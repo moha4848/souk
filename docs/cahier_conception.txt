@@ -1,0 +1,157 @@
+﻿
+
+
+
+SOUK âœ¦
+Cahier de Conception et d'Analyse
+
+
+SaaS Marketplace Multi-tenant
+& Intelligence Artificielle
+
+
+
+
+
+
+
+1. Contexte du Projet
+1.1 ProblÃ©matique
+Les artisans locaux du Maroc souffrent d'une fracture numÃ©rique profonde. Les outils e-commerce classiques sont complexes, coÃ»teux, et inadaptÃ©s aux rÃ©alitÃ©s des petites structures artisanales. Cette situation engendre une exclusion numÃ©rique qui freine le dÃ©veloppement Ã©conomique local.
+
+1.2 Vision et Proposition de Valeur
+Le projet SOUK âœ¦ est une infrastructure de transformation digitale conÃ§ue spÃ©cifiquement pour l'Ã©cosystÃ¨me artisanal marocain. En adoptant une architecture SaaS Multi-tenant, SOUK âœ¦ offre :
+
+AccessibilitÃ© ImmÃ©diate : CrÃ©ation de boutique en moins de 2 minutes, sans compÃ©tences techniques requises.
+CoÃ»ts PartagÃ©s : Infrastructure mutualisÃ©e rÃ©duisant significativement les frais pour les petits artisans.
+Intelligence AssistÃ©e : L'IA compense l'absence de compÃ©tences en marketing, design et rÃ©daction.
+Multi-tenancy SÃ©curisÃ©e : Isolation totale des donnÃ©es garantissant la confidentialitÃ© entre marchands.
+
+2. Acteurs et RÃ´les
+Le systÃ¨me utilise un modÃ¨le de sÃ©curitÃ© RBAC (Role-Based Access Control) hiÃ©rarchique pour assurer une sÃ©paration nette des responsabilitÃ©s entre les diffÃ©rents intervenants de la plateforme.
+
+
+3. FonctionnalitÃ©s DÃ©taillÃ©es
+3.1 Suite Intelligence Artificielle
+AI Store Creator
+Analyse du projet artisanal pour gÃ©nÃ©rer automatiquement l'identitÃ© de marque complÃ¨te : logo, palette de couleurs, typographie et slogan. Le module utilise l'API Gemini pour proposer des identitÃ©s visuelles cohÃ©rentes avec l'univers artisanal marocain.
+
+AI Product Optimizer
+GÃ©nÃ©ration automatique de fiches produits SEO-friendly avec descriptions persuasives, balises mÃ©ta optimisÃ©es et suggestions de prix basÃ©es sur le marchÃ©. Chaque description est adaptÃ©e Ã  la culture et aux tendances du marchÃ© local.
+
+3.2 Moteur SaaS et Multi-tenancy
+Isolation des DonnÃ©es : Ã‰tanchÃ©itÃ© totale via les Scopes Eloquent (TenantScope) â€” aucune fuite inter-tenant possible.
+Customization Engine : Ã‰diteur de thÃ¨me en temps rÃ©el pour personnaliser la vitrine sans Ã©crire une seule ligne de code.
+Gestion des Abonnements : Plans Free, Standard et Premium avec quotas dynamiques et facturation automatisÃ©e.
+
+3.3 Composants Frontend
+Admin Dashboard : Modules de modÃ©ration, audit logs, gestion RBAC et statistiques globales.
+Vendor Dashboard : AI Store Creator, gestion produits, analytics en temps rÃ©el, gestion des commandes.
+Client Storefront : Marketplace global, chat temps rÃ©el, Smart Checkout, programme de fidÃ©litÃ©.
+
+
+4. Architecture Technique
+La stack technologique a Ã©tÃ© sÃ©lectionnÃ©e pour sa robustesse, sa maturitÃ© et sa capacitÃ© native Ã  gÃ©rer les exigences du multi-tenant Ã  grande Ã©chelle.
+
+
+4.1 Contraintes de SÃ©curitÃ©
+Protection CSRF sur tous les formulaires et endpoints sensibles.
+Chiffrement JWT avec rotation automatique des tokens d'accÃ¨s.
+Scoping de donnÃ©es au niveau ORM â€” interdiction absolue d'accÃ¨s inter-tenant.
+Rate limiting par tenant pour prÃ©venir les abus et les attaques DDoS.
+
+4.2 Performances
+Caching Redis des configurations de boutique pour minimiser les requÃªtes DB.
+Lazy Loading des composants React pour optimiser le First Contentful Paint.
+CDN pour les assets statiques (images, CSS, JS) avec cache-busting automatique.
+
+
+5. Diagrammes UML
+5.1 Diagramme de Cas d'Utilisation
+Ce diagramme prÃ©sente les interactions entre les diffÃ©rents acteurs du systÃ¨me et les fonctionnalitÃ©s accessibles selon les rÃ´les RBAC dÃ©finis.
+
+
+Figure 1 â€” Diagramme de Cas d'Utilisation Global SOUK âœ¦
+
+5.2 Diagramme de Classes
+Architecture orientÃ©e objet du backend Laravel 11. Les relations illustrent l'isolation multi-tenant assurÃ©e par le TenantScope Eloquent appliquÃ© sur chaque modÃ¨le.
+
+Figure 2 â€” Diagramme de Classes Technique
+
+
+5.3 Diagramme de SÃ©quence â€” Isolation SaaS
+Ce diagramme modÃ©lise le flux complet d'une requÃªte authentifiÃ©e Ã  travers la chaÃ®ne de middlewares, illustrant l'isolation garantie au niveau ORM.
+
+
+
+Figure 3 et 4 â€” Diagramme de SÃ©quence : Isolation Multi-tenant
+
+6. Dictionnaire de DonnÃ©es
+Â Utilisateurs et Profils
+TableÂ users
+Cette table gÃ¨re l'authentification et les informations gÃ©nÃ©rales de tous les utilisateurs (Clients, Vendeurs, Administrateurs).
+TableÂ clients
+Informations spÃ©cifiques aux utilisateurs ayant le rÃ´le de client.
+TableÂ vendors
+Informations spÃ©cifiques aux utilisateurs ayant le rÃ´le de vendeur (artisans, marchands).
+TableÂ staff
+EmployÃ©s internes ou modÃ©rateurs de la plateforme.
+
+2. Produits et Catalogue
+TableÂ products
+EntitÃ© principale gÃ©rant les articles et services proposÃ©s sur la plateforme.
+
+3. Commandes et Panier
+TableÂ orders
+Enregistre les transactions globales.
+TableÂ order_items
+Lignes de dÃ©tail pour chaque commande (produits achetÃ©s).
+
+4. Finance et Abonnements
+TableÂ packages
+Les diffÃ©rents forfaits d'abonnement disponibles pour les vendeurs.
+TableÂ subscriptions
+Suivi des abonnements actifs des vendeurs.
+TableÂ commissions
+Suivi des commissions prÃ©levÃ©es par la plateforme sur chaque vente.
+
+5. Gestion des AccÃ¨s (RBAC) & Ã‰quipes (SOUK Interne)
+TableÂ teams
+Ã‰quipes internes pour l'administration de SOUK.
+TableÂ roles
+Les diffÃ©rents rÃ´les applicables dans le systÃ¨me ou dans les Ã©quipes.
+TableÂ permissions
+Liste exhaustive de toutes les actions permises dans l'application.
+TableÂ role_permissionÂ (Table pivot)
+Associe les permissions Ã  des rÃ´les spÃ©cifiques.
+TableÂ user_team_memberships
+Affecte les utilisateurs (staff) aux Ã©quipes avec un rÃ´le dÃ©fini.
+
+
+
+7. Tableau de Bord Projet
+7.1 Matrice des Risques
+
+
+7.2 Suivi BudgÃ©taire
+
+7.3 Planning de DÃ©veloppement
+
+
+8. Livrables Attendus
+Code source complet (Frontend React + Backend Laravel).
+Scripts de migration, Seeders et Factories de test.
+Documentation technique complÃ¨te (ce document).
+DÃ©monstration vidÃ©o des fonctionnalitÃ©s clÃ©s.
+Rapport final de tests et de couverture de code.
+
+9. Exclusions (Hors PÃ©rimÃ¨tre)
+Applications mobiles natives iOS / Android â€” Focus sur le Web Responsive uniquement.
+IntÃ©gration rÃ©elle de passerelle de paiement â€” Simulation de paiement incluse uniquement.
+Support multilingue avancÃ© â€” Arabe et FranÃ§ais de base, internationalisation complÃ¨te hors pÃ©rimÃ¨tre.
+
+10. Signatures et Approbations
+
+
+
+

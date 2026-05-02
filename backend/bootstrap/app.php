@@ -15,6 +15,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'permission' => \App\Http\Middleware\CheckPermission::class,
         ]);
+        $middleware->redirectTo(
+            guests: function ($request) {
+                if ($request->is('api/*')) {
+                    return null;
+                }
+                return '/login';
+            }
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

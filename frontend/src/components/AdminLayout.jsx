@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAdminAuth } from '../context/AdminAuthContext'
+import { useTranslation } from 'react-i18next'
 import { C } from './UI'
+import LanguageSwitcher from './LanguageSwitcher'
 
 export default function AdminLayout({ children }) {
   const { admin, logoutAdmin } = useAdminAuth()
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { t } = useTranslation()
 
   const TEAM_CONFIG = {
     superadmin: {
@@ -14,11 +17,11 @@ export default function AdminLayout({ children }) {
       icon: '⬢',
       color: C.emerald,
       nav: [
-        { path: '/admin/dashboard',    icon: '📊', label: 'Vue Globale' },
-        { path: '/admin/moderation',   icon: '🛡️', label: 'Modération' },
-        { path: '/admin/finance',      icon: '💰', label: 'Finance' },
-        { path: '/admin/rbac',         icon: '🔐', label: 'Équipes & Rôles' },
-        { path: '/admin/logs',         icon: '📜', label: 'Audit Logs' },
+        { path: '/admin/dashboard',    icon: '📊', label: 'global_view' },
+        { path: '/admin/moderation',   icon: '🛡️', label: 'moderation' },
+        { path: '/admin/finance',      icon: '💰', label: 'finance' },
+        { path: '/admin/rbac',         icon: '🔐', label: 'teams_roles' },
+        { path: '/admin/logs',         icon: '📜', label: 'audit_logs' },
       ]
     },
     staff: {
@@ -26,7 +29,7 @@ export default function AdminLayout({ children }) {
       icon: '⬡',
       color: C.emeraldL,
       nav: [
-        { path: '/admin/dashboard', icon: '📊', label: 'Mon espace' },
+        { path: '/admin/dashboard', icon: '📊', label: 'my_space' },
       ]
     },
   }
@@ -54,19 +57,12 @@ export default function AdminLayout({ children }) {
         background: C.surface, borderRight: `1px solid ${C.border}`,
         display: 'flex', flexDirection: 'column', zIndex: 100, transition:'0.4s'
       }}>
-        <div style={{ padding: '40px 30px' }}>
+        <div onClick={() => navigate('/')} style={{ cursor:'pointer', padding: '40px 30px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 50 }}>
-            <div style={{ 
-              width: 40, height: 40, borderRadius: 12, background: C.emerald, 
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: `0 0 20px ${C.emerald}40`
-            }}>
-              <span style={{ fontSize: 20, color: '#fff' }}>{config.icon}</span>
-            </div>
-            <div>
-              <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 2 }}>SOUK</div>
-              <div style={{ fontSize: 9, letterSpacing: 2, color: config.color, fontWeight: 800 }}>{config.label.toUpperCase()}</div>
-            </div>
+             <img src="/logo.png" alt="SOUK" style={{ height: 60, width: 'auto' }} />
+             <div>
+               <div style={{ fontSize: 9, letterSpacing: 2, color: config.color, fontWeight: 800 }}>{config.label.toUpperCase()}</div>
+             </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -86,7 +82,7 @@ export default function AdminLayout({ children }) {
                   onMouseOut={e => !active && (e.currentTarget.style.color = C.muted)}
                 >
                   <span style={{ fontSize: 18 }}>{item.icon}</span>
-                  {item.label}
+                  {t(item.label)}
                 </button>
               )
             })}
@@ -105,7 +101,7 @@ export default function AdminLayout({ children }) {
               border: `1px solid ${C.border}`, color: C.danger, cursor: 'pointer',
               fontSize: 12, fontWeight: 800
             }}
-          >DECONNEXION</button>
+          >{t('logout').toUpperCase()}</button>
         </div>
       </aside>
 
@@ -117,10 +113,11 @@ export default function AdminLayout({ children }) {
           borderBottom: `1px solid ${C.border}`, position:'sticky', top:0, zIndex:90
         }}>
           <h2 style={{ fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 2, color: C.muted }}>
-             Dashboard <span style={{ color:C.text, margin:'0 10px' }}>/</span> <span style={{ color:C.emerald }}>{config.nav.find(n => n.path === pathname)?.label || 'Aperçu'}</span>
+             Dashboard <span style={{ color:C.text, margin:'0 10px' }}>/</span> <span style={{ color:C.emerald }}>{t(config.nav.find(n => n.path === pathname)?.label) || t('overview')}</span>
           </h2>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+             <LanguageSwitcher />
              <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: 12, fontWeight: 800 }}>{admin?.name}</div>
                 <div style={{ fontSize: 10, color: config.color, fontWeight: 700 }}>{admin?.role}</div>
@@ -149,7 +146,7 @@ export default function AdminLayout({ children }) {
               fontSize: 10, cursor: 'pointer', transition:'0.3s'
             }}>
               <span style={{ fontSize: 22, opacity: active ? 1 : 0.6 }}>{item.icon}</span>
-              <span style={{ fontWeight: active ? 900 : 600, letterSpacing:1 }}>{item.label.split(' ')[0].toUpperCase()}</span>
+              <span style={{ fontWeight: active ? 900 : 600, letterSpacing:1 }}>{t(item.label).split(' ')[0].toUpperCase()}</span>
             </button>
           )
         })}

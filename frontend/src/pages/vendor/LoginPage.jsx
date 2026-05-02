@@ -41,11 +41,7 @@ export default function LoginPage() {
 
           {/* Logo */}
           <div style={{ textAlign:'center', marginBottom:40, position:'relative', zIndex:1 }}>
-            <div style={{ width:64, height:64, background:C.emerald, borderRadius:20, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', boxShadow:`0 10px 25px ${C.emerald}40` }}>
-               <span style={{ color:'#fff', fontWeight:900, fontSize:32 }}>S</span>
-            </div>
-            <div style={{ fontFamily:"'Outfit', sans-serif", fontSize:32, fontWeight:800, color:'#fff', letterSpacing:'-1px' }}>SOUK</div>
-            <div style={{ fontSize:10, color:C.emerald, letterSpacing:4, textTransform:'uppercase', marginTop:10, fontWeight:800 }}>EMERALD EDITION</div>
+             <img src="/logo.png" alt="SOUK" style={{ height: 100, width: 'auto', marginBottom: 20 }} />
           </div>
 
           <Ornament />

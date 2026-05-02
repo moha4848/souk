@@ -105,7 +105,7 @@ export default function StoreFront() {
            <div style={{ width:60, height:3, background:C.gold, margin:'20px auto' }} />
         </div>
 
-        <div className="store-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 40 }}>
+        <div className="responsive-grid">
           {products.map((product, i) => (
             <Card key={product.id} hover onClick={() => navigate(`/store/${slug}/product/${product.id}`)} style={{ padding: 0, overflow: 'hidden' }}>
               <div style={{ height: 350, background: C.surface2, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

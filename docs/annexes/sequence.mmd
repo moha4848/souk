@@ -1,0 +1,20 @@
+sequenceDiagram
+    actor Vendeur
+    participant API Gateway
+    participant Auth Middleware
+    participant Tenant Middleware
+    participant Eloquent ORM
+    participant Database
+
+    Vendeur->>API Gateway: GET /api/products (Authorization: Bearer Token)
+    API Gateway->>Auth Middleware: Vérification du Token JWT (Sanctum)
+    alt Token Invalide
+        Auth Middleware-->>Vendeur: 401 Unauthorized
+    else Token Valide
+        Auth Middleware->>Tenant Middleware: Identifier le Tenant (store_id)
+        Tenant Middleware->>Eloquent ORM: Appliquer `TenantScope` (where store_id = X)
+        Eloquent ORM->>Database: SELECT * FROM products WHERE store_id = X
+        Database-->>Eloquent ORM: Résultats filtrés
+        Eloquent ORM-->>API Gateway: Collection JSON
+        API Gateway-->>Vendeur: 200 OK (Produits isolés)
+    end

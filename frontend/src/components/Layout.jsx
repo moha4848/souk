@@ -1,19 +1,22 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTranslation } from 'react-i18next'
 import { C } from './UI'
+import LanguageSwitcher from './LanguageSwitcher'
 
 const NAV = [
-  { path:'/dashboard',  icon:'⬡', label:'Accueil' },
-  { path:'/products',   icon:'◈', label:'Produits' },
-  { path:'/orders',     icon:'◇', label:'Commandes' },
-  { path:'/analytics',  icon:'◉', label:'Stats' },
-  { path:'/profile',    icon:'◎', label:'Profil' },
+  { path:'/dashboard',  icon:'⬡', label:'dashboard' },
+  { path:'/products',   icon:'◈', label:'products' },
+  { path:'/orders',     icon:'◇', label:'orders' },
+  { path:'/analytics',  icon:'◉', label:'analytics' },
+  { path:'/profile',    icon:'◎', label:'profile' },
 ]
 
 export default function Layout({ children }) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { user, logout } = useAuth()
+  const { t } = useTranslation()
 
   const RESPONSIVE_CSS = `
   /* ── RESET ── */
@@ -119,11 +122,8 @@ export default function Layout({ children }) {
 
       <aside className="sidebar">
         <div style={{ padding: '45px 28px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 40 }}>
-            <div style={{ width: 32, height: 32, background: C.emerald, borderRadius: 10, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 15px ${C.emerald}40` }}>
-              <span style={{ color:'#fff', fontWeight:900, fontSize:18 }}>S</span>
-            </div>
-            <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: 2 }}>SOUK</div>
+          <div onClick={() => navigate('/')} style={{ cursor:'pointer', display: 'flex', alignItems: 'center', gap: 15, marginBottom: 40 }}>
+             <img src="/logo.png" alt="SOUK" style={{ height: 60, width: 'auto', filter: 'drop-shadow(0 0 10px rgba(255,215,0,0.2))' }} />
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -136,7 +136,7 @@ export default function Layout({ children }) {
                   onClick={() => navigate(it.path)}
                 >
                   <span style={{ fontSize: 20 }}>{it.icon}</span>
-                  {it.label}
+                  {t(it.label)}
                 </button>
               )
             })}
@@ -148,16 +148,19 @@ export default function Layout({ children }) {
             <div style={{ width:36, height:36, borderRadius:12, background:C.surface2, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:800, color:C.emerald }}>{user?.name?.charAt(0)}</div>
             <div style={{ fontSize:13, fontWeight:700 }}>{user?.name?.split(' ')[0]}</div>
           </div>
-          <button onClick={logout} style={{ width:'100%', padding:12, borderRadius:12, border:`1px solid ${C.border}`, background:'none', color:C.muted, fontSize:12, fontWeight:800, cursor:'pointer' }}>DÉCONNEXION</button>
+          <button onClick={logout} style={{ width:'100%', padding:12, borderRadius:12, border:`1px solid ${C.border}`, background:'none', color:C.muted, fontSize:12, fontWeight:800, cursor:'pointer', textTransform:'uppercase' }}>{t('logout')}</button>
         </div>
       </aside>
 
       <div className="main-content">
         <div className="top-bar">
-          <div className="show-mobile" style={{ fontSize: 20, fontWeight: 900, letterSpacing: 2 }}>SOUK</div>
+          <img src="/logo.png" alt="SOUK" className="show-mobile" style={{ height: 40, width: 'auto', cursor: 'pointer' }} onClick={() => navigate('/')} />
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 20, alignItems: 'center' }}>
-            <div style={{ width: 10, height: 10, borderRadius: '50%', background: C.emerald, boxShadow: `0 0 10px ${C.emerald}` }} />
-            <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', opacity: 0.6 }}>Statut: Opérationnel</span>
+            <LanguageSwitcher />
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <div style={{ width: 10, height: 10, borderRadius: '50%', background: C.emerald, boxShadow: `0 0 10px ${C.emerald}` }} />
+              <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', opacity: 0.6 }}>{t('status_operational')}</span>
+            </div>
           </div>
         </div>
 
@@ -182,7 +185,7 @@ export default function Layout({ children }) {
               transform: active ? 'translateY(-4px)' : 'none'
             }}>
               <span style={{ fontSize:24, opacity: active ? 1 : 0.5, filter: active ? `drop-shadow(0 0 8px ${C.emerald}40)` : 'none' }}>{it.icon}</span>
-              <span style={{ fontSize:9, letterSpacing:1.5, textTransform:'uppercase', fontWeight: active ? 900 : 600 }}>{it.label}</span>
+              <span style={{ fontSize:9, letterSpacing:1.5, textTransform:'uppercase', fontWeight: active ? 900 : 600 }}>{t(it.label)}</span>
               {active && <div style={{ width: 5, height: 5, borderRadius: '50%', background: C.emerald, marginTop: 4, boxShadow:`0 0 10px ${C.emerald}` }} />}
             </button>
           ]

@@ -13,7 +13,7 @@ use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UploadController;
 
-Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
+Route::post('/login', [AuthController::class, 'login'])->name('login')->middleware('throttle:5,1');
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('throttle:5,1');
 Route::post('/register', [AuthController::class, 'register']);
 

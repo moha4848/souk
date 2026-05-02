@@ -35,11 +35,28 @@ const globalStyles = `
     :root {
       --container-padding: 20px;
     }
+    .hero-title { font-size: 42px !important; }
+    .hero-subtitle { font-size: 16px !important; }
   }
   img { max-width: 100%; height: auto; }
   .hide-mobile { @media (max-width: 768px) { display: none !important; } }
   .show-mobile { display: none !important; @media (max-width: 768px) { display: block !important; } }
   
+  .responsive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 40px;
+  }
+  @media (max-width: 1024px) {
+    .responsive-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+  }
+  @media (max-width: 768px) {
+    .responsive-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+  }
+  @media (max-width: 480px) {
+    .responsive-grid { grid-template-columns: 1fr; gap: 20px; }
+  }
+
   @keyframes float {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }

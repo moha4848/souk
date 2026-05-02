@@ -1,4 +1,4 @@
-import { C } from '../../../../components/UI'
+import { C } from '../../../components/UI'
 
 export default function StatCard({ icon, title, value, sub, color = C.gold, trend }) {
   return (

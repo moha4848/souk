@@ -1,0 +1,19 @@
+flowchart LR
+    Client((Client Luxe))
+    Vendeur((Vendeur / Artisan))
+    Admin((Admin SOUK))
+
+    %% Client Actions
+    Client --> UC1(Recherche IA & Social Feed)
+    Client --> UC2(Smart Checkout & Points)
+    Client --> UC3(Chat temps réel)
+
+    %% Vendeur Actions
+    Vendeur --> UC4(AI Store & Product Creator)
+    Vendeur --> UC5(Gestion Commandes & Stock)
+    Vendeur --> UC6(Abonnements SaaS & Analytics)
+
+    %% Admin Actions
+    Admin --> UC7(Modération & RBAC)
+    Admin --> UC8(Gestion Financière & Forfaits)
+    Admin --> UC9(Audit Logs & Notifications)

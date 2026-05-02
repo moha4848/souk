@@ -1,0 +1,6 @@
+graph TD
+    Client[Navigateur Web / Mobile PWA] -->|HTTPS / REST API| API[Serveur Laravel 11]
+    API -->|Sanctum JWT| Auth[Couche Sécurité / Auth]
+    API -->|Eloquent ORM| DB[(Base MySQL Multi-Tenant)]
+    API -->|Storage| S3[Stockage Médias Local / S3]
+    API -.->|Requêtes API| AI[Services IA Externes]
