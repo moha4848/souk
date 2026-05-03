@@ -19,9 +19,23 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5174', 'http://127.0.0.1:5174', 'http://localhost:3000'],
+    'allowed_origins' => [
+        // Local development
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'http://localhost:5174',
+        'http://127.0.0.1:5174',
+        'http://localhost:3000',
+        // Production — replace with your actual Vercel URL after deployment
+        'https://souk-project.vercel.app',
+    ],
 
-    'allowed_origins_patterns' => ['http://localhost:.*', 'http://127.0.0.1:.*'],
+    'allowed_origins_patterns' => [
+        'http://localhost:.*',
+        'http://127.0.0.1:.*',
+        'https://.*\.vercel\.app',      // All Vercel preview URLs
+        'https://.*\.railway\.app',     // Railway preview URLs
+    ],
 
     'allowed_headers' => ['*'],
 
