@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getDashboard } from '../../api/services'
 import { useAuth } from '../../context/AuthContext'
 import { useSettings } from '../../context/SettingsContext'
-import { C, Ornament, Pill, Card, StatusBadge, ZelligeBg, Spinner } from '../../components/UI'
+import { C, Ornament, Pill, Card, StatusBadge, ZelligeBg, Spinner, Glass } from '../../components/UI'
 
 export default function Dashboard() {
   const { user }    = useAuth()
@@ -56,7 +56,7 @@ export default function Dashboard() {
         display:'flex', justifyContent:'space-between', alignItems:'center' }}>
         <div>
           <div style={{ fontSize:10, letterSpacing:3, color:C.muted, textTransform:'uppercase' }}>Marhba bik</div>
-          <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize: 'clamp(18px, 3vw, 26px)', fontWeight:600 }}>
+          <div style={{ fontFamily:"'Playfair Display',serif", fontSize: 'clamp(20px, 3vw, 28px)', fontWeight:900, color:'#fff' }}>
             {user?.vendor?.shop_name || user?.name} <span style={{ color:C.gold }}>✦</span>
           </div>
         </div>
@@ -71,37 +71,38 @@ export default function Dashboard() {
       {/* Revenue card */}
       {/* Revenue + Stats row */}
       <div className="dash-top" style={{ padding:'18px clamp(16px, 3vw, 32px) 0', position:'relative', zIndex:1 }}>
-        <div className="dash-revenue" style={{
-          background:'linear-gradient(135deg,rgba(201,168,76,.12),rgba(184,115,51,.07))',
-          border:'1px solid rgba(201,168,76,.28)', borderRadius:20, padding:'24px', overflow:'hidden', position:'relative' }}>
+        <Glass className="dash-revenue" style={{
+          background:'rgba(255,255,255,0.03)',
+          border:`1px solid ${C.gold}30`, borderRadius:24, padding:'30px', overflow:'hidden', position:'relative' }}>
           <div style={{ position:'absolute', right:-12, top:-20, fontSize:110,
-            color:'rgba(201,168,76,.05)', lineHeight:1, userSelect:'none' }}>◈</div>
-          <div style={{ fontSize:10, letterSpacing:2, color:C.muted, textTransform:'uppercase', marginBottom:6 }}>
-            Chiffre d'affaires · Ce mois
+            color:C.gold, opacity:0.05, lineHeight:1, userSelect:'none' }}>◈</div>
+          <div style={{ fontSize:10, letterSpacing:2.5, color:C.muted, textTransform:'uppercase', marginBottom:12, fontWeight:800 }}>
+            <span style={{ color:C.gold }}>✦</span> Chiffre d'affaires · Ce mois
           </div>
-          <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight:700, color:C.goldL, lineHeight:1 }}>
+          <div style={{ fontFamily:"'Playfair Display',serif", fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight:900, color:'#fff', lineHeight:1 }}>
             {(data?.revenue ?? 0).toLocaleString('fr-MA')}
-            <span style={{ fontSize:16, fontWeight:400, color:C.muted }}> MAD</span>
+            <span style={{ fontSize:16, fontWeight:400, color:C.muted, marginLeft:10 }}>MAD</span>
           </div>
-          <div style={{ marginTop:14 }}>
-            <Pill color={data?.revenue_growth >= 0 ? C.tealL : C.danger}
-              bg={data?.revenue_growth >= 0 ? 'rgba(42,107,107,0.25)' : 'rgba(201,76,76,0.15)'}>
+          <div style={{ marginTop:20 }}>
+            <Pill color={data?.revenue_growth >= 0 ? C.emerald : C.danger}
+              bg={data?.revenue_growth >= 0 ? `${C.emerald}15` : `${C.danger}15`}>
               {data?.revenue_growth >= 0 ? '↑' : '↓'} {Math.abs(data?.revenue_growth ?? 0)}% vs mois dernier
             </Pill>
           </div>
-        </div>
+        </Glass>
 
       {/* Mini stats */}
         <div className="dash-stats">
           {stats.map(s => (
-            <div key={s.label} style={{ background:C.surface, border:`1px solid ${C.border}`,
-              borderRadius:16, padding:'16px 12px', textAlign:'center', transition: 'transform 0.2s' }}
+            <Glass key={s.label} style={{ 
+              background:'rgba(255,255,255,0.02)', border:`1px solid ${C.border}`,
+              borderRadius:20, padding:'20px 15px', textAlign:'center', transition: 'transform 0.2s' }}
               onMouseOver={e => e.currentTarget.style.transform = 'translateY(-4px)'}
               onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
-              <div style={{ fontSize:24, marginBottom:6 }}>{s.icon}</div>
-              <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:22, fontWeight:600 }}>{s.val}</div>
-              <div style={{ fontSize:10, color:C.muted, textTransform:'uppercase', letterSpacing:1, marginTop:4 }}>{s.label}</div>
-            </div>
+              <div style={{ fontSize:28, marginBottom:8, opacity:0.8 }}>{s.icon}</div>
+              <div style={{ fontFamily:"'Playfair Display',serif", fontSize:24, fontWeight:900, color:'#fff' }}>{s.val}</div>
+              <div style={{ fontSize:10, color:C.muted, textTransform:'uppercase', letterSpacing:1.5, marginTop:6, fontWeight:800 }}>{s.label}</div>
+            </Glass>
           ))}
         </div>
       </div>
@@ -110,7 +111,7 @@ export default function Dashboard() {
 
       {/* Recent orders */}
       <div style={{ padding:'4px clamp(16px, 3vw, 32px) 0', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:18, fontWeight:600 }}>Commandes récentes</div>
+        <div style={{ fontFamily:"'Playfair Display',serif", fontSize:22, fontWeight:900, color:'#fff' }}>Commandes récentes</div>
         <div onClick={() => navigate('/orders')} style={{ fontSize:11, color:C.gold, cursor:'pointer' }}>Voir tout →</div>
       </div>
       <div style={{ padding:'10px clamp(16px, 3vw, 32px) 0' }}>

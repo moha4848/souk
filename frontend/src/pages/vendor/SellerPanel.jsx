@@ -27,7 +27,7 @@ export default function SellerPanel() {
           <div style={{ color:C.gold, fontSize:12, letterSpacing:4, textTransform:'uppercase', marginBottom:8 }}>
             Tableau de Bord Vendeur
           </div>
-          <h1 style={{ color:C.text, fontSize:36, margin:0, fontFamily:"'Cormorant Garamond', serif" }}>
+          <h1 style={{ color:C.text, fontSize:42, margin:0, fontFamily:"'Playfair Display', serif", fontWeight:900 }}>
             Bienvenue, {store_info.name || 'Artisan SOUK'}
           </h1>
           <div style={{ marginTop:14, display:'flex', gap:10 }}>

@@ -68,44 +68,69 @@ export default function ClientDashboard() {
     <div style={{ minHeight: '100vh', background: C.bg, color: C.text, fontFamily: "'Outfit', sans-serif" }}>
       <style>{KF}</style>
       
-      {/* ── Navbar ── */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(10,10,10,0.8)', backdropFilter: 'blur(20px)', borderBottom: `1px solid ${C.border}`, padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 32, height: 32, background: C.emerald, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#fff' }}>S</div>
-          <span style={{ fontWeight: 800, letterSpacing: -0.5 }}>SOUK <span style={{ color: C.emerald }}>✦</span></span>
+      {/* ── High-End Navbar ── */}
+      <header style={{ 
+        position: 'sticky', top: 0, zIndex: 100, 
+        background: 'rgba(5,5,5,0.7)', backdropFilter: 'blur(30px)', 
+        borderBottom: `1px solid ${C.border}`, padding: '15px 40px', 
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between' 
+      }}>
+        <div onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <img src="/logo.png" alt="SOUK" style={{ height: 32 }} />
+          <div style={{ width:1, height:20, background:C.border, margin:'0 5px' }} />
+          <span style={{ fontWeight: 900, fontSize:18, letterSpacing: -0.5, color:'#fff' }}>ESPACE <span style={{ color: C.emerald }}>PRIVÉ</span></span>
         </div>
-        <button onClick={logoutClient} style={{ background: 'transparent', border: 'none', color: C.danger, display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
-          <LogOut size={16} /> <span style={{ opacity: 0.8 }}>Déconnexion</span>
-        </button>
+        
+        <div style={{ display:'flex', alignItems:'center', gap:25 }}>
+           <div style={{ display:'flex', alignItems:'center', gap:10, padding:'6px 15px', borderRadius:100, background:`${C.gold}10`, border:`1px solid ${C.gold}30` }}>
+              <Diamond size={14} color={C.gold} />
+              <span style={{ fontSize:12, fontWeight:900, color:C.gold }}>{client.loyalty_points || 0} PTS</span>
+           </div>
+           <button onClick={logoutClient} style={{ background: 'transparent', border: 'none', color: C.danger, display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer', opacity:0.8 }}>
+             <LogOut size={18} /> <span>QUITTER</span>
+           </button>
+        </div>
       </header>
 
-      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 24px' }}>
+      <main style={{ maxWidth: 1400, margin: '0 auto', padding: '60px 40px' }}>
         
-        {/* ── Welcome & Stats ── */}
-        <section style={{ animation: 'fadeUp 0.6s ease-out' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32 }}>
-            <div>
-              <h1 style={{ fontSize: 32, fontWeight: 800, margin: 0 }}>Bonjour, {client.name.split(' ')[0]} 👋</h1>
-              <p style={{ color: C.muted, margin: '4px 0 0', fontSize: 15 }}>Bienvenue dans votre espace personnel Emerald.</p>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: 24, fontWeight: 800, color: C.emerald }}>{stats[1].value} <span style={{ fontSize: 14 }}>PTS</span></div>
-              <div style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: 1 }}>Fidélité Mécène</div>
+        {/* ── Welcome & Artistic Stats ── */}
+        <section style={{ animation: 'fadeUp 0.8s cubic-bezier(0.23, 1, 0.32, 1)', marginBottom: 60 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 45 }}>
+            <div style={{ position:'relative' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
+                 <div style={{ width:20, height:1, background:C.emerald }} />
+                 <span style={{ fontSize:11, fontWeight:900, color:C.emerald, letterSpacing:2 }}>ESPACE ACHETEUR</span>
+              </div>
+              <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, margin: 0, fontFamily:"'Playfair Display', serif", color:'#fff' }}>
+                Ravi de vous revoir, <span style={{ color:C.emerald }}>{client.name.split(' ')[0]}</span>
+              </h1>
+              <p style={{ color: C.muted, margin: '10px 0 0', fontSize: 17, fontWeight:300 }}>Bienvenue dans votre univers privilégié sur SOUK ✦</p>
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 20, marginBottom: 40 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 25 }}>
             {stats.map((s, i) => (
-              <Glass key={i} style={{ padding: 24, display: 'flex', alignItems: 'center', gap: 20 }}>
-                <div style={{ width: 48, height: 48, borderRadius: 14, background: `${s.color}15`, color: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Glass key={i} style={{ 
+                padding: '30px', display: 'flex', alignItems: 'center', gap: 25, 
+                border: `1px solid ${C.border}`, borderRadius: 24, position:'relative', overflow:'hidden' 
+              }}>
+                <div style={{ position:'absolute', top:'-20%', right:'-10%', width:100, height:100, background:s.color, filter:'blur(40px)', opacity:0.05 }} />
+                
+                <div style={{ 
+                  width: 60, height: 60, borderRadius: 18, 
+                  background: `${s.color}15`, color: s.color, 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: `0 10px 20px ${s.color}10`
+                }}>
                   {s.icon}
                 </div>
                 <div>
-                  <div style={{ fontSize: 24, fontWeight: 800 }}>{s.value}</div>
-                  <div style={{ fontSize: 12, color: C.muted, display: 'flex', gap: 5 }}>
-                    <span>{s.labelFr}</span>
-                    <span style={{ opacity: 0.5 }}>•</span>
-                    <span style={{ fontFamily: 'serif' }}>{s.label}</span>
+                  <div style={{ fontSize: 32, fontWeight: 900, color:'#fff', lineHeight:1 }}>{s.value}</div>
+                  <div style={{ fontSize: 12, color: C.muted, marginTop: 8, display: 'flex', gap: 8, alignItems:'center' }}>
+                    <span style={{ fontWeight:800, color:s.color, letterSpacing:1 }}>{s.label.toUpperCase()}</span>
+                    <span style={{ opacity: 0.3 }}>|</span>
+                    <span style={{ fontFamily: "'Cairo', sans-serif", fontSize:13 }}>{s.labelAr}</span>
                   </div>
                 </div>
               </Glass>

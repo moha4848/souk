@@ -32,18 +32,20 @@ function slugify(s) {
 }
 
 // ── Step indicator ────────────────────────────────────────────────────
+// ── Step indicator ────────────────────────────────────────────────────
 function StepBar({ step }) {
   const labels = ['Compte', 'Boutique', 'Validation']
   return (
-    <div style={{ marginBottom: 28 }}>
+    <div style={{ marginBottom: 40, padding:'0 20px' }}>
       {/* Progress bar */}
-      <div style={{ height: 3, background: C.border, borderRadius: 2, marginBottom: 16, overflow: 'hidden' }}>
+      <div style={{ height: 4, background: C.surface2, borderRadius: 10, marginBottom: 20, overflow: 'hidden', position: 'relative' }}>
         <div style={{
           height: '100%',
           width: `${(step / 3) * 100}%`,
-          background: `linear-gradient(90deg, ${C.teal}, ${C.gold})`,
-          borderRadius: 2,
-          transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)',
+          background: `linear-gradient(90deg, ${C.emerald}, ${C.gold})`,
+          borderRadius: 10,
+          transition: 'width 0.8s cubic-bezier(0.23, 1, 0.32, 1)',
+          boxShadow: `0 0 15px ${C.emerald}60`
         }} />
       </div>
       {/* Step dots */}
@@ -53,18 +55,20 @@ function StepBar({ step }) {
           const done = step > s
           const active = step === s
           return (
-            <div key={lbl} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
+            <div key={lbl} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
               <div style={{
-                width: 28, height: 28, borderRadius: '50%',
-                background: done ? `linear-gradient(135deg,${C.gold},${C.copper})` : active ? C.surface2 : C.surface,
-                border: `2px solid ${done || active ? C.gold : C.border}`,
+                width: 32, height: 32, borderRadius: 12,
+                background: done ? C.emerald : active ? C.surface2 : C.surface,
+                border: `1.5px solid ${done || active ? C.emerald : C.border}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 11, fontWeight: 700, color: done ? C.bg : active ? C.gold : C.muted,
+                fontSize: 12, fontWeight: 900, color: done ? '#fff' : active ? C.emerald : C.muted,
                 transition: 'all 0.4s',
+                boxShadow: active ? `0 0 20px ${C.emerald}30` : 'none',
+                transform: active ? 'scale(1.1)' : 'none'
               }}>
-                {done ? <Check size={14} /> : s}
+                {done ? <Check size={16} /> : s}
               </div>
-              <span style={{ fontSize: 9, color: active ? C.gold : C.muted, letterSpacing: 0.5, textTransform: 'uppercase' }}>
+              <span style={{ fontSize: 10, color: active ? '#fff' : C.muted, letterSpacing: 1, textTransform: 'uppercase', fontWeight: active ? 900 : 500 }}>
                 {lbl}
               </span>
             </div>
@@ -79,37 +83,41 @@ function StepBar({ step }) {
 function Step1({ data, set, error, onNext }) {
   const ok = data.name && data.email && data.password && data.password.length >= 8
   return (
-    <div style={{ animation: 'slideRight 0.4s ease-out' }}>
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ fontSize: 11, color: C.gold, letterSpacing: 3, textTransform: 'uppercase', marginBottom: 4 }}>Étape 1 / 4</div>
-        <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, fontWeight: 700 }}>Créer votre compte</div>
-        <div style={{ fontSize: 12, color: C.muted, marginTop: 4 }}>Informations personnelles du vendeur</div>
+    <div style={{ animation: 'fadeUp 0.6s ease-out' }}>
+      <div style={{ marginBottom: 35 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:8 }}>
+           <span style={{ fontSize: 11, color: C.emerald, letterSpacing: 3, textTransform: 'uppercase', fontWeight:900 }}>Étape 01</span>
+           <div style={{ flex:1, height:1, background:C.border }} />
+        </div>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: 32, fontWeight: 900, color:'#fff', margin:0 }}>Informations Artisan</h2>
+        <p style={{ fontSize: 15, color: C.muted, marginTop: 8, fontWeight:400 }}>Créez votre identité de vendeur SOUK ✦</p>
       </div>
-      <FieldInput label="Nom complet" value={data.name} onChange={set('name')} placeholder="Mohamed AlMahdi" />
-      <FieldInput label="Email" type="email" value={data.email} onChange={set('email')} placeholder="vous@example.com" />
-      <FieldInput label="Téléphone (optionnel)" value={data.phone} onChange={set('phone')} placeholder="+212 6XX XXX XXX" />
-      {/* Language selector */}
-      <div style={{ marginBottom: 14 }}>
-        <div style={{ fontSize: 10, color: C.muted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>Langue</div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          {LANGS.map(l => (
-            <button key={l.value} onClick={() => set('language')({ target: { value: l.value } })}
-              style={{
-                flex: 1, padding: '9px 4px', borderRadius: 10, cursor: 'pointer',
-                background: data.language === l.value ? `linear-gradient(135deg,${C.gold}22,${C.copper}11)` : C.surface2,
-                border: `1.5px solid ${data.language === l.value ? C.gold : C.border}`,
-                color: data.language === l.value ? C.gold : C.muted, fontSize: 11,
-                transition: 'all 0.2s',
-              }}>
-              {l.label}
-            </button>
-          ))}
+      
+      <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
+        <FieldInput label="Nom complet" value={data.name} onChange={set('name')} placeholder="Mohamed Al Mansouri" />
+        <FieldInput label="Email professionnel" type="email" value={data.email} onChange={set('email')} placeholder="vous@souk.ma" />
+        
+        <div style={{ display:'grid', gridTemplateColumns:'1.2fr 1fr', gap:15 }}>
+           <FieldInput label="Téléphone" value={data.phone} onChange={set('phone')} placeholder="+212 6XX XXX XXX" />
+           <div style={{ marginBottom: 14 }}>
+              <div style={{ fontSize: 11, color: C.muted, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8, fontWeight:700 }}>Langue</div>
+              <select value={data.language} onChange={set('language')} style={{ width: '100%', background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 14, padding: '14px 12px', color: C.text, fontSize: 14, outline: 'none' }}>
+                {LANGS.map(l => <option key={l.value} value={l.value} style={{background:C.surface}}>{l.label}</option>)}
+              </select>
+           </div>
+        </div>
+
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:15 }}>
+           <FieldInput label="Mot de passe" type="password" value={data.password} onChange={set('password')} placeholder="••••••••" />
+           <FieldInput label="Confirmation" type="password" value={data.password_confirmation} onChange={set('password_confirmation')} placeholder="••••••••" />
         </div>
       </div>
-      <FieldInput label="Mot de passe (8 min)" type="password" value={data.password} onChange={set('password')} placeholder="••••••••" />
-      <FieldInput label="Confirmer mot de passe" type="password" value={data.password_confirmation} onChange={set('password_confirmation')} placeholder="••••••••" />
+
       {error && <ErrorBox msg={error} />}
-      <GoldBtn disabled={!ok} onClick={onNext} style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>Continuer <ArrowRight size={18} /></GoldBtn>
+      
+      <GoldBtn disabled={!ok} onClick={onNext} style={{ marginTop:40, width:'100%', padding:'20px', borderRadius:20, display:'flex', alignItems:'center', justifyContent:'center', gap:12, fontSize:14, fontWeight:900 }}>
+        CONTINUER L'INSTALLATION <ArrowRight size={20} />
+      </GoldBtn>
     </div>
   )
 }
@@ -118,95 +126,80 @@ function Step1({ data, set, error, onNext }) {
 function Step2({ data, set, error, onNext, onBack }) {
   const ok = data.store_name && data.store_slug
   return (
-    <div style={{ animation: 'slideRight 0.4s ease-out' }}>
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ fontSize: 11, color: C.gold, letterSpacing: 3, textTransform: 'uppercase', marginBottom: 4 }}>Étape 2 / 3</div>
-        <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, fontWeight: 700 }}>Créer votre boutique</div>
-        <div style={{ fontSize: 12, color: C.muted, marginTop: 4 }}>Paramètres de votre espace de vente</div>
-      </div>
-      <FieldInput
-        label="Nom de la boutique"
-        value={data.store_name}
-        onChange={e => {
-          set('store_name')(e)
-          set('store_slug')({ target: { value: slugify(e.target.value) } })
-        }}
-        placeholder="Ma Super Boutique"
-      />
-      {/* Slug preview */}
-      <div style={{ marginBottom: 14 }}>
-        <div style={{ fontSize: 10, color: C.muted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>URL de la boutique</div>
-        <div style={{ display: 'flex', alignItems: 'center', background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 12, overflow: 'hidden' }}>
-          <span style={{ padding: '13px 10px 13px 14px', fontSize: 12, color: C.muted, whiteSpace: 'nowrap' }}>souk.ma/</span>
-          <input
-            value={data.store_slug}
-            onChange={set('store_slug')}
-            placeholder="ma-boutique"
-            style={{ flex: 1, background: 'transparent', border: 'none', padding: '13px 14px 13px 0', color: C.gold, fontFamily: "'DM Sans',sans-serif", fontSize: 14, outline: 'none' }}
-          />
+    <div style={{ animation: 'fadeUp 0.6s ease-out' }}>
+      <div style={{ marginBottom: 35 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:8 }}>
+           <span style={{ fontSize: 11, color: C.gold, letterSpacing: 3, textTransform: 'uppercase', fontWeight:900 }}>Étape 02</span>
+           <div style={{ flex:1, height:1, background:C.border }} />
         </div>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: 32, fontWeight: 900, color:'#fff', margin:0 }}>Configuration Boutique</h2>
+        <p style={{ fontSize: 15, color: C.muted, marginTop: 8, fontWeight:400 }}>Définissez l'adresse de votre échoppe digitale.</p>
       </div>
-      {/* Description */}
-      <div style={{ marginBottom: 14 }}>
-        <div style={{ fontSize: 10, color: C.muted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>Description (optionnel)</div>
-        <textarea
-          value={data.store_description}
-          onChange={set('store_description')}
-          placeholder="Décrivez votre boutique en quelques mots…"
-          rows={3}
-          style={{ width: '100%', background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 12, padding: '13px 16px', color: C.text, fontFamily: "'DM Sans',sans-serif", fontSize: 14, outline: 'none', resize: 'none', boxSizing: 'border-box' }}
-          onFocus={e => e.target.style.borderColor = C.gold}
-          onBlur={e => e.target.style.borderColor = C.border}
+
+      <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
+        <FieldInput
+          label="Nom de l'enseigne"
+          value={data.store_name}
+          onChange={e => {
+            set('store_name')(e)
+            set('store_slug')({ target: { value: slugify(e.target.value) } })
+          }}
+          placeholder="Ma Boutique Artisanale"
         />
-      </div>
-      {/* Logo upload */}
-      <div style={{ marginBottom: 14 }}>
-        <div style={{ fontSize: 10, color: C.muted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>Logo (optionnel)</div>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', background: C.surface2, border: `1.5px dashed ${C.border}`, borderRadius: 12, padding: '14px 16px', transition: 'border 0.2s' }}
-          onMouseOver={e => e.currentTarget.style.borderColor = C.gold}
-          onMouseOut={e => e.currentTarget.style.borderColor = C.border}
-        >
-          <div style={{ color: C.gold }}><Image size={24} /></div>
-          <div>
-            <div style={{ fontSize: 13, color: C.text }}>{data.logo_name || 'Choisir une image'}</div>
-            <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>PNG, JPG ou SVG · max 2 MB</div>
+
+        <div>
+          <div style={{ fontSize: 11, color: C.muted, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8, fontWeight:700 }}>URL de la boutique</div>
+          <div style={{ display: 'flex', alignItems: 'center', background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 16, overflow: 'hidden', padding:'4px' }}>
+            <span style={{ padding: '0 15px', fontSize: 14, color: C.muted, fontWeight:700 }}>souk.ma/</span>
+            <input
+              value={data.store_slug}
+              onChange={set('store_slug')}
+              placeholder="ma-boutique"
+              style={{ flex: 1, background: 'transparent', border: 'none', padding: '14px 0', color: C.emerald, fontSize: 15, outline: 'none', fontWeight:900 }}
+            />
           </div>
-          <input type="file" accept="image/*" style={{ display: 'none' }}
-            onChange={e => {
-              const f = e.target.files[0]
-              if (f) {
-                set('logo')({ target: { value: f } })
-                set('logo_name')({ target: { value: f.name } })
-              }
-            }}
+        </div>
+
+        <div>
+          <div style={{ fontSize: 11, color: C.muted, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8, fontWeight:700 }}>Description de la marque</div>
+          <textarea
+            value={data.store_description}
+            onChange={set('store_description')}
+            placeholder="Décrivez votre savoir-faire et vos valeurs…"
+            rows={4}
+            style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: `1px solid ${C.border}`, borderRadius: 16, padding: '15px 20px', color: C.text, fontSize: 14, outline: 'none', resize: 'none', boxSizing: 'border-box', lineHeight:1.6 }}
+            onFocus={e => e.target.style.borderColor = C.emerald}
+            onBlur={e => e.target.style.borderColor = C.border}
           />
-        </label>
-      </div>
-      {/* Country + Timezone */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
-        <div>
-          <div style={{ fontSize: 10, color: C.muted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>Pays</div>
-          <select value={data.country} onChange={set('country')} style={{ width: '100%', background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 12, padding: '13px 12px', color: C.text, fontFamily: "'DM Sans',sans-serif", fontSize: 13, outline: 'none' }}>
-            <option value="MA">Maroc</option>
-            <option value="FR">France</option>
-            <option value="DZ">Algérie</option>
-            <option value="TN">Tunisie</option>
-          </select>
         </div>
-        <div>
-          <div style={{ fontSize: 10, color: C.muted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>Fuseau horaire</div>
-          <select value={data.timezone} onChange={set('timezone')} style={{ width: '100%', background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 12, padding: '13px 12px', color: C.text, fontFamily: "'DM Sans',sans-serif", fontSize: 13, outline: 'none' }}>
-            {TIMEZONES.map(t => <option key={t.value} value={t.value} style={{ background: C.surface }}>{t.label}</option>)}
-          </select>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 15 }}>
+          <div>
+            <div style={{ fontSize: 11, color: C.muted, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8, fontWeight:700 }}>Pays d'origine</div>
+            <select value={data.country} onChange={set('country')} style={{ width: '100%', background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 14, padding: '14px 12px', color: C.text, fontSize: 14, outline: 'none' }}>
+              <option value="MA">Maroc 🇲🇦</option>
+              <option value="FR">France 🇫🇷</option>
+              <option value="DZ">Algérie 🇩🇿</option>
+              <option value="TN">Tunisie 🇹🇳</option>
+            </select>
+          </div>
+          <div>
+            <div style={{ fontSize: 11, color: C.muted, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8, fontWeight:700 }}>Fuseau horaire</div>
+            <select value={data.timezone} onChange={set('timezone')} style={{ width: '100%', background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 14, padding: '14px 12px', color: C.text, fontSize: 14, outline: 'none' }}>
+              {TIMEZONES.map(t => <option key={t.value} value={t.value} style={{ background: C.surface }}>{t.label}</option>)}
+            </select>
+          </div>
         </div>
       </div>
+
       {error && <ErrorBox msg={error} />}
-      <div style={{ display: 'flex', gap: 10 }}>
-        <GoldBtn outline onClick={onBack} style={{ width: 'auto', padding: '13px 22px', flex: '0 0 auto', display:'flex', alignItems:'center', gap:8 }}>
-          <ArrowLeft size={18} /> Retour
-        </GoldBtn>
-        <GoldBtn disabled={!ok} onClick={onNext} style={{ flex: 1, display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
-          Continuer <ArrowRight size={18} />
+      
+      <div style={{ display: 'flex', gap: 15, marginTop:40 }}>
+        <button onClick={onBack} style={{ padding: '18px 25px', borderRadius: 20, border: `1px solid ${C.border}`, background: C.surface, color: C.text, cursor: 'pointer', fontSize: 13, fontWeight: 800, display: 'flex', alignItems: 'center', gap: 10, transition: 'all 0.3s' }}>
+          <ArrowLeft size={20} />
+        </button>
+        <GoldBtn disabled={!ok} onClick={onNext} style={{ flex: 1, borderRadius:20, display:'flex', alignItems:'center', justifyContent:'center', gap:12, fontSize:14, fontWeight:900 }}>
+          CONFIGURER LE THÈME <ArrowRight size={20} />
         </GoldBtn>
       </div>
     </div>
@@ -217,48 +210,57 @@ function Step2({ data, set, error, onNext, onBack }) {
 function Step3({ data, set, error, loading, onBack, onSubmit }) {
   const ok = data.terms && data.privacy
   return (
-    <div style={{ animation: 'slideRight 0.4s ease-out' }}>
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ fontSize: 11, color: C.gold, letterSpacing: 3, textTransform: 'uppercase', marginBottom: 4 }}>Étape 3 / 3</div>
-        <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, fontWeight: 700 }}>Validation finale</div>
-        <div style={{ fontSize: 12, color: C.muted, marginTop: 4 }}>Lisez et acceptez avant de lancer votre boutique</div>
+    <div style={{ animation: 'fadeUp 0.6s ease-out' }}>
+      <div style={{ marginBottom: 35 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:8 }}>
+           <span style={{ fontSize: 11, color: C.emerald, letterSpacing: 3, textTransform: 'uppercase', fontWeight:900 }}>Étape 03</span>
+           <div style={{ flex:1, height:1, background:C.border }} />
+        </div>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: 32, fontWeight: 900, color:'#fff', margin:0 }}>Validation Finale</h2>
+        <p style={{ fontSize: 15, color: C.muted, marginTop: 8, fontWeight:400 }}>Revoyez vos informations avant le lancement.</p>
       </div>
 
-      {/* Summary card */}
-      <div style={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 14, padding: '16px', marginBottom: 20 }}>
-        <div style={{ fontSize: 11, color: C.gold, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 12 }}>Récapitulatif</div>
-        <Row label="Vendeur" val={data.name} />
-        <Row label="Email" val={data.email} />
-        <Row label="Boutique" val={data.store_name} />
-        <Row label="URL" val={`souk.ma/${data.store_slug}`} color={C.gold} />
+      <div style={{ background: `linear-gradient(145deg, ${C.surface} 0%, ${C.bg} 100%)`, border: `1px solid ${C.border}`, borderRadius: 24, padding: '25px', marginBottom: 30, position:'relative', overflow:'hidden' }}>
+        <ZelligeBg opacity={0.05} />
+        <div style={{ fontSize: 11, color: C.emerald, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 20, fontWeight:900, display:'flex', alignItems:'center', gap:8 }}>
+           <Check size={14} /> Récapitulatif du profil
+        </div>
+        <div style={{ display:'flex', flexDirection:'column', gap:15 }}>
+           <Row label="Artisan" val={data.name} />
+           <Row label="Email" val={data.email} />
+           <Row label="Enseigne" val={data.store_name} />
+           <Row label="Adresse SOUK" val={`souk.ma/${data.store_slug}`} color={C.emerald} />
+        </div>
       </div>
 
-      {/* Checkboxes */}
-      <CheckRow
-        checked={data.terms}
-        onChange={() => set('terms')({ target: { value: !data.terms } })}
-        label={<>J'accepte les <a href="#" style={{ color: C.gold, textDecoration: 'none' }}>Conditions Générales d'Utilisation</a> de SOUK</>}
-      />
-      <CheckRow
-        checked={data.privacy}
-        onChange={() => set('privacy')({ target: { value: !data.privacy } })}
-        label={<>J'accepte la <a href="#" style={{ color: C.gold, textDecoration: 'none' }}>Politique de Confidentialité</a> et le traitement de mes données</>}
-      />
+      <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+         <CheckRow
+           checked={data.terms}
+           onChange={() => set('terms')({ target: { value: !data.terms } })}
+           label={<>J'accepte les <a href="#" style={{ color: C.emerald, textDecoration: 'none', fontWeight:700 }}>Conditions d'Utilisation</a></>}
+         />
+         <CheckRow
+           checked={data.privacy}
+           onChange={() => set('privacy')({ target: { value: !data.privacy } })}
+           label={<>J'accepte la <a href="#" style={{ color: C.emerald, textDecoration: 'none', fontWeight:700 }}>Politique de Confidentialité</a></>}
+         />
+      </div>
 
       {error && <ErrorBox msg={error} />}
-      <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
-        <GoldBtn outline onClick={onBack} style={{ width: 'auto', padding: '13px 22px', flex: '0 0 auto', display:'flex', alignItems:'center', gap:8 }}>
-          <ArrowLeft size={18} /> Retour
-        </GoldBtn>
-        <GoldBtn disabled={!ok || loading} onClick={onSubmit} style={{ flex: 1, display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+      
+      <div style={{ display: 'flex', gap: 15, marginTop: 40 }}>
+        <button onClick={onBack} style={{ padding: '18px 25px', borderRadius: 20, border: `1px solid ${C.border}`, background: C.surface, color: C.text, cursor: 'pointer', fontSize: 13, fontWeight: 800, display: 'flex', alignItems: 'center', gap: 10, transition: 'all 0.3s' }}>
+          <ArrowLeft size={20} />
+        </button>
+        <GoldBtn disabled={!ok || loading} onClick={onSubmit} style={{ flex: 1, borderRadius:20, display:'flex', alignItems:'center', justifyContent:'center', gap:12, fontSize:14, fontWeight:900 }}>
           {loading ? (
-            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-              <span style={{ display: 'inline-block', width: 14, height: 14, border: `2px solid ${C.bg}`, borderTop: `2px solid ${C.gold}`, borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
-              Inscription en cours…
-            </span>
+             <>
+               <div style={{ width: 18, height: 18, border: `3px solid rgba(255,255,255,0.2)`, borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+               DÉPLOIEMENT...
+             </>
           ) : (
             <>
-              <Sparkles size={18} /> Finaliser l'inscription
+              <Sparkles size={20} /> LANCER MA BOUTIQUE
             </>
           )}
         </GoldBtn>
@@ -269,20 +271,26 @@ function Step3({ data, set, error, loading, onBack, onSubmit }) {
 
 // ── Helpers ───────────────────────────────────────────────────────────
 const ErrorBox = ({ msg }) => (
-  <div style={{ background: 'rgba(201,76,76,0.1)', border: `1px solid ${C.danger}40`, borderRadius: 10, padding: '10px 14px', fontSize: 12, color: C.danger, marginBottom: 14 }}>{msg}</div>
+  <div style={{ background: `${C.danger}10`, border: `1px solid ${C.danger}30`, backdropFilter:'blur(10px)', borderRadius: 16, padding: '16px 20px', fontSize: 13, color: C.danger, marginBottom: 20, fontWeight:600 }}>{msg}</div>
 )
-const Row = ({ label, val, color = C.text }) => (
-  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 7, fontSize: 12 }}>
-    <span style={{ color: C.muted }}>{label}</span>
-    <span style={{ color, fontWeight: 600 }}>{val}</span>
+const Row = ({ label, val, color = '#fff' }) => (
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems:'center', padding:'10px 0', borderBottom:`1px solid ${C.border}10` }}>
+    <span style={{ color: C.muted, fontSize:13, fontWeight:500 }}>{label}</span>
+    <span style={{ color, fontWeight: 800, fontSize:14 }}>{val}</span>
   </div>
 )
 const CheckRow = ({ checked, onChange, label }) => (
-  <div onClick={onChange} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 14, cursor: 'pointer' }}>
-    <div style={{ width: 20, height: 20, borderRadius: 6, border: `2px solid ${checked ? C.gold : C.border}`, background: checked ? `linear-gradient(135deg,${C.gold},${C.copper})` : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.bg, flexShrink: 0, marginTop: 1, transition: 'all 0.2s' }}>
-      {checked ? <Check size={12} /> : ''}
+  <div onClick={onChange} style={{ 
+    display: 'flex', gap: 15, alignItems: 'center', padding:'18px 22px', borderRadius:20, 
+    background: checked ? 'rgba(16,185,129,0.05)' : 'rgba(255,255,255,0.02)', 
+    border:`1px solid ${checked ? `${C.emerald}50` : `${C.border}`}`, 
+    backdropFilter:'blur(10px)',
+    cursor: 'pointer', transition:'0.4s cubic-bezier(0.23, 1, 0.32, 1)' 
+  }}>
+    <div style={{ width: 22, height: 22, borderRadius: 8, border: `2px solid ${checked ? C.emerald : C.border}`, background: checked ? C.emerald : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0, transition: 'all 0.3s' }}>
+      {checked ? <Check size={14} /> : ''}
     </div>
-    <span style={{ fontSize: 12, color: C.muted, lineHeight: 1.6 }}>{label}</span>
+    <span style={{ fontSize: 13, color: checked ? '#fff' : C.muted, fontWeight: checked ? 700 : 400 }}>{label}</span>
   </div>
 )
 
@@ -355,41 +363,101 @@ export default function RegisterPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: `radial-gradient(ellipse at 30% 0%, rgba(201,168,76,0.06) 0%, ${C.bg} 55%)`,
-      display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px 16px',
+      display: 'flex',
+      background: C.bg,
+      color: C.text,
+      fontFamily: "'Outfit', sans-serif"
     }}>
       <style>{KF}</style>
 
-      <div style={{
-        width: '100%', maxWidth: 520, background: C.bg, borderRadius: 32,
-        border: `1.5px solid ${C.border}`, overflow: 'hidden',
-        boxShadow: '0 0 80px rgba(201,168,76,0.07), 0 40px 80px rgba(0,0,0,0.75)',
-        animation: 'fadeUp 0.5s ease-out',
+      {/* ── Left Side: Artistic Branding (Desktop Only) ── */}
+      <div className="hide-mobile" style={{
+        flex: 1.2,
+        background: `linear-gradient(135deg, ${C.surface} 0%, ${C.bg} 100%)`,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        borderRight: `1px solid ${C.border}`,
+        overflow: 'hidden'
       }}>
+        <ZelligeBg opacity={0.15} />
+        
+        {/* Glow Effects */}
+        <div style={{ position:'absolute', top:'-10%', left:'-10%', width:500, height:500, background:C.emerald, filter:'blur(200px)', opacity:0.1 }} />
+        <div style={{ position:'absolute', bottom:'-10%', right:'-10%', width:400, height:400, background:C.gold, filter:'blur(150px)', opacity:0.05 }} />
 
-        {/* Header */}
-        <div style={{ position: 'relative', padding: '28px 28px 0' }}>
-          <ZelligeBg height={120} />
-          <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', marginBottom: 20 }}>
-            <img src="/logo.png" alt="SOUK Logo" style={{ height: 60, objectFit: 'contain', marginBottom: 8 }} />
-            <div style={{ fontSize: 11, color: C.muted, marginTop: 3, letterSpacing: 1 }}>Onboarding vendeur</div>
+        <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: 60, animation: 'fadeUp 1s ease-out' }}>
+          <div style={{ display:'flex', justifyContent:'center', marginBottom:40 }}>
+             <img src="/logo.png" alt="SOUK" style={{ height: 100, width: 'auto', filter: 'drop-shadow(0 0 40px rgba(16,185,129,0.4))' }} />
+          </div>
+          
+          <h1 style={{ 
+            fontSize: 48, fontWeight: 900, margin: '0 0 25px', letterSpacing: '-2px', 
+            fontFamily:"'Playfair Display', serif", color:'#fff', lineHeight: 1.1
+          }}>
+            Propulsez votre <br/> <span style={{ color: C.emerald }}>Artisanat</span> au sommet.
+          </h1>
+          
+          <div style={{ width:80, height:2, background:C.gold, margin:'0 auto 30px' }} />
+          
+          <p style={{ color: C.muted, fontSize: 18, maxWidth: 450, margin: '0 auto', lineHeight: 1.8, fontWeight: 300 }}>
+            Rejoignez la première plateforme SaaS dédiée aux maîtres artisans marocains et commencez à vendre en 5 minutes.
+          </p>
+
+          <div style={{ marginTop:60, display:'flex', gap:20, justifyContent:'center' }}>
+             {[1,2,3].map(i => (
+               <div key={i} style={{ 
+                 width:100, height:130, borderRadius:20, background:C.surface2, 
+                 border:`1px solid ${C.border}`, overflow:'hidden', transform: `translateY(${i*15}px)`,
+                 display:'flex', alignItems:'center', justifyContent:'center', color:C.emerald, opacity:0.3
+               }}>
+                  <Sparkles size={40} />
+               </div>
+             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Right Side: Wizard Form ── */}
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '60px 40px',
+        position: 'relative',
+        overflowY: 'auto'
+      }}>
+        <div style={{ width: '100%', maxWidth: 500, animation: 'fadeUp 0.8s cubic-bezier(0.23, 1, 0.32, 1)' }}>
+          {/* Logo only on mobile */}
+          <div className="show-mobile" style={{ textAlign: 'center', marginBottom: 50 }}>
+             <img src="/logo.png" alt="SOUK" style={{ height: 80, width: 'auto' }} />
+          </div>
+
+          <div style={{ marginBottom: 45 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:15 }}>
+               <div style={{ width:24, height:1, background:C.gold }} />
+               <span style={{ fontSize:12, fontWeight:900, color:C.gold, letterSpacing:2, textTransform:'uppercase' }}>Onboarding Vendeur</span>
+            </div>
+            <h2 style={{ fontSize: 36, margin: '0 0 12px', fontWeight: 900, color:'#fff', letterSpacing:'-1px' }}>Lancer votre échoppe</h2>
+            <p style={{ color: C.muted, margin: 0, fontSize: 16, fontWeight: 400 }}>Suivez les étapes pour configurer votre boutique.</p>
           </div>
 
           <StepBar step={step} />
-        </div>
+          
+          <div style={{ display:'flex', justifyContent:'center', marginBottom:30 }}><Ornament /></div>
 
-        {/* Step content */}
-        <div style={{ padding: '4px 28px 32px' }}>
-          <Ornament />
-          <div style={{ marginTop: 20 }}>
+          <div style={{ minHeight: 400 }}>
             {step === 1 && <Step1 data={form} set={set} error={error} onNext={validateStep} />}
             {step === 2 && <Step2 data={form} set={set} error={error} onNext={validateStep} onBack={() => setStep(1)} />}
             {step === 3 && <Step3 data={form} set={set} error={error} loading={loading} onBack={() => setStep(2)} onSubmit={submit} />}
           </div>
 
-          <div style={{ textAlign: 'center', marginTop: 20, fontSize: 12, color: C.muted }}>
-            Déjà un compte ?{' '}
-            <Link to="/login" style={{ color: C.gold, textDecoration: 'none' }}>Se connecter</Link>
+          <div style={{ textAlign: 'center', marginTop: 40, fontSize: 14, color: C.muted, borderTop: `1px solid ${C.border}`, paddingTop: 30 }}>
+            Déjà artisan sur SOUK ?{' '}
+            <Link to="/login" style={{ color: C.emerald, textDecoration: 'none', fontWeight: 800, marginLeft:5 }}>Se connecter</Link>
           </div>
         </div>
       </div>

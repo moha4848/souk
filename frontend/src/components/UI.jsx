@@ -195,36 +195,73 @@ export const Pill = ({ color=C.emerald, bg='rgba(16,185,129,0.1)', children }) =
 )
 
 export const FieldInput = ({ label, type='text', value, onChange, placeholder, style={} }) => (
-  <div style={{ marginBottom:25, ...style }}>
-    {label && <div style={{ fontSize:11, color:C.emerald, letterSpacing:2,
-      textTransform:'uppercase', marginBottom:10, marginLeft:4, fontWeight:800 }}>{label}</div>}
-    <input type={type} value={value} onChange={onChange} placeholder={placeholder} style={{
-      width:'100%', background:C.surface2, border:`1px solid ${C.border}`, borderRadius:18,
-      padding:'18px 24px', color:C.text, fontFamily:"'Outfit', sans-serif", fontSize:15, outline:'none',
-      transition:'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', boxSizing:'border-box',
-    }}
-    onFocus={e=>{e.target.style.borderColor=C.emerald; e.target.style.boxShadow=`0 0 0 6px ${C.emerald}15`, e.target.style.transform='translateY(-2px)'}}
-    onBlur={e=>{e.target.style.borderColor=C.border; e.target.style.boxShadow='none', e.target.style.transform='translateY(0)'}}
-    />
+  <div style={{ marginBottom:28, ...style }}>
+    {label && (
+      <div style={{ 
+        fontSize:10, color:C.muted, letterSpacing:2.5,
+        textTransform:'uppercase', marginBottom:12, marginLeft:4, fontWeight:900,
+        display:'flex', alignItems:'center', gap:8
+      }}>
+        <span style={{ color:C.emerald }}>✦</span> {label}
+      </div>
+    )}
+    <div style={{ position:'relative', borderRadius:20, padding:1, background:`linear-gradient(135deg, ${C.border}, transparent)`, transition:'0.4s' }}>
+      <input type={type} value={value} onChange={onChange} placeholder={placeholder} style={{
+        width:'100%', background:'rgba(255,255,255,0.03)', backdropFilter:'blur(12px)',
+        border:'none', borderRadius:19, padding:'18px 25px', color:C.text, 
+        fontFamily:"'Outfit', sans-serif", fontSize:15, outline:'none',
+        transition:'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)', boxSizing:'border-box',
+        boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)'
+      }}
+      onFocus={e=>{
+        e.target.parentElement.style.background = `linear-gradient(135deg, ${C.emerald}, ${C.gold})`;
+        e.target.style.background = 'rgba(255,255,255,0.06)';
+        e.target.style.transform = 'scale(0.995)';
+      }}
+      onBlur={e=>{
+        e.target.parentElement.style.background = `linear-gradient(135deg, ${C.border}, transparent)`;
+        e.target.style.background = 'rgba(255,255,255,0.03)';
+        e.target.style.transform = 'scale(1)';
+      }}
+      />
+    </div>
   </div>
 )
 
 export const FieldSelect = ({ label, value, onChange, options, style={} }) => (
-  <div style={{ marginBottom:25, ...style }}>
-    {label && <div style={{ fontSize:11, color:C.emerald, letterSpacing:2,
-      textTransform:'uppercase', marginBottom:10, marginLeft:4, fontWeight:800 }}>{label}</div>}
-    <select value={value} onChange={onChange} style={{
-      width:'100%', background:C.surface2, border:`1px solid ${C.border}`, borderRadius:18,
-      padding:'18px 24px', color:C.text, fontFamily:"'Outfit', sans-serif", fontSize:15, outline:'none',
-      cursor:'pointer', transition: 'all 0.3s'
-    }}
-    onFocus={e=>e.target.style.borderColor=C.emerald}
-    onBlur={e=>e.target.style.borderColor=C.border}
-    >
-      {options.map(o => (
-        <option key={o.value} value={o.value} style={{ background:C.surface }}>{o.label}</option>
-      ))}
-    </select>
+  <div style={{ marginBottom:28, ...style }}>
+    {label && (
+      <div style={{ 
+        fontSize:10, color:C.muted, letterSpacing:2.5,
+        textTransform:'uppercase', marginBottom:12, marginLeft:4, fontWeight:900,
+        display:'flex', alignItems:'center', gap:8
+      }}>
+        <span style={{ color:C.emerald }}>✦</span> {label}
+      </div>
+    )}
+    <div style={{ position:'relative', borderRadius:20, padding:1, background:`linear-gradient(135deg, ${C.border}, transparent)`, transition:'0.4s' }}>
+      <select value={value} onChange={onChange} style={{
+        width:'100%', background:'rgba(255,255,255,0.03)', backdropFilter:'blur(12px)',
+        border:'none', borderRadius:19, padding:'18px 25px', color:C.text, 
+        fontFamily:"'Outfit', sans-serif", fontSize:15, outline:'none',
+        cursor:'pointer', transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)',
+        appearance: 'none'
+      }}
+      onFocus={e=>{
+        e.target.parentElement.style.background = `linear-gradient(135deg, ${C.emerald}, ${C.gold})`;
+        e.target.style.background = 'rgba(255,255,255,0.06)';
+      }}
+      onBlur={e=>{
+        e.target.parentElement.style.background = `linear-gradient(135deg, ${C.border}, transparent)`;
+        e.target.style.background = 'rgba(255,255,255,0.03)';
+      }}
+      >
+        {options.map(o => (
+          <option key={o.value} value={o.value} style={{ background:C.surface, color:C.text }}>{o.label}</option>
+        ))}
+      </select>
+      <div style={{ position:'absolute', right:20, top:'50%', transform:'translateY(-50%)', pointerEvents:'none', color:C.muted, fontSize:10 }}>▼</div>
+    </div>
   </div>
 )
 

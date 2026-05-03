@@ -55,85 +55,130 @@ export default function StoreFront() {
   const themeBg = store.theme_settings?.backgroundColor || C.bg
 
   return (
-    <div style={{ background:themeBg, minHeight:'100vh', color:C.text, fontFamily:"'Cairo', sans-serif" }}>
+    <div style={{ background:themeBg, minHeight:'100vh', color:C.text, fontFamily:"'Outfit', sans-serif" }}>
       <style>{keyframes}</style>
       
-      {/* ── Store Header ── */}
+      {/* ── High-End Store Header ── */}
       <section className="store-header" style={{ 
-        height: 450, position: 'relative', overflow: 'hidden', 
+        height: 500, position: 'relative', overflow: 'hidden', 
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: `linear-gradient(135deg, ${C.surface} 0%, ${C.bg} 100%)`
+        background: `linear-gradient(180deg, ${C.surface} 0%, ${themeBg} 100%)`
       }}>
-        <ZelligeBg opacity={0.1} />
+        <ZelligeBg opacity={0.15} />
         
-        {/* Nav Overlays */}
-        <div className="store-nav" style={{ position:'absolute', top:30, left:40, right:40, display:'flex', justifyContent:'space-between', zIndex:100, alignItems:'center' }}>
-           <button onClick={() => navigate('/')} style={{ background:'none', border:`1px solid ${themeColor}40`, color:themeColor, padding:'10px 20px', borderRadius:30, cursor:'pointer', fontWeight:700, display:'flex', alignItems:'center', gap:8 }}>
-              <ArrowLeft size={16} /> ACCUEIL
+        {/* Glow Effects */}
+        <div style={{ position:'absolute', top:'-10%', right:'-10%', width:500, height:500, background:themeColor, filter:'blur(180px)', opacity:0.1 }} />
+
+        {/* Floating Navigation */}
+        <div className="store-nav" style={{ position:'absolute', top:40, left:60, right:60, display:'flex', justifyContent:'space-between', zIndex:100, alignItems:'center' }}>
+           <button onClick={() => navigate('/')} style={{ background:'rgba(255,255,255,0.03)', backdropFilter:'blur(10px)', border:`1px solid ${C.border}`, color:'#fff', padding:'12px 24px', borderRadius:100, cursor:'pointer', fontWeight:800, display:'flex', alignItems:'center', gap:10, fontSize:12, letterSpacing:1 }} onMouseOver={e=>e.target.style.borderColor=themeColor}>
+              <ArrowLeft size={18} /> RETOUR
            </button>
-           <button onClick={() => navigate(`/store/${slug}/cart`)} style={{ background:themeColor, color:'#000', padding:'10px 24px', borderRadius:30, border:'none', fontWeight:900, cursor:'pointer', boxShadow:`0 10px 30px ${themeColor}40`, display:'flex', alignItems:'center', gap:10 }}>
-             <ShoppingBag size={18} /> PANIER ({count})
+           <button onClick={() => navigate(`/store/${slug}/cart`)} style={{ background:themeColor, color:'#000', padding:'12px 28px', borderRadius:100, border:'none', fontWeight:900, cursor:'pointer', boxShadow:`0 15px 35px ${themeColor}40`, display:'flex', alignItems:'center', gap:12, fontSize:13 }}>
+             <ShoppingBag size={20} /> PANIER <span style={{ background:'rgba(0,0,0,0.1)', padding:'2px 8px', borderRadius:8, fontSize:11 }}>{count}</span>
            </button>
         </div>
 
-        <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', animation: 'slideUp 1s ease-out', width:'100%', maxWidth:600 }}>
-           <Arch className="store-arch" style={{ padding: '40px 60px' }}>
-              <Pill bg={`${C.gold}15`}>BOUTIQUE VÉRIFIÉE</Pill>
-              <h1 style={{ 
-                fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', 
-                margin: '15px 0', fontWeight: 900, color: '#fff' 
-              }}>
-                {store.shop_name}
-              </h1>
-              <Ornament />
-              <div style={{ display:'flex', justifyContent:'center', gap:20, marginTop:20 }}>
-                 <GoldBtn onClick={handleFollow} style={{ width:'auto', padding:'10px 30px', fontSize:12, background: themeColor }}>
-                   {isFollowing ? '✓ ABONNÉ' : '+ S\'ABONNER'}
-                 </GoldBtn>
-                 <Glass style={{ padding:'10px 20px', borderRadius:30, fontSize:13, fontWeight:700, color:themeColor }}>
-                   {store.followers_count || 0} SUIVEURS
-                 </Glass>
-              </div>
-           </Arch>
+        <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', animation: 'slideUp 1s cubic-bezier(0.23, 1, 0.32, 1)', width:'100%', maxWidth:700 }}>
+           <div style={{ display:'flex', justifyContent:'center', marginBottom:20 }}><Ornament /></div>
+           <Pill color={themeColor} bg={`${themeColor}15`}>BOUTIQUE CERTIFIÉE SOUK ✦</Pill>
+           
+           <h1 style={{ 
+             fontFamily: "'Playfair Display', serif", fontSize: 'clamp(3rem, 7vw, 5.5rem)', 
+             margin: '25px 0', fontWeight: 900, color: '#fff', letterSpacing:'-2px', lineHeight:1.1
+           }}>
+             {store.shop_name}
+           </h1>
+           
+           <div style={{ display:'flex', justifyContent:'center', gap:25, marginTop:40 }}>
+              <button 
+                onClick={handleFollow} 
+                style={{ 
+                  background: isFollowing ? 'transparent' : themeColor,
+                  color: isFollowing ? themeColor : '#000',
+                  border: isFollowing ? `2px solid ${themeColor}` : 'none',
+                  padding: '16px 40px', borderRadius: 100, fontWeight: 900, cursor: 'pointer',
+                  fontSize: 13, letterSpacing: 1, transition: '0.4s',
+                  boxShadow: isFollowing ? 'none' : `0 15px 30px ${themeColor}30`
+                }}
+                onMouseOver={e => !isFollowing && (e.target.style.transform='translateY(-4px)')}
+                onMouseOut={e => e.target.style.transform='translateY(0)'}
+              >
+                {isFollowing ? '✓ ABONNÉ' : '+ S\'ABONNER'}
+              </button>
+              
+               <div style={{ 
+                 padding:'14px 28px', borderRadius:100, background:'rgba(255,255,255,0.03)', 
+                 backdropFilter:'blur(10px)', border:`1px solid ${C.border}`, 
+                 display:'flex', alignItems:'center', gap:10 
+               }}>
+                  <div style={{ width:8, height:8, borderRadius:'50%', background:themeColor, boxShadow:`0 0 10px ${themeColor}` }} />
+                  <span style={{ fontSize:14, fontWeight:800, color:'#fff' }}>{store.followers_count || 0}</span>
+                  <span style={{ fontSize:11, color:C.muted, textTransform:'uppercase', letterSpacing:1 }}>Suiveurs</span>
+               </div>
+           </div>
         </div>
       </section>
 
-      {/* ── Product Catalog ── */}
-      <div style={{ maxWidth: 1400, margin: '0 auto', padding: '100px 40px' }}>
-        <div style={{ textAlign: 'center', marginBottom: 60 }}>
-           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, color: '#fff' }}>Nos Créations</h2>
-           <div style={{ width:60, height:3, background:C.gold, margin:'20px auto' }} />
+      {/* ── Product Catalog Grid ── */}
+      <div style={{ maxWidth: 1500, margin: '0 auto', padding: '120px 40px' }}>
+        <div style={{ display:'flex', alignItems:'flex-end', gap:20, marginBottom:80 }}>
+           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, color: '#fff', margin:0, fontWeight:900 }}>Nos Créations</h2>
+           <div style={{ height:1, flex:1, background:C.border, marginBottom:15, opacity:0.5 }} />
+           <Pill color={themeColor} bg={`${themeColor}10`}>{products.length} ARTICLES</Pill>
         </div>
 
         <div className="responsive-grid">
           {products.map((product, i) => (
-            <Card key={product.id} hover onClick={() => navigate(`/store/${slug}/product/${product.id}`)} style={{ padding: 0, overflow: 'hidden' }}>
-              <div style={{ height: 350, background: C.surface2, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Card key={product.id} hover onClick={() => navigate(`/store/${slug}/product/${product.id}`)} style={{ padding: 0, overflow: 'hidden', background: C.surface, border:`1px solid ${C.border}` }}>
+              <div style={{ height: 400, background: C.surface2, position: 'relative', overflow:'hidden' }}>
                 {product.image_url ? (
-                  <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition:'0.8s cubic-bezier(0.23, 1, 0.32, 1)' }} />
                 ) : (
-                  <div style={{ color:C.gold, opacity: 0.2 }}><Package size={60} /></div>
+                  <div style={{ color:themeColor, opacity: 0.15, height:'100%', display:'flex', alignItems:'center', justifyContent:'center' }}><Package size={80} /></div>
                 )}
-                <div style={{ position: 'absolute', bottom: 20, left: 20, background: 'rgba(0,0,0,0.8)', color: themeColor, padding: '8px 18px', borderRadius: 15, fontWeight: 900, fontSize: 18, border: `1px solid ${themeColor}40` }}>
-                  {product.price} MAD
+                
+                {/* Price Tag Overlay */}
+                <div style={{ 
+                  position: 'absolute', top: 25, right: 25, background: 'rgba(10,10,10,0.8)', 
+                  backdropFilter: 'blur(12px)', color: themeColor, padding: '10px 22px', 
+                  borderRadius: 100, fontWeight: 900, fontSize: 18, border: `1px solid ${themeColor}40` 
+                }}>
+                  {product.price} <span style={{ fontSize:11, opacity:0.6 }}>MAD</span>
                 </div>
               </div>
               
-              <div style={{ padding: 25, display:'flex', flexDirection:'column', gap:12 }}>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, margin: 0, color: '#fff' }}>{product.name}</h3>
-                <p style={{ color: C.muted, margin: 0, fontSize: 14, lineHeight: 1.6 }}>{product.description?.substring(0, 80)}...</p>
-                <GoldBtn style={{ marginTop: 10 }}>DÉCOUVRIR</GoldBtn>
+              <div style={{ padding: 35, display:'flex', flexDirection:'column', gap:20 }}>
+                <h3 style={{ fontFamily: "'Outfit', sans-serif", fontSize: 24, margin: 0, color: '#fff', fontWeight:800 }}>{product.name}</h3>
+                <p style={{ color: C.muted, margin: 0, fontSize: 14, lineHeight: 1.7, fontWeight:300, display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                  {product.description || "Une pièce d'exception conçue avec passion et savoir-faire traditionnel."}
+                </p>
+                <button style={{ 
+                  marginTop: 15, width:'100%', padding:'16px', borderRadius:16, border:`1px solid ${C.border}`,
+                  background:'transparent', color:'#fff', fontSize:12, fontWeight:800, letterSpacing:1.5,
+                  transition:'0.4s', textTransform:'uppercase', cursor:'pointer'
+                }}
+                onMouseOver={e=>{e.target.style.background=themeColor; e.target.style.borderColor=themeColor; e.target.style.color='#000'; e.target.style.transform='translateY(-4px)'; e.target.style.boxShadow=`0 10px 25px ${themeColor}30`}}
+                onMouseOut={e=>{e.target.style.background='transparent'; e.target.style.borderColor=C.border; e.target.style.color='#fff'; e.target.style.transform='translateY(0)'; e.target.style.boxShadow='none'}}
+                >
+                  Détails de l'article
+                </button>
               </div>
             </Card>
           ))}
         </div>
       </div>
 
-      <footer style={{ padding: '80px 40px', borderTop: `1px solid ${C.border}`, textAlign: 'center', background: C.surface }}>
-         <div style={{ fontSize: 24, fontWeight: 900, color: C.gold, fontFamily: "'Playfair Display', serif" }}>{store.shop_name.toUpperCase()}</div>
-         <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, marginTop:15 }}>
-            <span style={{ color: C.muted }}>Propulsé par</span>
-            <img src="/logo.png" alt="SOUK" style={{ height: 25 }} />
+      {/* ── Store Footer ── */}
+      <footer style={{ padding: '120px 40px', borderTop: `1px solid ${C.border}`, textAlign: 'center', background: '#050505' }}>
+         <div style={{ fontSize: 32, fontWeight: 900, color: themeColor, fontFamily: "'Playfair Display', serif", letterSpacing:-1 }}>{store.shop_name.toUpperCase()}</div>
+         <p style={{ color:C.muted, fontSize:14, marginTop:15, maxWidth:500, margin:'15px auto' }}>L'excellence marocaine, livrée chez vous avec passion et authenticité.</p>
+         <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:15, marginTop:40, opacity:0.6 }}>
+            <span style={{ fontSize:11, color: C.muted, letterSpacing:1, fontWeight:800 }}>PROPULSÉ PAR</span>
+            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+               <img src="/logo.png" alt="SOUK" style={{ height: 28 }} />
+               <span style={{ color:'#fff', fontWeight:900, fontSize:16, letterSpacing:-0.5 }}>SOUK<span style={{ color:C.emerald }}>✦</span></span>
+            </div>
          </div>
       </footer>
     </div>

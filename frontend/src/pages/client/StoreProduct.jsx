@@ -51,9 +51,13 @@ export default function StoreProduct() {
 
   if (loading) return <Spinner />
   if (!product) return (
-    <div style={{ background:C.bg, height:'100vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:20 }}>
-      <Package size={80} color={C.gold} opacity={0.3} />
-      <h2 style={{ fontFamily:"'Playfair Display', serif", fontSize:24 }}>PIÈCE INTROUVABLE</h2>
+    <div style={{ 
+                   background: `linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%)`, 
+                   backdropFilter:'blur(20px)',
+                   border: `1.5px solid ${C.gold}30`, borderRadius: 32, padding: '35px', 
+                   animation: 'fadeUp 0.6s ease-out 0.2s both', boxShadow:`0 30px 60px rgba(0,0,0,0.4)` 
+                 }}>
+                   <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 900, marginBottom: 25, color:'#fff', letterSpacing:'-1px' }}>RÉCAPITULATIF</div>
       <GoldBtn onClick={() => navigate('/')}>RETOUR À L'ACCUEIL</GoldBtn>
     </div>
   )
@@ -116,8 +120,12 @@ export default function StoreProduct() {
 
               <div style={{ display:'flex', alignItems:'center', gap:40, marginBottom:50 }}>
                  <div>
-                    <div style={{ fontSize:12, fontWeight:800, color:themeColor, letterSpacing:2, marginBottom:15 }}>QUANTITÉ</div>
-                    <div style={{ display:'flex', alignItems:'center', gap:25, background:C.surface, padding:'10px 25px', borderRadius:20, border:`1px solid ${C.border}` }}>
+                    <div style={{ fontSize:10, fontWeight:900, color:themeColor, letterSpacing:2.5, marginBottom:15 }}>✦ QUANTITÉ</div>
+                    <div style={{ 
+                      display:'flex', alignItems:'center', gap:25, 
+                      background:'rgba(255,255,255,0.03)', backdropFilter:'blur(10px)',
+                      padding:'12px 25px', borderRadius:20, border:`1px solid ${C.border}` 
+                    }}>
                        <Minus size={18} onClick={() => setQty(q => Math.max(1, q-1))} style={{ cursor:'pointer', opacity: qty > 1 ? 1 : 0.2 }} />
                        <span style={{ fontSize:20, fontWeight:900, width:30, textAlign:'center' }}>{qty}</span>
                        <Plus size={18} onClick={() => setQty(q => q+1)} style={{ cursor:'pointer' }} />

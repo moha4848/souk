@@ -30,40 +30,77 @@ export default function AdminLogin() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#020203', color: C.text, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'DM Sans', sans-serif" }}>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      background: C.bg,
+      color: C.text,
+      fontFamily: "'Outfit', sans-serif",
+      overflow: 'hidden'
+    }}>
       <style>{KF}</style>
-      
-      {/* Absolute Admin Emblem Background */}
-      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80vw', height: '80vw', background: 'radial-gradient(circle, rgba(201,168,76,0.02) 0%, transparent 60%)', borderRadius: '50%' }} />
-      </div>
 
-      <div style={{ position: 'relative', width: '100%', maxWidth: 480, padding: 'clamp(28px, 4vw, 40px)', background: 'rgba(8,8,12,0.9)', backdropFilter: 'blur(20px)', border: `1px solid ${C.gold}40`, borderRadius: 24, animation: 'dropIn 0.8s cubic-bezier(0.16, 1, 0.3, 1)', boxShadow: `0 20px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05)` }}>
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <div style={{ width: 60, height: 60, margin: '0 auto 20px', borderRadius: 16, background: `linear-gradient(135deg, ${C.gold}, ${C.copper})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, boxShadow: `0 10px 20px ${C.gold}40`, fontWeight: 'bold', color: C.bg, animation: 'glow 3s infinite ease-in-out' }}>
+      {/* ── Left Side: Artistic Branding ── */}
+      <div className="hide-mobile" style={{
+        flex: 1.2,
+        background: `linear-gradient(135deg, ${C.surface} 0%, ${C.bg} 100%)`,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        borderRight: `1px solid ${C.gold}20`,
+        overflow: 'hidden'
+      }}>
+        <div style={{ position:'absolute', top:'-10%', left:'-10%', width:500, height:500, background:C.gold, filter:'blur(200px)', opacity:0.05 }} />
+        <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: 60, animation: 'fadeUp 1s ease-out' }}>
+          <div style={{ width: 80, height: 80, margin: '0 auto 30px', borderRadius: 24, background: `linear-gradient(135deg, ${C.gold}, ${C.copper})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, boxShadow: `0 20px 40px ${C.gold}30` }}>
             👑
           </div>
-          <h1 style={{ margin: 0, fontFamily: "'Playfair Display', serif", fontSize: 28, color: '#fff' }}>SOUK SuperAdmin</h1>
-          <p style={{ margin: '8px 0 0', color: C.muted, fontSize: 13, letterSpacing: 1, textTransform: 'uppercase' }}>Portail de gestion centralisé</p>
+          <h1 style={{ fontSize: 52, fontWeight: 900, margin: '0 0 20px', letterSpacing: '-2px', fontFamily:"'Playfair Display', serif", color:'#fff', lineHeight: 1.1 }}>
+            Contrôle <br/> <span style={{ color: C.gold }}>Suprême</span>.
+          </h1>
+          <p style={{ color: C.muted, fontSize: 18, maxWidth: 400, margin: '0 auto', lineHeight: 1.8, fontWeight: 300 }}>
+            Interface de gestion centralisée pour l'écosystème SOUK ✦. Accès réservé au personnel autorisé.
+          </p>
         </div>
+      </div>
 
-        {err && (
-          <div style={{ background: 'rgba(201,76,76,0.1)', border: `1px solid ${C.danger}50`, color: C.danger, padding: '12px', borderRadius: 12, fontSize: 13, textAlign: 'center', marginBottom: 20 }}>
-            {err}
+      {/* ── Right Side: Form ── */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 40px' }}>
+        <div style={{ width: '100%', maxWidth: 400, animation: 'fadeUp 0.8s ease-out' }}>
+          <div style={{ marginBottom: 45 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:15 }}>
+               <div style={{ width:24, height:1, background:C.gold }} />
+               <span style={{ fontSize:11, fontWeight:900, color:C.gold, letterSpacing:2, textTransform:'uppercase' }}>Administration</span>
+            </div>
+            <h2 style={{ fontSize: 32, margin: '0 0 10px', fontWeight: 900, color:'#fff' }}>Accès SuperAdmin</h2>
+            <p style={{ color: C.muted, margin: 0, fontSize: 15, fontWeight: 300 }}>Authentification de sécurité requise.</p>
           </div>
-        )}
 
-        <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <FieldInput label="Identifiant SuperAdmin" value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="admin@souk.ma" />
-          <FieldInput label="Mot de passe" type="password" value={form.password} onChange={e => setForm({...form, password: e.target.value})} placeholder="••••••••" />
+          {err && (
+            <div style={{ background: 'rgba(201,76,76,0.1)', border: `1px solid ${C.danger}30`, color: C.danger, padding: '16px', borderRadius: 16, fontSize: 13, marginBottom: 25, fontWeight: 600 }}>
+              {err}
+            </div>
+          )}
+
+          <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column' }}>
+            <FieldInput label="Identifiant SuperAdmin" value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="admin@souk.ma" />
+            <FieldInput label="Mot de passe" type="password" value={form.password} onChange={e => setForm({...form, password: e.target.value})} placeholder="••••••••" />
+            
+            <button type="submit" disabled={loading} style={{ 
+              marginTop: 20, padding: '20px', background: `linear-gradient(135deg, ${C.gold}, ${C.copper})`, 
+              border: 'none', borderRadius: 20, color: C.bg, fontSize: 15, fontWeight: 900, 
+              cursor: loading ? 'wait' : 'pointer', transition: 'all 0.3s', 
+              boxShadow: `0 15px 30px ${C.gold}30` 
+            }}>
+              {loading ? 'DÉCRYPTAGE...' : 'ENTRER DANS LE SYSTÈME'}
+            </button>
+          </form>
           
-          <button type="submit" disabled={loading} style={{ marginTop: 10, padding: '16px', background: `linear-gradient(135deg, ${C.gold}, ${C.copper})`, border: 'none', borderRadius: 14, color: C.bg, fontSize: 15, fontWeight: 700, cursor: loading ? 'wait' : 'pointer', transition: 'all 0.2s', boxShadow: loading ? 'none' : `0 8px 24px ${C.gold}40` }}>
-            {loading ? 'Authentification...' : 'Accéder au contrôle absolu'}
-          </button>
-        </form>
-        
-        <div style={{ marginTop: 30, textAlign: 'center', fontSize: 12, color: C.muted }}>
-          Module hautement sécurisé. Connexion tracée.
+          <div style={{ marginTop: 40, textAlign: 'center', fontSize: 12, color: C.muted, letterSpacing:0.5 }}>
+             MODULE SÉCURISÉ · TOUTES LES ACTIONS SONT ENREGISTRÉES
+          </div>
         </div>
       </div>
     </div>

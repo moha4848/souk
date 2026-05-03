@@ -100,18 +100,26 @@ export default function ProductForm() {
           placeholder="Écharpe laine artisanale" />
 
         <div style={{ marginBottom:14 }}>
-          <div style={{ fontSize:10, color:C.muted, letterSpacing:2, textTransform:'uppercase', marginBottom:6 }}>
-            Description
+          <div style={{ fontSize:10, color:C.muted, letterSpacing:2.5, textTransform:'uppercase', marginBottom:12, marginLeft:4, fontWeight:900 }}>
+             <span style={{ color:C.emerald }}>✦</span> Description
           </div>
-          <textarea value={form.description} onChange={set('description')}
-            placeholder="Décrivez votre produit…" rows={3}
-            style={{ width:'100%', background:C.surface2, border:`1px solid ${C.border}`,
-              borderRadius:12, padding:'13px 16px', color:C.text,
-              fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:'none',
-              resize:'vertical', transition:'border .2s' }}
-            onFocus={e=>e.target.style.borderColor=C.gold}
-            onBlur={e=>e.target.style.borderColor=C.border}
-          />
+          <div style={{ position:'relative', borderRadius:20, padding:1, background:`linear-gradient(135deg, ${C.border}, transparent)`, transition:'0.4s' }}>
+            <textarea value={form.description} onChange={set('description')}
+              placeholder="Décrivez votre produit…" rows={3}
+              style={{ width:'100%', background:'rgba(255,255,255,0.03)', backdropFilter:'blur(12px)', border:'none',
+                borderRadius:19, padding:'15px 20px', color:C.text,
+                fontFamily:"'Outfit',sans-serif", fontSize:14, outline:'none',
+                resize:'vertical', transition:'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)', boxSizing:'border-box' }}
+              onFocus={e=>{
+                e.target.parentElement.style.background = `linear-gradient(135deg, ${C.emerald}, ${C.gold})`;
+                e.target.style.background = 'rgba(255,255,255,0.06)';
+              }}
+              onBlur={e=>{
+                e.target.parentElement.style.background = `linear-gradient(135deg, ${C.border}, transparent)`;
+                e.target.style.background = 'rgba(255,255,255,0.03)';
+              }}
+            />
+          </div>
         </div>
 
         <div style={{ marginBottom: 24 }}>

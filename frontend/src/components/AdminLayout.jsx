@@ -54,7 +54,8 @@ export default function AdminLayout({ children }) {
       {/* ── Desktop Sidebar ── */}
       <aside className="admin-sidebar" style={{
         position: 'fixed', top: 0, left: 0, bottom: 0, width: 280,
-        background: C.surface, borderRight: `1px solid ${C.border}`,
+        background: 'rgba(5,5,5,0.7)', backdropFilter: 'blur(30px)', 
+        borderRight: `1px solid ${C.border}`,
         display: 'flex', flexDirection: 'column', zIndex: 100, transition:'0.4s'
       }}>
         <div onClick={() => navigate('/')} style={{ cursor:'pointer', padding: '40px 30px' }}>
@@ -108,8 +109,8 @@ export default function AdminLayout({ children }) {
       {/* ── Main Area ── */}
       <main className="admin-main" style={{ marginLeft: 280, transition:'0.4s' }}>
         <header className="admin-topbar" style={{
-          height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '0 40px', background: 'rgba(10,10,10,0.5)', backdropFilter: 'blur(20px)',
+          height: 90, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '0 40px', background: 'rgba(5,5,5,0.4)', backdropFilter: 'blur(25px)',
           borderBottom: `1px solid ${C.border}`, position:'sticky', top:0, zIndex:90
         }}>
           <h2 style={{ fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 2, color: C.muted }}>

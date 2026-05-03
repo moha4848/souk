@@ -100,9 +100,9 @@ export default function AdminDashboard() {
 const SuperAdminPanel = ({ stats, pendingUsers, pendingSubs, commissions, handleAction }) => (
     <>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, marginBottom: 40 }}>
-          <StatCard title="Total Utilisateurs" val={stats?.total_users} icon="👥" color={C.teal} />
+          <StatCard title="Total Utilisateurs" val={stats?.total_users} icon="👥" color={C.emerald} />
           <StatCard title="Vendeurs en attente" val={stats?.pending_users} icon="⏳" color={C.gold} />
-          <StatCard title="Forfaits en attente" val={stats?.pending_subscriptions} icon="🛡️" color={C.copper} />
+          <StatCard title="Forfaits en attente" val={stats?.pending_subscriptions} icon="🛡️" color={C.emeraldL} />
           <StatCard title="Total Commissions" val={`${stats?.total_commissions} MAD`} icon="💰" color={C.gold} />
         </div>
 
@@ -172,7 +172,7 @@ const SupportPanel = ({ stats }) => (
 
 // ── UI Helpers ──
 const Table = ({ data, columns, actions }) => (
-    <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 16, overflow: 'hidden', marginBottom: 40 }}>
+    <div style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', border: `1px solid ${C.border}`, borderRadius: 16, overflow: 'hidden', marginBottom: 40 }}>
       <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
         <thead>
           <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: `1px solid ${C.border}` }}>
@@ -206,14 +206,26 @@ const Table = ({ data, columns, actions }) => (
 
 // ── Shared UI Components ──
 const StatCard = ({ title, val, icon, color }) => (
-  <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 16, padding: '24px', position: 'relative', overflow: 'hidden' }}>
-    <div style={{ position: 'absolute', right: -10, top: -10, fontSize: 60, opacity: 0.05 }}>{icon}</div>
-    <div style={{ color: C.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>{title}</div>
-    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color }}>{val ?? '...'}</div>
+  <div style={{ 
+    background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)',
+    border: `1px solid ${C.border}`, borderRadius: 24, padding: '30px', 
+    position: 'relative', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' 
+  }}>
+    <div style={{ position: 'absolute', right: -5, top: -5, fontSize: 60, opacity: 0.08, filter:'blur(1px)' }}>{icon}</div>
+    <div style={{ color: C.muted, fontSize: 11, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 12, fontWeight:800 }}>{title}</div>
+    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, fontWeight: 900, color: '#fff', letterSpacing:'-1px' }}>
+      <span style={{ color }}>{val ?? '...'}</span>
+    </div>
+    <div style={{ width:40, height:2, background:color, marginTop:15, borderRadius:10 }} />
   </div>
 )
 
-const SectionTitle = ({ title }) => <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, marginBottom: 20, marginTop: 40 }}>{title}</h2>
+const SectionTitle = ({ title }) => (
+  <div style={{ display:'flex', alignItems:'center', gap:15, marginBottom:25, marginTop:50 }}>
+     <div style={{ width:8, height:8, borderRadius:'50%', background:C.gold, boxShadow:`0 0 10px ${C.gold}` }} />
+     <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, margin:0, fontWeight:900, color:'#fff', letterSpacing:'-0.5px' }}>{title}</h2>
+  </div>
+)
 
 const THStyle = { padding: '16px 24px', color: C.muted, fontWeight: 500, fontSize: 13 }
 const TDStyle = { padding: '16px 24px', fontSize: 14 }

@@ -94,7 +94,11 @@ export default function StoreCart() {
                         <div style={{ fontSize: 14, color: C.gold, fontWeight:600 }}>{item.price} MAD · unité</div>
                         
                         {/* Qty controls */}
-                        <div style={{ display: 'flex', alignItems: 'center', background: C.bg, border: `1px solid ${C.border}`, borderRadius: 12, width: 'fit-content', overflow: 'hidden', marginTop:5 }}>
+                        <div style={{ 
+                          display: 'flex', alignItems: 'center', 
+                          background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)',
+                          border: `1px solid ${C.border}`, borderRadius: 12, width: 'fit-content', overflow: 'hidden', marginTop:5 
+                        }}>
                           <button onClick={() => item.quantity === 1 ? removeFromCart(slug, item.id) : updateQty(slug, item.id, item.quantity - 1)} style={{ width: 40, height: 40, background: 'none', border: 'none', color: '#fff', cursor: 'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
                             <Minus size={16} />
                           </button>
@@ -120,8 +124,13 @@ export default function StoreCart() {
 
             {/* ── Order Summary ── */}
             <div className="cart-summary" style={{ position: 'sticky', top: 100 }}>
-              <div style={{ background: `linear-gradient(135deg, ${C.surface} 0%, ${C.bg} 100%)`, border: `2px solid ${C.gold}30`, borderRadius: 30, padding: '30px', animation: 'fadeUp 0.6s ease-out 0.2s both', boxShadow:`0 20px 50px rgba(0,0,0,0.3)` }}>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 900, marginBottom: 25, color:'#fff' }}>RÉCAPITULATIF</div>
+                 <div style={{ 
+                   background: `linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%)`, 
+                   backdropFilter:'blur(20px)',
+                   border: `1.5px solid ${C.gold}30`, borderRadius: 32, padding: '35px', 
+                   animation: 'fadeUp 0.6s ease-out 0.2s both', boxShadow:`0 30px 60px rgba(0,0,0,0.4)` 
+                 }}>
+                   <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 900, marginBottom: 25, color:'#fff', letterSpacing:'-1px' }}>RÉCAPITULATIF</div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 15, marginBottom: 25 }}>
                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: C.muted }}>
