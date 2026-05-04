@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: souk-backend
+    runtime: docker
+    repo: https://github.com/moha4848/souk
+    branch: main
+    rootDir: backend
+    plan: free
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        value: base64:mXrYEQyyvnozo9HaiQLxjZwb9fghg/NeQfWrz3+rDhA=
+      - key: JWT_SECRET
+        value: mwP8jYTlpAUgsP5gzcYCA1xC7Z9wsDbpKktAKkwvvxFdeQyYFiDJmvHMeMURPfaQ
+      - key: DB_CONNECTION
+        value: mysql
+      - key: FRONTEND_URL
+        value: https://souk-frontend.vercel.app
+      - key: PORT
+        value: 8000
