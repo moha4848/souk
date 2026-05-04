@@ -43,9 +43,14 @@ export default function Landing() {
     .hero-search button { width: 100% !important; }
     .hero-title { font-size: 3rem !important; }
     .hero-stats { flex-direction: column !important; gap: 20px !important; align-items: center !important; }
-    .nav-header { padding: 15px 20px !important; }
-    .section-padding { padding: 60px 20px !important; }
-    .footer-padding { padding: 60px 20px !important; }
+    .nav-header { padding: 10px 15px !important; gap: 10px !important; }
+    .nav-links { display: none !important; }
+    .hero-title { font-size: 2.2rem !important; line-height: 1.2 !important; letter-spacing: -1px !important; }
+    .section-padding { padding: 40px 15px !important; }
+    .footer-padding { padding: 40px 15px !important; }
+    .luxury-img-stack { height: 350px !important; }
+    .stack-item { border-radius: 20px !important; }
+    .recap-card { display: none !important; }
   }
   
   .luxury-img-stack {
@@ -91,8 +96,8 @@ export default function Landing() {
            <span style={{ fontSize: 24, fontWeight: 900, letterSpacing: -1, color: '#fff' }}>SOUK<span style={{ color: C.emerald }}>✦</span></span>
         </div>
         
-        <div style={{ display: 'flex', gap: 50, alignItems: 'center' }}>
-          <div className="nav-links hide-mobile" style={{ display:'flex', gap:35, fontSize:12, fontWeight:800, letterSpacing:1.5 }}>
+        <div style={{ display: 'flex', gap: 15, alignItems: 'center' }}>
+          <div className="nav-links hide-mobile" style={{ display:'flex', gap:20, fontSize:11, fontWeight:800, letterSpacing:1 }}>
              <span onClick={() => navigate('/explore')} style={{ cursor:'pointer', transition:'0.3s' }} onMouseOver={e=>e.target.style.color=C.emerald} onMouseOut={e=>e.target.style.color=C.text}>{t('explorer')}</span>
              <span onClick={() => navigate('/register')} style={{ cursor:'pointer', color:C.emerald }}>{t('sell')}</span>
           </div>
@@ -101,14 +106,14 @@ export default function Landing() {
             onClick={() => navigate('/client/dashboard')}
             style={{ 
               background: C.emerald, color: '#fff', 
-              padding: '12px 28px', borderRadius: 100, fontWeight: 900, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 12, boxShadow:`0 15px 30px ${C.emerald}30`,
+              padding: '10px 18px', borderRadius: 100, fontWeight: 900, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 8, boxShadow:`0 10px 20px ${C.emerald}30`,
               transition: '0.3s'
             }}
             onMouseOver={e=>e.currentTarget.style.transform='scale(1.05)'}
             onMouseOut={e=>e.currentTarget.style.transform='scale(1)'}
           >
-            <ShoppingBag size={20} /> {totalCartCount}
+            <ShoppingBag size={18} /> {totalCartCount}
           </div>
         </div>
       </header>
@@ -143,11 +148,12 @@ export default function Landing() {
               }}>{t('reinvented')}</span>
             </h1>
 
-            <div style={{ 
+            <div className="recap-card" style={{ 
                    background: `linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%)`, 
                    backdropFilter:'blur(20px)',
                    border: `1.5px solid ${C.gold}30`, borderRadius: 32, padding: '35px', 
-                   animation: 'fadeUp 0.6s ease-out 0.2s both', boxShadow:`0 30px 60px rgba(0,0,0,0.4)` 
+                   animation: 'fadeUp 0.6s ease-out 0.2s both', boxShadow:`0 30px 60px rgba(0,0,0,0.4)`,
+                   marginBottom: 40
                  }}>
                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 900, marginBottom: 25, color:'#fff', letterSpacing:'-1px' }}>RÉCAPITULATIF</div>
               {t('hero_subtitle')}
