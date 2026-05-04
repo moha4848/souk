@@ -34,7 +34,7 @@ export default function GlobalFeed() {
     <div style={{ background:C.bg, minHeight:'100vh', paddingBottom:120, fontFamily: "'Outfit', sans-serif" }}>
       
       {/* ── Exploratory Hero ── */}
-      <div style={{ position:'relative', padding:'120px 20px', textAlign:'center', background: `linear-gradient(180deg, ${C.surface} 0%, ${C.bg} 100%)`, borderBottom:`1px solid ${C.border}`, overflow:'hidden' }}>
+      <div className="hero-padding" style={{ position:'relative', padding:'120px 20px', textAlign:'center', background: `linear-gradient(180deg, ${C.surface} 0%, ${C.bg} 100%)`, borderBottom:`1px solid ${C.border}`, overflow:'hidden' }}>
         <ZelligeBg opacity={0.12} />
         
         {/* Glows */}
@@ -57,11 +57,11 @@ export default function GlobalFeed() {
         </div>
       </div>
 
-      <div style={{ maxWidth:1400, margin:'0 auto', padding:'80px 40px' }}>
+      <div className="main-padding" style={{ maxWidth:1400, margin:'0 auto', padding:'80px 40px' }}>
         
         {/* ── Featured Curators (Stores) ── */}
         <section style={{ marginBottom:100 }}>
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginBottom:40 }}>
+          <div className="section-header" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginBottom:40 }}>
              <div>
                 <h2 style={{ color:'#fff', fontFamily:"'Playfair Display', serif", fontSize:32, margin:0, fontWeight:900 }}>Boutiques d'Exception</h2>
                 <p style={{ color:C.muted, fontSize:14, marginTop:8 }}>Les créateurs les plus influents du moment</p>
@@ -86,7 +86,7 @@ export default function GlobalFeed() {
 
         {/* ── Trending Masterpieces ── */}
         <section>
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginBottom:40 }}>
+          <div className="section-header" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginBottom:40 }}>
              <div>
                 <h2 style={{ color:'#fff', fontFamily:"'Playfair Display', serif", fontSize:32, margin:0, fontWeight:900 }}>Tendances du Moment</h2>
                 <p style={{ color:C.muted, fontSize:14, marginTop:8 }}>Pièces uniques sélectionnées pour leur excellence</p>
@@ -104,6 +104,11 @@ export default function GlobalFeed() {
       </div>
       <style>{`
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) {
+          .hero-padding { padding: 80px 20px !important; }
+          .main-padding { padding: 40px 20px !important; }
+          .section-header { flex-direction: column !important; align-items: flex-start !important; gap: 15px !important; }
+        }
       `}</style>
     </div>
   )

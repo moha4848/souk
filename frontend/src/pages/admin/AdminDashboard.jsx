@@ -172,7 +172,7 @@ const SupportPanel = ({ stats }) => (
 
 // ── UI Helpers ──
 const Table = ({ data, columns, actions }) => (
-    <div style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', border: `1px solid ${C.border}`, borderRadius: 16, overflow: 'hidden', marginBottom: 40 }}>
+    <div style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', border: `1px solid ${C.border}`, borderRadius: 16, overflowX: 'auto', marginBottom: 40 }}>
       <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
         <thead>
           <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: `1px solid ${C.border}` }}>

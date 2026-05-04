@@ -14,6 +14,12 @@ const keyframes = `
   .store-nav { left: 20px !important; right: 20px !important; flex-direction: column; gap: 15px; align-items: flex-start !important; }
   .store-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important; gap: 20px !important; }
   .store-arch { padding: 30px 20px !important; width: 100%; box-sizing: border-box; }
+  .main-padding { padding: 60px 20px !important; }
+  .footer-padding { padding: 60px 20px !important; }
+  .store-actions { flex-direction: column !important; width: 100% !important; align-items: stretch !important; gap: 15px !important; }
+  .store-actions button { width: 100% !important; justify-content: center !important; }
+  .store-actions > div { justify-content: center !important; }
+  .store-nav button { width: 100% !important; justify-content: center !important; }
 }
 `
 
@@ -90,7 +96,7 @@ export default function StoreFront() {
              {store.shop_name}
            </h1>
            
-           <div style={{ display:'flex', justifyContent:'center', gap:25, marginTop:40 }}>
+           <div className="store-actions" style={{ display:'flex', justifyContent:'center', gap:25, marginTop:40 }}>
               <button 
                 onClick={handleFollow} 
                 style={{ 
@@ -121,7 +127,7 @@ export default function StoreFront() {
       </section>
 
       {/* ── Product Catalog Grid ── */}
-      <div style={{ maxWidth: 1500, margin: '0 auto', padding: '120px 40px' }}>
+      <div className="main-padding" style={{ maxWidth: 1500, margin: '0 auto', padding: '120px 40px' }}>
         <div style={{ display:'flex', alignItems:'flex-end', gap:20, marginBottom:80 }}>
            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, color: '#fff', margin:0, fontWeight:900 }}>Nos Créations</h2>
            <div style={{ height:1, flex:1, background:C.border, marginBottom:15, opacity:0.5 }} />
@@ -170,7 +176,7 @@ export default function StoreFront() {
       </div>
 
       {/* ── Store Footer ── */}
-      <footer style={{ padding: '120px 40px', borderTop: `1px solid ${C.border}`, textAlign: 'center', background: '#050505' }}>
+      <footer className="footer-padding" style={{ padding: '120px 40px', borderTop: `1px solid ${C.border}`, textAlign: 'center', background: '#050505' }}>
          <div style={{ fontSize: 32, fontWeight: 900, color: themeColor, fontFamily: "'Playfair Display', serif", letterSpacing:-1 }}>{store.shop_name.toUpperCase()}</div>
          <p style={{ color:C.muted, fontSize:14, marginTop:15, maxWidth:500, margin:'15px auto' }}>L'excellence marocaine, livrée chez vous avec passion et authenticité.</p>
          <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:15, marginTop:40, opacity:0.6 }}>

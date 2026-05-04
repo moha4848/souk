@@ -37,9 +37,15 @@ export default function Landing() {
   @media (max-width: 992px) {
     .hero-grid { grid-template-columns: 1fr !important; text-align: center; }
     .hero-copy { order: 2; display: flex; flexDirection: column; alignItems: center; }
-    .hero-visual { order: 1; margin-bottom: 60px; }
-    .hero-search { max-width: 100% !important; }
-    .hero-title { font-size: 3.5rem !important; }
+    .hero-visual { order: 1; margin-bottom: 60px; display: block !important; }
+    .hero-search { max-width: 100% !important; flex-direction: column !important; background: transparent !important; border: none !important; gap: 15px !important; }
+    .hero-search-inner { width: 100% !important; background: rgba(255,255,255,0.03) !important; border: 1px solid ${C.emerald}30 !important; border-radius: 100px !important; display: flex !important; }
+    .hero-search button { width: 100% !important; }
+    .hero-title { font-size: 3rem !important; }
+    .hero-stats { flex-direction: column !important; gap: 20px !important; align-items: center !important; }
+    .nav-header { padding: 15px 20px !important; }
+    .section-padding { padding: 60px 20px !important; }
+    .footer-padding { padding: 60px 20px !important; }
   }
   
   .luxury-img-stack {
@@ -74,7 +80,7 @@ export default function Landing() {
       <style>{KF}</style>
       
       {/* ── Modern Navbar ── */}
-      <header className="navbar nav-blur" style={{ 
+      <header className="navbar nav-blur nav-header" style={{ 
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, 
         padding: '20px 80px', 
         borderBottom: `1px solid ${C.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -108,7 +114,7 @@ export default function Landing() {
       </header>
 
       {/* ── Ultra-Premium Hero ── */}
-      <section style={{ 
+      <section className="section-padding" style={{ 
         minHeight: '100vh', position: 'relative', overflow: 'hidden', 
         display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '140px 20px'
       }}>
@@ -157,20 +163,22 @@ export default function Landing() {
                  background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(15px)',
                  border: `1px solid ${C.emerald}30`, position:'relative'
                }}>
-                  <div style={{ display:'flex', alignItems:'center', paddingLeft:25, color:C.emerald }}><Search size={20} /></div>
-                  <input 
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    placeholder={t('search_placeholder')}
-                    style={{ flex:1, background:'none', border:'none', color:'#fff', padding:'0 20px', fontSize:17, outline:'none', fontFamily:"'Outfit', sans-serif" }}
-                  />
+                  <div className="hero-search-inner" style={{ display:'flex', flex:1, alignItems:'center', borderRadius: 100 }}>
+                    <div style={{ display:'flex', alignItems:'center', paddingLeft:25, color:C.emerald }}><Search size={20} /></div>
+                    <input 
+                      value={search}
+                      onChange={e => setSearch(e.target.value)}
+                      placeholder={t('search_placeholder')}
+                      style={{ flex:1, background:'none', border:'none', color:'#fff', padding:'15px 20px', fontSize:17, outline:'none', fontFamily:"'Outfit', sans-serif" }}
+                    />
+                  </div>
                   <GoldBtn style={{ width:'auto', padding:'15px 40px', borderRadius:100, fontSize:13 }}>
                     {t('find')}
                   </GoldBtn>
                </div>
             </div>
 
-            <div style={{ marginTop: 60, display: 'flex', gap: 40, opacity: 0.7 }}>
+            <div className="hero-stats" style={{ marginTop: 60, display: 'flex', gap: 40, opacity: 0.7 }}>
                {[
                  { label: 'Artisans', val: '500+' },
                  { label: 'Produits', val: '12k+' },
@@ -185,10 +193,10 @@ export default function Landing() {
           </div>
 
           {/* Right: Artistic Composition */}
-          <div className="hero-visual hide-mobile" style={{ animation: 'fadeIn 2s ease-out' }}>
+          <div className="hero-visual" style={{ animation: 'fadeIn 2s ease-out' }}>
              <div className="luxury-img-stack">
-                <div className="stack-item" style={{ top: 0, right: 0, width: '70%', height: '70%', zIndex: 1, animation: 'float 6s infinite ease-in-out' }}>
-                   <img src="https://images.unsplash.com/photo-1590076215667-873d67008673?auto=format&fit=crop&q=80&w=1000" style={{ width:'100%', height:'100%', objectFit:'cover' }} alt="Artisanat" />
+                <div className="stack-item" style={{ top: 0, right: 0, width: '70%', height: '70%', zIndex: 1, animation: 'float 6s infinite ease-in-out', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.02)' }}>
+                   <img src="/logo.png" style={{ width:'60%', height:'auto', objectFit:'contain', filter: `drop-shadow(0 0 20px ${C.emerald}50)` }} alt="SOUK" />
                 </div>
                 <div className="stack-item" style={{ bottom: 0, left: 0, width: '60%', height: '60%', zIndex: 2, animation: 'float 8s infinite ease-in-out reverse' }}>
                    <img src="https://images.unsplash.com/photo-1617957718614-8c23f060c2d0?auto=format&fit=crop&q=80&w=1000" style={{ width:'100%', height:'100%', objectFit:'cover' }} alt="Pottery" />
@@ -211,7 +219,7 @@ export default function Landing() {
       </section>
 
       {/* ── Curated Collection ── */}
-      <section style={{ maxWidth: 1500, margin: '0 auto', padding: '120px 40px' }}>
+      <section className="section-padding" style={{ maxWidth: 1500, margin: '0 auto', padding: '120px 40px' }}>
         <div style={{ textAlign: 'center', marginBottom: 100 }}>
           <Ornament />
           <h2 className="hero-title" style={{ fontSize: 64, color: '#fff', fontWeight:900, letterSpacing:'-1px' }}>{t('curated_collection')}</h2>
@@ -256,7 +264,7 @@ export default function Landing() {
       </section>
 
       {/* ── Brand Promise Section ── */}
-      <section style={{ padding: '120px 20px', background: `${C.surface}80`, borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
+      <section className="section-padding" style={{ padding: '120px 20px', background: `${C.surface}80`, borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 60 }}>
             {[
               { icon: <ShieldCheck size={40} />, title: 'Paiement Sécurisé', desc: 'Transactions protégées par cryptage SSL de pointe.' },
@@ -273,7 +281,7 @@ export default function Landing() {
       </section>
 
       {/* ── Neo Footer ── */}
-      <footer style={{ background: '#050505', padding: '140px 80px', borderTop: `1px solid ${C.border}` }}>
+      <footer className="footer-padding" style={{ background: '#050505', padding: '140px 80px', borderTop: `1px solid ${C.border}` }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', textAlign:'center' }}>
            <img src="/logo.png" alt="SOUK" style={{ height: 70, width: 'auto', marginBottom: 40 }} />
            <p style={{ color: C.muted, maxWidth: 650, margin: '0 auto 60px', lineHeight: 1.8, fontSize:20, fontWeight:300 }}>{t('footer_text')}</p>

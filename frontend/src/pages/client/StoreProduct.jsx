@@ -17,6 +17,7 @@ const KF = `
   .prod-info { padding: 40px 20px !important; }
   .prod-title { font-size: 2.5rem !important; }
   .nav-header { padding: 15px 20px !important; }
+  .trust-indicators { grid-template-columns: 1fr !important; }
 }
 `
 
@@ -141,7 +142,7 @@ export default function StoreProduct() {
               </GoldBtn>
 
               {/* Trust Indicators */}
-              <div style={{ marginTop: 50, display: 'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
+              <div className="trust-indicators" style={{ marginTop: 50, display: 'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
                  <Glass style={{ padding:'15px 20px', display:'flex', alignItems:'center', gap:12, borderRadius:15 }}>
                     <Truck size={20} color={themeColor} />
                     <div style={{ fontSize:11, fontWeight:700 }}>LIVRAISON ROYALE</div>

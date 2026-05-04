@@ -12,6 +12,20 @@ import {
 const KF = `
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideRight { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+@media (max-width: 768px) {
+  .nav-header { padding: 15px 20px !important; flex-wrap: wrap !important; gap: 10px !important; }
+  .main-padding { padding: 30px 20px !important; }
+  .dashboard-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+  .quick-actions-grid { grid-template-columns: 1fr !important; }
+  .profile-grid { grid-template-columns: 1fr !important; }
+  .profile-header { flex-direction: column !important; gap: 20px !important; align-items: flex-start !important; }
+  .order-item { flex-direction: column !important; align-items: flex-start !important; gap: 15px !important; }
+  .order-item-right { width: 100% !important; display: flex !important; justify-content: space-between !important; align-items: center !important; }
+  .welcome-title { font-size: 2rem !important; }
+  .lang-grid { flex-direction: column !important; }
+  .filters-container { overflow-x: auto !important; padding-bottom: 10px !important; }
+}
 `
 
 export default function ClientDashboard() {
@@ -69,7 +83,7 @@ export default function ClientDashboard() {
       <style>{KF}</style>
       
       {/* ── High-End Navbar ── */}
-      <header style={{ 
+      <header className="nav-header" style={{ 
         position: 'sticky', top: 0, zIndex: 100, 
         background: 'rgba(5,5,5,0.7)', backdropFilter: 'blur(30px)', 
         borderBottom: `1px solid ${C.border}`, padding: '15px 40px', 
@@ -92,7 +106,7 @@ export default function ClientDashboard() {
         </div>
       </header>
 
-      <main style={{ maxWidth: 1400, margin: '0 auto', padding: '60px 40px' }}>
+      <main className="main-padding" style={{ maxWidth: 1400, margin: '0 auto', padding: '60px 40px' }}>
         
         {/* ── Welcome & Artistic Stats ── */}
         <section style={{ animation: 'fadeUp 0.8s cubic-bezier(0.23, 1, 0.32, 1)', marginBottom: 60 }}>
@@ -102,7 +116,7 @@ export default function ClientDashboard() {
                  <div style={{ width:20, height:1, background:C.emerald }} />
                  <span style={{ fontSize:11, fontWeight:900, color:C.emerald, letterSpacing:2 }}>ESPACE ACHETEUR</span>
               </div>
-              <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, margin: 0, fontFamily:"'Playfair Display', serif", color:'#fff' }}>
+              <h1 className="welcome-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, margin: 0, fontFamily:"'Playfair Display', serif", color:'#fff' }}>
                 Ravi de vous revoir, <span style={{ color:C.emerald }}>{client.name.split(' ')[0]}</span>
               </h1>
               <p style={{ color: C.muted, margin: '10px 0 0', fontSize: 17, fontWeight:300 }}>Bienvenue dans votre univers privilégié sur SOUK ✦</p>
@@ -138,7 +152,7 @@ export default function ClientDashboard() {
           </div>
         </section>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 40, alignItems: 'start' }}>
+        <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 40, alignItems: 'start' }}>
           
           {/* ── Sidebar ── */}
           <aside style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -157,7 +171,7 @@ export default function ClientDashboard() {
             {/* 1. PROFILE */}
             {activeTab === 'profile' && (
               <Card style={{ padding: 40 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 40 }}>
+                <div className="profile-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 40 }}>
                   <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
                     <div style={{ width: 80, height: 80, borderRadius: '50%', background: `linear-gradient(135deg, ${C.emerald}, ${C.tealL})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, fontWeight: 800, color: '#fff', border: `4px solid ${C.surface2}` }}>
                       {client.name[0]}
@@ -172,7 +186,7 @@ export default function ClientDashboard() {
                     <Edit3 size={16} /> ✏️ تعديل
                   </button>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                <div className="profile-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                   <div style={{ background: C.surface2, padding: 20, borderRadius: 16 }}>
                     <div style={{ fontSize: 12, color: C.muted, marginBottom: 4 }}>Téléphone / رقم الهاتف</div>
                     <div style={{ fontWeight: 600 }}>{client.phone || 'Non renseigné'}</div>
@@ -201,7 +215,7 @@ export default function ClientDashboard() {
                 </Glass>
 
                 {/* Quick Actions */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+                <div className="quick-actions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
                   {[
                     { label: 'Démarrer Shopping', labelAr: 'بدء التسوق', color: C.emerald, action: () => navigate('/') },
                     { label: 'Suivre Commande', labelAr: 'تتبع الطلبات', color: C.gold, action: () => setActiveTab('orders') },
@@ -243,13 +257,13 @@ export default function ClientDashboard() {
             {/* 3. ORDERS LIST */}
             {activeTab === 'orders' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div style={{ display: 'flex', gap: 12, marginBottom: 10 }}>
+                <div className="filters-container" style={{ display: 'flex', gap: 12, marginBottom: 10 }}>
                   {['Tous', 'En cours', 'Livrés', 'Annulés'].map(f => (
                     <div key={f} style={{ padding: '8px 16px', background: f === 'Tous' ? C.emerald : C.surface2, color: f === 'Tous' ? '#fff' : C.text, borderRadius: 10, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>{f}</div>
                   ))}
                 </div>
                 {loading ? <Spinner /> : orders.map(o => (
-                  <Card key={o.id} style={{ padding: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Card key={o.id} className="order-item" style={{ padding: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
                       <div style={{ padding: 12, background: `${C.emerald}10`, borderRadius: 12, color: C.emerald }}><Package size={24} /></div>
                       <div>
@@ -257,7 +271,7 @@ export default function ClientDashboard() {
                         <div style={{ fontSize: 12, color: C.muted }}>{new Date(o.created_at).toLocaleDateString()}</div>
                       </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+                    <div className="order-item-right" style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
                       <div style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', marginBottom: 4 }}>Statut</div>
                         <div style={{ background: o.status === 'delivered' ? `${C.emerald}20` : `${C.gold}20`, color: o.status === 'delivered' ? C.emerald : C.gold, padding: '4px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700 }}>{o.status.toUpperCase()}</div>
@@ -311,7 +325,7 @@ export default function ClientDashboard() {
                   <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
                     <Globe size={18} color={C.emerald} /> {t('language')} / اللغة
                   </div>
-                  <div style={{ display: 'flex', gap: 10 }}>
+                  <div className="lang-grid" style={{ display: 'flex', gap: 10 }}>
                     {[
                       { code: 'fr', label: 'Français' },
                       { code: 'ar', label: 'العربية' },
