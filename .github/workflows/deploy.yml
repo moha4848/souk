@@ -1,27 +1,15 @@
-name: Deploy Frontend to GitHub Pages
+name: Deploy Frontend to Vercel
 
 on:
   push:
     branches: [main]
     paths:
       - 'frontend/**'
-
-  # Permet de déclencher manuellement depuis l'onglet Actions
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Un seul déploiement à la fois
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
-  build:
-    name: Build React App
+  deploy:
+    name: Deploy to Vercel
     runs-on: ubuntu-latest
 
     steps:
@@ -39,30 +27,9 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Build production bundle
+      - name: Deploy to Vercel
         working-directory: frontend
+        run: npx vercel --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
-        run: npm run build
-
-      - name: Add 404.html for SPA routing
-        working-directory: frontend/dist
-        run: cp index.html 404.html
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: frontend/dist
-
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
