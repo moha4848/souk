@@ -25,6 +25,10 @@ export default function LoginPage() {
     }
   }
 
+  const KF = `
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  `;
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -150,9 +154,6 @@ export default function LoginPage() {
           </form>
         </div>
       </div>
-      <style>{`
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-      `}</style>
     </div>
   )
 }
