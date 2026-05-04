@@ -153,15 +153,11 @@ export default function Landing() {
                    backdropFilter:'blur(20px)',
                    border: `1.5px solid ${C.gold}30`, borderRadius: 32, padding: '35px', 
                    animation: 'fadeUp 0.6s ease-out 0.2s both', boxShadow:`0 30px 60px rgba(0,0,0,0.4)`,
-                   marginBottom: 40
+                   marginBottom: 60, position: 'relative', zIndex: 5
                  }}>
                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 900, marginBottom: 25, color:'#fff', letterSpacing:'-1px' }}>RÉCAPITULATIF</div>
-              {t('hero_subtitle')}
+              <p style={{ margin:0, fontSize:18, lineHeight:1.6, color:C.text, fontWeight:300 }}>{t('hero_subtitle')}</p>
             </div>
-            
-            <p style={{ fontSize: 22, lineHeight: 1.7, color: C.muted, maxWidth: 650, marginBottom: 60, fontWeight:300 }}>
-              {t('hero_subtitle')}
-            </p>
 
             <div style={{ display: 'flex', gap: 20 }}>
                <div className="hero-search" style={{ 
