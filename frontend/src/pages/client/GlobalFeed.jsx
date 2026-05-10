@@ -69,7 +69,7 @@ export default function GlobalFeed() {
              <div style={{ height:1, flex:1, background:C.border, margin:'0 40px 15px', opacity:0.5 }} className="hide-mobile" />
           </div>
 
-          <div className="responsive-grid" style={{ gridTemplateColumns:'repeat(auto-fill, minmax(220px, 1fr))', gap:25 }}>
+          <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns:'repeat(auto-fill, minmax(220px, 1fr))', gap:25 }}>
             {data.featured_stores.map(store => (
               <Link key={store.id} to={`/store/${store.store_slug}`} style={{ textDecoration:'none' }}>
                 <Card hover style={{ textAlign:'center', padding:40, background:C.surface, border:`1px solid ${C.border}` }}>
@@ -94,7 +94,7 @@ export default function GlobalFeed() {
              <div style={{ height:1, flex:1, background:C.border, margin:'0 40px 15px', opacity:0.5 }} className="hide-mobile" />
           </div>
 
-          <div className="responsive-grid">
+          <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 30 }}>
             {data.trending_products.map(product => (
               <ProductCard key={product.id} product={product} onLike={() => handleLike(product.id)} />
             ))}

@@ -10,7 +10,9 @@ class Package extends Model
         'name',
         'price',
         'max_products',
+        'commission_rate',
         'features',
+        'is_active',
     ];
 
     protected $casts = [

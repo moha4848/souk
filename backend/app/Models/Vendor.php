@@ -38,6 +38,12 @@ class Vendor extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'store_follows', 'vendor_id', 'user_id')
+            ->withTimestamps();
+    }
+
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);

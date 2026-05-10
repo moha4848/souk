@@ -15,9 +15,9 @@ import {
 import { Line, Bar } from 'react-chartjs-2'
 import { 
   DollarSign, Landmark, Shield, Package, Brain, 
-  Rocket, CheckCircle, Palette, TrendingUp, Plus, ArrowRight 
+  Rocket, CheckCircle, Palette, TrendingUp, Plus, ArrowRight, Sparkles 
 } from 'lucide-react'
-import { C, Card, Ornament, ZelligeBg, Pill, Spinner, StatusBadge, GoldBtn } from '../../components/UI'
+import { C, Card, Ornament, ZelligeBg, Pill, Spinner, StatusBadge, GoldBtn, Glass } from '../../components/UI'
 import { getSellerDashboard } from '../../api/services'
 
 // Register ChartJS components

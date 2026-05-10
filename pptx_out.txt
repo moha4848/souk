@@ -1,0 +1,334 @@
+--- ppt/slides/slide1.xml ---
+SOUK
+PLATEFORME SAAS & MARKETPLACE
+Soutenance de Projet de Synthèse
+
+--- ppt/slides/slide2.xml ---
+SOMMAIRE
+Contenu
+Présentation complète du projet SOUK — de la problématique aux perspectives futures.
+01
+Introduction du projet
+02
+Problématique & Objectifs
+03
+Fonctionnement & Architecture
+04
+Maquettes du Site
+05
+Fonctionnalités MVP
+06
+Technologies & Analyse
+07
+Conclusion & Perspectives
+
+--- ppt/slides/slide3.xml ---
+01
+Introduction
+du projet
+Présentation de SOUK, une plateforme numérique dédiée aux artisans marocains
+
+--- ppt/slides/slide4.xml ---
+01
+ Introduction | 02 Problématique | 03 Fonctionnement | 04 Maquettes | 05 Fonctionnalités | 06 Technologies | 07 Conclusion
+Qu'est-ce que SOUK ?
+SOUK
+ est une plateforme numérique conçue comme un pont direct entre les 
+artisans et commerçants marocains
+ et les consommateurs.
+Chaque vendeur peut créer et gérer sa vitrine au sein d'un 
+écosystème e-commerce unifié
+.
+Type de projet :
+ Web Application — Solution SaaS & Marketplace (Version MVP)
+Contexte marocain :
+ Le commerce de proximité et les artisans peinent à franchir le cap du e-commerce (barrières techniques, coût élevé). SOUK vise à démocratiser cet accès avec une plateforme moderne et adaptée au marché local.
+Mission :
+ Préserver et dynamiser l'économie locale marocaine en connectant l'artisanat traditionnel avec l'économie numérique moderne.
+04
+
+--- ppt/slides/slide5.xml ---
+02
+Problématique
+& Objectifs
+Identifier le défi et définir les objectifs du projet MVP
+
+--- ppt/slides/slide6.xml ---
+01 Introduction | 
+02
+ Problématique | 03 Fonctionnement | 04 Maquettes | 05 Fonctionnalités | 06 Technologies | 07 Conclusion
+Problématique
+Problème central :
+ Comment intégrer les artisans marocains dans l'économie numérique sans les confronter à la complexité et aux coûts d'un site e-commerce individuel ?
+Difficultés des Vendeurs
+Manque d'expertise technique
+Difficulté à acquérir du trafic
+Coûts de développement élevés
+Absence de visibilité numérique
+Difficultés des Clients
+Recherche d'une plateforme de confiance
+Besoin de produits locaux authentiques
+Fragmentation de l'offre artisanale en ligne
+Manque de traçabilité et garantie qualité
+Importance :
+ La digitalisation de ces acteurs est un enjeu majeur pour la préservation et la dynamisation de l'économie locale marocaine.
+06
+
+--- ppt/slides/slide7.xml ---
+01 Introduction | 
+02
+ Problématique | 03 Fonctionnement | 04 Maquettes | 05 Fonctionnalités | 06 Technologies | 07 Conclusion
+Objectifs du projet
+OBJECTIF PRINCIPAL
+Concevoir et développer un 
+MVP fonctionnel et évolutif
+, démontrant la faisabilité technique d'une marketplace SaaS centralisée.
+Expérience Utilisateur
+Proposer une UX claire et intuitive avec le design system 
+"Emerald & Gold"
+Fonctionnalités Clés
+Développer les fonctionnalités fondamentales de gestion pour les 
+vendeurs
+ et les 
+administrateurs
+Architecture Logicielle
+Mettre en place une architecture solide séparant la 
+logique métier
+ et l'
+interface utilisateur
+07
+
+--- ppt/slides/slide8.xml ---
+03
+Fonctionnement
+& Architecture
+Architecture découplée, rôles utilisateurs et parcours
+
+--- ppt/slides/slide9.xml ---
+01 Introduction | 02 Problématique | 
+03
+ Fonctionnement | 04 Maquettes | 05 Fonctionnalités | 06 Technologies | 07 Conclusion
+Architecture globale & Rôles
+ARCHITECTURE
+Backend API
+ — Laravel 11
+API RESTful robuste avec ORM Eloquent
+Frontend
+ — React.js + Vite
+Interface réactive et orientée composants
+RÔLES UTILISATEURS
+Administrateur
+Modération de la plateforme
+Gestion des utilisateurs
+Gestion des boutiques
+Supervision globale
+Vendeur (Vendor)
+Création de boutique
+Ajout de produits
+Gestion des commandes
+Espace dédié artisan
+Client (Customer)
+Navigation marketplace
+Inscription
+Passation de commandes
+Exploration du catalogue
+09
+
+--- ppt/slides/slide10.xml ---
+01 Introduction | 02 Problématique | 
+03
+ Fonctionnement | 04 Maquettes | 05 Fonctionnalités | 06 Technologies | 07 Conclusion
+Parcours Utilisateur (User Flow)
+1
+Inscription
+Inscription et redirection selon les rôles
+2
+Création Boutique
+Le vendeur crée sa boutique digitale
+3
+Gestion Stock
+Ajout et gestion de l'inventaire produits
+4
+Commande Client
+Exploration du catalogue et commande
+5
+Gestion Commande
+Réception et gestion par le vendeur
+Description du flux
+Côté Vendeur :
+1. Inscription → Création de la boutique
+2. Ajout des produits au catalogue
+3. Réception et gestion des commandes
+Côté Client :
+1. Inscription sur la plateforme
+2. Exploration du catalogue produits
+3. Passation de commande
+10
+
+--- ppt/slides/slide11.xml ---
+04
+Maquettes
+du Site
+Présentation des pages clés de l'application
+
+--- ppt/slides/slide12.xml ---
+01 Introduction | 02 Problématique | 03 Fonctionnement | 
+04
+ Maquettes | 05 Fonctionnalités | 06 Technologies | 07 Conclusion
+Home Page & Authentification
+Home Page
+Vitrine principale
+La vitrine principale de 
+SOUK
+. Design épuré mettant en avant l'identité visuelle du projet. Elle guide naturellement l'utilisateur vers la découverte des produits.
+UX/UI :
+ Design épuré • Identité visuelle forte • Navigation intuitive vers le catalogue produits
+[ Capture d'écran : Home Page ]
+Login / Register
+Accès centralisé
+Interface centralisée pour l'accès des 
+clients
+, 
+vendeurs
+ et 
+admins
+. Formulaire clair avec un onboarding simple pour réduire les frictions à l'entrée.
+UX/UI :
+ Formulaire clair • Onboarding simplifié • Réduction des frictions d'inscription
+[ Capture d'écran : Login / Register ]
+12
+
+--- ppt/slides/slide13.xml ---
+01 Introduction | 02 Problématique | 03 Fonctionnement | 
+04
+ Maquettes | 05 Fonctionnalités | 06 Technologies | 07 Conclusion
+Marketplace & Dashboards
+Marketplace
+Affichage central de tous les produits disponibles. Présentation sous forme de 
+grille responsive
+, optimisée pour mettre en valeur les images des produits.
+[ Capture : Marketplace ]
+Vendor Dashboard
+L'espace de travail réservé aux artisans. Tableau de bord fonctionnel regroupant les actions essentielles.
+[ Capture : Vendor Dashboard ]
+Admin Dashboard
+Interface de supervision. Vues en listes pour la gestion et la modération des comptes utilisateurs et vendeurs.
+[ Capture : Admin Dashboard ]
+13
+
+--- ppt/slides/slide14.xml ---
+05
+Fonctionnalités
+MVP
+Périmètre fonctionnel de la première version
+
+--- ppt/slides/slide15.xml ---
+01 Introduction | 02 Problématique | 03 Fonctionnement | 04 Maquettes | 
+05
+ Fonctionnalités | 06 Technologies | 07 Conclusion
+Fonctionnalités couvertes (MVP)
+Authentification
+Inscription, connexion et sécurisation des accès
+Gestion des Rôles
+Distinctions et permissions entre Admin, Vendeur et Client
+Création de Boutiques
+Les vendeurs initialisent leur "Souk" digital
+Gestion du Catalogue
+CRUD complet des produits
+Système de Commandes
+Passation de commande et affichage côté vendeur
+Tableaux de Bord
+Interfaces de pilotage pour vendeurs et administrateurs
+Intelligence Artificielle (Initiation)
+Système IA préliminaire posant les bases de futures recommandations intelligentes personnalisées
+15
+
+--- ppt/slides/slide16.xml ---
+06
+Technologies
+& Analyse
+Stack technique et analyse professionnelle du projet
+
+--- ppt/slides/slide17.xml ---
+01 Introduction | 02 Problématique | 03 Fonctionnement | 04 Maquettes | 05 Fonctionnalités | 
+06
+ Technologies | 07 Conclusion
+Technologies utilisées
+Backend / API
+Laravel 11
+Robustesse éprouvée du framework PHP
+Rapidité de mise en place d'une 
+API RESTful
+ORM Eloquent
+ pour la gestion des données
+Écosystème mature et documenté
+Frontend
+React.js + Vite
+Interface utilisateur 
+réactive
+ et moderne
+Architecture 
+orientée composants
+Build ultra-rapide avec 
+Vite
+Écosystème riche et communauté active
+Sécurité
+Authentification API gérée via 
+Laravel Sanctum
+ — Tokens sécurisés, gestion des sessions, protection CSRF
+17
+
+--- ppt/slides/slide18.xml ---
+01 Introduction | 02 Problématique | 03 Fonctionnement | 04 Maquettes | 05 Fonctionnalités | 
+06
+ Technologies | 07 Conclusion
+Analyse professionnelle
+POINTS FORTS
+Séparation Frontend / Backend
+Architecture découplée claire et maintenable
+Design System Cohérent
+Identité visuelle "Emerald & Gold" uniforme
+Code Bien Structuré
+Base de code propre et évolutive
+STRATÉGIE MVP
+Présenter le projet comme un 
+MVP fort et évolutif
+ démontre au jury une approche professionnelle et pragmatique de l'ingénierie logicielle.
+Cela prouve la capacité à 
+prioriser l'essentiel
+ — la faisabilité technique du cœur métier — sans se perdre dans la sur-promesse de fonctionnalités annexes non abouties.
+18
+
+--- ppt/slides/slide19.xml ---
+07
+Conclusion
+& Perspectives
+Bilan du projet et feuille de route post-MVP
+
+--- ppt/slides/slide20.xml ---
+01 Introduction | 02 Problématique | 03 Fonctionnement | 04 Maquettes | 05 Fonctionnalités | 06 Technologies | 
+07
+ Conclusion
+Conclusion et Roadmap
+BILAN
+Le projet 
+SOUK
+ a permis de concevoir avec succès le noyau dur d'une plateforme 
+SaaS B2B2C
+ complexe. L'application MVP est sur pied et valide l'idée fondatrice.
+ROADMAP POST-MVP
+Engagement Avancé
+Wishlist complète + Système de Reviews (Avis et notations)
+Temps Réel
+WebSockets pour notifications en direct (alertes de nouvelles commandes)
+Assurance Qualité
+Suite exhaustive de Feature Tests automatisés
+Évolution IA
+Développement d'un algorithme de suggestion personnalisée
+20
+
+--- ppt/slides/slide21.xml ---
+MERCI
+SOUK — Plateforme SaaS & Marketplace
+Questions & Discussion
+

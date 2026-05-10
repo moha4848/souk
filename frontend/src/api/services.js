@@ -16,6 +16,24 @@ api.interceptors.request.use(config => {
   return config
 })
 
+// Add response interceptor for global error handling
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      // Auto logout on unauthorized
+      localStorage.removeItem('souk_token')
+      localStorage.removeItem('souk_admin_token')
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
+    }
+    
+    // Global error message logic can be added here (e.g., Toast)
+    return Promise.reject(error)
+  }
+)
+
 // ── Authentication (Real API) ──────────────────────────────────────────
 export const login = (data) => {
   const endpoint = data.isAdminLogin ? '/admin/login' : '/login'

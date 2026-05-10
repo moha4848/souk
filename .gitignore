@@ -11,6 +11,11 @@
 /backend/storage/framework/testing/*
 /backend/storage/framework/views/*
 /backend/storage/logs/*
+/backend/debug_me.php
+/backend/get_latest_user.php
+/backend/reset.php
+/backend/test_status.php
+/backend/verify_supervision.php
 /frontend/node_modules
 /frontend/dist
 .DS_Store

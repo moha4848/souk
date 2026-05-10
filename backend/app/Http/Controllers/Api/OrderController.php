@@ -14,119 +14,80 @@ use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use InvalidArgumentException;
 
 class OrderController extends Controller
 {
+    protected $orderService;
+
+    public function __construct(\App\Services\OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
+
     public function store(OrderRequest $request)
     {
-        return DB::transaction(function () use ($request) {
-            $vendor = \App\Models\Vendor::with('activeSubscription.package')->findOrFail($request->store_id);
-            $clientUser = null;
-            $client = null;
-            if ($request->client_email) {
-                $clientUser = User::where('email', $request->client_email)->with('client')->first();
-                $client = $clientUser ? $clientUser->client : null;
-            }
-
-            // 1. Calculate totals
-            $subtotal = 0;
-            foreach ($request->items as $item) {
-                $product = Product::findOrFail($item['product_id']);
-                $subtotal += $product->price * $item['quantity'];
-                
-                // Deduct stock
-                $product->decrement('stock', $item['quantity']);
-            }
-
-            $discount = 0;
-            if ($client && $request->points_used > 0) {
-                // Example: 10 points = 1 MAD discount
-                $pointsToUse = min($client->loyalty_points, $request->points_used);
-                $discount = $pointsToUse / 10;
-                $client->decrement('loyalty_points', $pointsToUse);
-            }
-
-            $total = $subtotal - $discount;
-            
-            // 2. Loyalty points earning (1 achat = 3 points)
-            $pointsEarned = 3;
-            if ($client) {
-                $client->increment('loyalty_points', $pointsEarned);
-            }
-
-            // 3. Create Order
-            $order = Order::create([
-                'client_id' => $client ? $client->id : null,
-                'vendor_id' => $vendor->id,
-                'client_name' => $request->client_name,
-                'client_email' => $request->client_email,
-                'client_phone' => $request->client_phone,
-                'shipping_address' => $request->shipping_address,
-                'shipping_city' => $request->shipping_city,
-                'total' => $total,
-                'discount' => $discount,
-                'points_used' => $request->points_used ?? 0,
-                'points_earned' => $pointsEarned,
-                'status' => 'pending', 
-                'payment_method' => $request->payment_method,
-                'delivery_method' => $request->delivery_method,
-                'notes' => $request->notes,
-            ]);
-
-            // 4. Save Items
-            foreach ($request->items as $item) {
-                $product = Product::find($item['product_id']);
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $product->id,
-                    'product_name' => $product->name,
-                    'quantity' => $item['quantity'],
-                    'price' => $product->price,
-                ]);
-            }
-
-            // 5. Calculate and Record Admin Commission
-            $commissionRate = 10; // Default rate
-            if ($vendor && $vendor->activeSubscription && $vendor->activeSubscription->package) {
-                $commissionRate = $vendor->activeSubscription->package->commission_rate;
-            }
-            $commissionAmount = $total * ($commissionRate / 100);
-            Commission::create([
-                'order_id' => $order->id,
-                'vendor_id' => $vendor->id,
-                'amount' => $commissionAmount,
-                'status' => 'pending',
-            ]);
+        try {
+            $result = $this->orderService->createOrder($request->all());
 
             return response()->json([
                 'message' => 'Commande passée avec succès',
-                'order' => $order,
-                'points_earned' => $pointsEarned
+                'order' => $result['order'],
+                'points_earned' => $result['points_earned']
             ], 201);
-        });
+        } catch (InvalidArgumentException $e) {
+            return response()->json([
+                'message' => 'Commande invalide',
+                'error' => $e->getMessage()
+            ], 422);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Ressource introuvable',
+                'error' => 'Produit, vendeur ou client introuvable'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Erreur lors de la commande',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function getVendorOrders()
     {
-        $vendorId = Auth::user()->vendor->id ?? null;
-        if (!$vendorId) return response()->json([]);
+        $vendor = Auth::user()->vendor;
+        if (!$vendor) {
+            return response()->json(['error' => 'No vendor profile found'], 403);
+        }
         
-        return response()->json(Order::with('items.product')->where('vendor_id', $vendorId)->latest()->get());
+        $orders = Order::with('items.product')
+            ->where('vendor_id', $vendor->id)
+            ->latest()
+            ->paginate(15);
+            
+        return response()->json($orders);
     }
 
     public function getClientOrders()
     {
-        $clientId = Auth::user()->client->id ?? null;
-        if (!$clientId) return response()->json([]);
+        $client = Auth::user()->client;
+        if (!$client) {
+            return response()->json(['error' => 'No client profile found'], 403);
+        }
         
-        return response()->json(Order::with('items.product')->where('client_id', $clientId)->latest()->get());
+        return response()->json(Order::with('items.product')->where('client_id', $client->id)->latest()->get());
     }
 
     public function show($id)
     {
         $user = Auth::user();
-        $vendorId = $user->vendor->id ?? null;
-        $clientId = $user->client->id ?? null;
+        $vendorId = $user->vendor?->id;
+        $clientId = $user->client?->id;
+
+        if (!$vendorId && !$clientId) {
+            return response()->json(['error' => 'No vendor or client profile found'], 403);
+        }
 
         $order = Order::with('items.product')
             ->where(function($q) use ($vendorId, $clientId) {
@@ -140,10 +101,12 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
-        $vendorId = Auth::user()->vendor->id ?? null;
-        if (!$vendorId) abort(403);
+        $vendor = Auth::user()->vendor;
+        if (!$vendor) {
+            return response()->json(['error' => 'No vendor profile found'], 403);
+        }
         
-        $order = Order::where('vendor_id', $vendorId)->findOrFail($id);
+        $order = Order::where('vendor_id', $vendor->id)->findOrFail($id);
         
         $request->validate([
             'status' => 'required|string|in:pending,processing,shipped,delivered,cancelled'

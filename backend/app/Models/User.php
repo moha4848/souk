@@ -79,6 +79,18 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Vendor::class);
     }
 
+    public function following()
+    {
+        return $this->belongsToMany(Vendor::class, 'store_follows', 'user_id', 'vendor_id')
+            ->withTimestamps();
+    }
+
+    public function likedProducts()
+    {
+        return $this->belongsToMany(Product::class, 'product_likes', 'user_id', 'product_id')
+            ->withTimestamps();
+    }
+
     public function staffProfile()
     {
         return $this->hasOne(Staff::class);

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOUK ✧ — Soutenance 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --em:#10B981;--em2:#059669;--em3:#34D399;
+  --gold:#FFD700;--gold2:#C9A66B;--gold3:#FFF3A3;
+  --bg:#060810;--bg2:#0C1120;--bg3:#111827;
+  --glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.08);
+  --border:rgba(16,185,129,0.18);--border2:rgba(255,215,0,0.18);
+  --text:#F8FAFC;--muted:#94A3B8;--muted2:#64748B;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text)}
+.deck{width:100vw;height:100vh;position:relative}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:60px;opacity:0;pointer-events:none;transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);
+  transform:translateX(60px);
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.exit{opacity:0;transform:translateX(-60px)}
+
+/* BG orbs */
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(16,185,129,.18),transparent 70%);top:-100px;left:-100px}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(255,215,0,.1),transparent 70%);bottom:-80px;right:-80px}
+.orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(16,185,129,.08),transparent 70%);top:40%;right:10%}
+
+/* NAV */
+.nav{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:20px;z-index:100;
+  background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid var(--border);
+  padding:14px 28px;border-radius:60px}
+.nav-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all .2s}
+.nav-btn:hover{color:var(--em);background:rgba(16,185,129,.1)}
+.nav-dots{display:flex;gap:8px;align-items:center}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--muted2);cursor:pointer;transition:all .3s}
+.dot.active{background:var(--em);width:24px;border-radius:3px}
+.slide-counter{color:var(--muted);font-size:12px;letter-spacing:.05em;min-width:40px;text-align:center}
+.kbd{position:fixed;top:20px;right:24px;color:var(--muted2);font-size:11px;opacity:.5;z-index:100}
+
+/* TYPOGRAPHY */
+.tag{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);
+  color:var(--em3);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  padding:5px 14px;border-radius:20px}
+.h-display{font-family:'Playfair Display',serif;font-size:clamp(48px,7vw,88px);font-weight:900;line-height:1.05;
+  background:linear-gradient(135deg,#fff 0%,var(--em3) 60%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.h1{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:700;color:var(--text)}
+.h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text)}
+.h3{font-size:13px;font-weight:600;color:var(--em);letter-spacing:.1em;text-transform:uppercase}
+.gold-text{color:var(--gold)}
+.em-text{color:var(--em)}
+.muted{color:var(--muted)}
+.subtitle{font-size:16px;color:var(--muted);line-height:1.7;font-weight:300}
+
+/* GLASS CARDS */
+.card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:20px;padding:28px}
+.card-gold{background:rgba(255,215,0,.04);border-color:var(--border2)}
+.card-sm{padding:20px;border-radius:16px}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.flex{display:flex;gap:20px;align-items:flex-start}
+
+/* STAT */
+.stat-num{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--em3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+
+/* PILL BADGE */
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-em{background:rgba(16,185,129,.15);color:var(--em3);border:1px solid rgba(16,185,129,.25)}
+.badge-gold{background:rgba(255,215,0,.12);color:var(--gold);border:1px solid rgba(255,215,0,.25)}
+
+/* SPRINT BAR */
+.sprint-bar{background:linear-gradient(90deg,var(--em2),var(--em));height:4px;border-radius:2px;width:100%;margin:10px 0}
+
+/* ICON CIRCLE */
+.icon-c{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.2);flex-shrink:0}
+.icon-c.gold{background:rgba(255,215,0,.1);border-color:rgba(255,215,0,.2)}
+
+/* LINE ACCENT */
+.accent-line{width:60px;height:3px;background:linear-gradient(90deg,var(--em),transparent);border-radius:2px}
+.accent-line.gold{background:linear-gradient(90deg,var(--gold),transparent)}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+
+/* FULL WIDTH SLIDES */
+.slide-full{padding:50px 70px;align-items:flex-start;justify-content:flex-start}
+.slide-center{justify-content:center;align-items:center;text-align:center}
+
+/* CONTENT WRAPPER */
+.content{position:relative;z-index:1;width:100%;max-width:1200px}
+
+/* BULLET ROW */
+.bullet-row{display:flex;align-items:flex-start;gap:12px;margin:10px 0}
+.bullet-dot{width:8px;height:8px;border-radius:50%;background:var(--em);margin-top:7px;flex-shrink:0}
+.bullet-dot.gold{background:var(--gold)}
+
+/* ARCH LAYER */
+.arch-layer{display:flex;align-items:center;gap:16px;padding:16px 22px;
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;margin:8px 0}
+.arch-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;min-width:90px}
+
+/* ROLE CARD */
+.role-card{text-align:center;padding:22px 16px;background:var(--glass);border:1px solid var(--border);border-radius:16px}
+.role-icon{font-size:32px;margin-bottom:10px}
+.role-name{font-size:11px;font-weight:600;color:var(--em);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+
+/* PROGRESS */
+.progress-track{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--em2),var(--em3))}
+
+/* IMAGE SLIDE */
+.img-frame{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;overflow:hidden;padding:16px}
+.img-frame img{width:100%;height:100%;object-fit:contain;border-radius:10px;display:block}
+
+/* COVER DECORATIVE */
+.star-em{color:var(--gold);font-size:28px;display:block;margin:16px 0}
+.cover-sub{font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);font-weight:500}
+.cover-pills{display:flex;gap:12px;justify-content:center;margin-top:32px}
+.cover-pill{padding:8px 22px;border:1px solid var(--border);border-radius:30px;font-size:12px;
+  font-weight:600;color:var(--em3);background:rgba(16,185,129,.06)}
+
+/* SCROLLABLE in slide */
+.scroll-inner{overflow-y:auto;max-height:calc(100vh - 240px)}
+.scroll-inner::-webkit-scrollbar{width:3px}
+.scroll-inner::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* TIMELINE */
+.timeline{display:flex;gap:0;width:100%}
+.sprint-col{flex:1;border-right:1px solid var(--border);padding:0 18px;position:relative}
+.sprint-col:last-child{border-right:none}
+.sprint-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--em);opacity:.3;line-height:1}
+.sprint-title{font-size:13px;font-weight:600;color:var(--em3);text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+.sprint-weeks{font-size:11px;color:var(--muted2);margin:6px 0 14px}
+.sprint-task{display:flex;gap:8px;align-items:flex-start;margin:8px 0;font-size:12px;color:var(--muted)}
+.sprint-dot{width:5px;height:5px;border-radius:50%;background:var(--em);margin-top:5px;flex-shrink:0}
+
+/* CONCLUSION */
+.concl-box{background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(255,215,0,.06));
+  border:1px solid;border-image:linear-gradient(135deg,var(--border),var(--border2)) 1;
+  border-radius:20px;padding:30px}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+<span class="kbd">← → ou cliquer pour naviguer</span>
+
+<div class="deck" id="deck">
+
+<!-- SLIDE 1: COVER -->
+<div class="slide slide-center active" id="s0">
+  <div class="content" style="text-align:center">
+    <div class="cover-sub">Soutenance Projet de Synthèse — 2026</div>
+    <div style="margin:28px 0 8px">
+      <span class="h-display" style="font-size:clamp(80px,11vw,130px)">SOUK</span>
+    </div>
+    <span style="color:var(--gold);font-size:36px">✧</span>
+    <div class="divider" style="margin:28px auto;max-width:300px"></div>
+    <p class="subtitle" style="max-width:520px;margin:0 auto;font-size:17px">
+      Infrastructure <strong style="color:var(--em3);font-weight:600">SaaS Multi-tenant</strong> pour l'Artisanat Marocain
+    </p>
+    <div class="cover-pills">
+      <span class="cover-pill">Laravel 11</span>
+      <span class="cover-pill">React / Vite</span>
+      <span class="cover-pill">JWT · RBAC</span>
+      <span class="cover-pill">Multi-tenant</span>
+    </div>
+    <p style="margin-top:48px;font-size:12px;color:var(--muted2);letter-spacing:.05em">
+      Encadrant : Jury de Soutenance &nbsp;·&nbsp; Projet de Synthèse 2026
+    </p>
+  </div>
+</div>
+
+<!-- SLIDE 2: SOMMAIRE -->
+<div class="slide slide-full" id="s1">
+  <div class="content">
+    <div class="tag" style="margin-bottom:16px">Plan de présentation</div>
+    <h1 class="h1" style="margin-bottom:8px">Sommaire</h1>
+    <div class="accent-line" style="margin-bottom:32px"></div>
+    <div class="grid2" style="gap:12px">
+      <div class="card card-sm" style="display:flex;gap:16px;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--em);opacity:.5;line-height:1">01</span>
+        <div><div style="font-weight:600;font-size:14px">Introduction & Problématique</div><div class="muted" style="font-size:12px">La fracture numérique artisanale</div></div>
+      </div>
+      <div class="card card-sm" style="display:flex;gap:16px;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--em);opacity:.5">02</span>
+        <div><div style="font-weight:600;font-size:14px">Objectifs du Projet</div><div class="muted" style="font-size:12px">SaaS, multi-tenant, démocratisation</div></div>
+      </div>
+      <div class="card card-sm" style="display:flex;gap:16px;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--em);opacity:.5">03</span>
+        <div><div style="font-weight:600;font-size:14px">Analyse des Besoins</div><div class="muted" style="font-size:12px">Vendeurs, clients, fonctionnalités</div></div>
+      </div>
+      <div class="card card-sm" style="display:flex;gap:16px;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--em);opacity:.5">04</span>
+        <div><div style="font-weight:600;font-size:14px">Architecture & Stack</div><div class="muted" style="font-size:12px">Laravel 11, React, JWT, RBAC</div></div>
+      </div>
+      <div class="card card-sm" style="display:flex;gap:16px;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--em);opacity:.5">05</span>
+        <div><div style="font-weight:600;font-size:14px">Méthodologie Agile / Scrum</div><div class="muted" style="font-size:12px">4 Sprints de développement</div></div>
+      </div>
+      <div class="card card-sm" style="display:flex;gap:16px;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--em);opacity:.5">06</span>
+        <div><div style="font-weight:600;font-size:14px">Diagrammes UML</div><div class="muted" style="font-size:12px">Use Case & Modèle de classes</div></div>
+      </div>
+      <div class="card card-sm" style="display:flex;gap:16px;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--em);opacity:.5">07</span>
+        <div><div style="font-weight:600;font-size:14px">Démonstration UI</div><div class="muted" style="font-size:12px">Interfaces & dashboards</div></div>
+      </div>
+      <div class="card card-sm" style="display:flex;gap:16px;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--em);opacity:.5">08</span>
+        <div><div style="font-weight:600;font-size:14px">Défis & Conclusion</div><div class="muted" style="font-size:12px">Bilan technique & perspectives</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: INTRO / PROBLÉMATIQUE -->
+<div class="slide slide-full" id="s2">
+  <div class="content">
+    <div class="tag" style="margin-bottom:16px">01 — Introduction</div>
+    <h1 class="h1" style="margin-bottom:6px">La fracture numérique</h1>
+    <p class="subtitle" style="margin-bottom:28px">de l'artisanat marocain</p>
+    <div class="flex">
+      <div style="flex:1.3">
+        <div class="card" style="margin-bottom:16px">
+          <div class="h3" style="margin-bottom:14px">Le constat</div>
+          <p class="subtitle" style="font-size:14px;margin-bottom:16px">L'artisanat marocain représente un patrimoine d'excellence mondial. Pourtant, les petits artisans restent exclus du marché global par manque d'outils adaptés.</p>
+          <div class="divider" style="margin:14px 0"></div>
+          <div class="h3" style="margin-bottom:10px;color:var(--gold)">Barrières identifiées</div>
+          <div class="bullet-row"><div class="bullet-dot"></div><span class="subtitle" style="font-size:13px">Coûts prohibitifs des plateformes e-commerce existantes</span></div>
+          <div class="bullet-row"><div class="bullet-dot"></div><span class="subtitle" style="font-size:13px">Complexité technique inaccessible aux artisans</span></div>
+          <div class="bullet-row"><div class="bullet-dot"></div><span class="subtitle" style="font-size:13px">Absence d'infrastructure mutualisée locale</span></div>
+        </div>
+        <div class="card card-gold" style="padding:18px 24px">
+          <p style="font-size:13px;color:var(--gold2);font-style:italic;line-height:1.7">
+            "SOUK ✧ intervient comme levier de transformation digitale, offrant une infrastructure mutualisée qui supprime les barrières à l'entrée."
+          </p>
+        </div>
+      </div>
+      <div style="flex:0.7;display:flex;flex-direction:column;gap:14px">
+        <div class="card" style="text-align:center;padding:24px">
+          <div class="stat-num">< 2min</div>
+          <div class="stat-label">Pour créer une vitrine pro</div>
+        </div>
+        <div class="card" style="text-align:center;padding:24px">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Isolation des données</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: OBJECTIFS -->
+<div class="slide slide-full" id="s3">
+  <div class="content">
+    <div class="tag" style="margin-bottom:16px">02 — Objectifs</div>
+    <h1 class="h1" style="margin-bottom:6px">Objectifs du Projet</h1>
+    <p class="subtitle" style="margin-bottom:28px">SaaS Multi-tenant — Démocratisation digitale</p>
+    <div class="grid3" style="gap:14px">
+      <div class="card" style="padding:22px">
+        <div class="icon-c" style="margin-bottom:14px">⚡</div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:8px">Démocratisation Digitale</div>
+        <p class="muted" style="font-size:12px;line-height:1.65">Vitrine pro en moins de 2 minutes, sans expertise technique requise.</p>
+      </div>
+      <div class="card" style="padding:22px">
+        <div class="icon-c gold" style="margin-bottom:14px">🔐</div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:8px">Sécurité & Isolation</div>
+        <p class="muted" style="font-size:12px;line-height:1.65">RBAC hiérarchique avec isolation stricte des données par tenant via TenantScope.</p>
+      </div>
+      <div class="card" style="padding:22px">
+        <div class="icon-c" style="margin-bottom:14px">🏆</div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:8px">Valorisation du Patrimoine</div>
+        <p class="muted" style="font-size:12px;line-height:1.65">Design System "Emerald & Gold" reflétant le prestige de l'artisanat local.</p>
+      </div>
+      <div class="card" style="padding:22px">
+        <div class="icon-c gold" style="margin-bottom:14px">📈</div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:8px">Pilotage Temps Réel</div>
+        <p class="muted" style="font-size:12px;line-height:1.65">Dashboards analytiques : ventes, stocks, abonnements et KPIs clés.</p>
+      </div>
+      <div class="card" style="padding:22px">
+        <div class="icon-c" style="margin-bottom:14px">🤖</div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:8px">Intelligence Assistée</div>
+        <p class="muted" style="font-size:12px;line-height:1.65">IA générative pour la rédaction automatique des descriptions produits.</p>
+      </div>
+      <div class="card" style="padding:22px">
+        <div class="icon-c gold" style="margin-bottom:14px">✨</div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:8px">Fidélité & Rétention</div>
+        <p class="muted" style="font-size:12px;line-height:1.65">Système de points de fidélité pour engager la clientèle locale et internationale.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: BESOINS -->
+<div class="slide slide-full" id="s4">
+  <div class="content">
+    <div class="tag" style="margin-bottom:16px">03 — Analyse des Besoins</div>
+    <h1 class="h1" style="margin-bottom:24px">Acteurs & Fonctionnalités</h1>
+    <div class="flex" style="gap:16px;align-items:stretch">
+      <div class="card" style="flex:1">
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:18px">
+          <div class="icon-c">🏪</div>
+          <div>
+            <div class="h3">Vendeur — Artisan</div>
+            <div class="muted" style="font-size:12px">Besoins métiers</div>
+          </div>
+        </div>
+        <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:13px">Gestion d'inventaire automatisée</span></div>
+        <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:13px">Assistant IA pour rédaction produits</span></div>
+        <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:13px">Dashboard de pilotage temps réel</span></div>
+        <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:13px">Configuration de boutique personnalisée</span></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+        <div class="card card-gold">
+          <div style="display:flex;gap:12px;align-items:center;margin-bottom:14px">
+            <div class="icon-c gold">🛍️</div>
+            <div>
+              <div class="h3" style="color:var(--gold)">Client — Acheteur</div>
+              <div class="muted" style="font-size:12px">Expérience utilisateur</div>
+            </div>
+          </div>
+          <div class="bullet-row"><div class="bullet-dot gold"></div><span style="font-size:13px">Parcours d'achat fluide (Seamless UX)</span></div>
+          <div class="bullet-row"><div class="bullet-dot gold"></div><span style="font-size:13px">Garantie d'authenticité artisanale</span></div>
+          <div class="bullet-row"><div class="bullet-dot gold"></div><span style="font-size:13px">Système de fidélité par points</span></div>
+        </div>
+        <div class="card">
+          <div class="h3" style="margin-bottom:12px">⚙️ Exigences non-fonctionnelles</div>
+          <div class="grid2" style="gap:8px">
+            <span class="badge badge-em" style="font-size:10px">Performance < 200ms</span>
+            <span class="badge badge-gold" style="font-size:10px">Stateless JWT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: ARCHITECTURE -->
+<div class="slide slide-full" id="s5">
+  <div class="content">
+    <div class="tag" style="margin-bottom:16px">04 — Architecture</div>
+    <h1 class="h1" style="margin-bottom:24px">Stack Technologique</h1>
+    <div class="flex" style="align-items:stretch;gap:20px">
+      <div style="flex:1.6">
+        <div class="h3" style="margin-bottom:14px">Architecture Headless & Decoupled</div>
+        <div class="arch-layer">
+          <div class="badge badge-em" style="min-width:90px;text-align:center">FRONTEND</div>
+          <div>
+            <div style="font-weight:600;font-size:14px">React 18 + Vite + Tailwind CSS</div>
+            <div class="muted" style="font-size:12px">SPA ultra-réactive — Interface immersive & responsive</div>
+          </div>
+        </div>
+        <div style="width:2px;height:14px;background:linear-gradient(var(--em2),transparent);margin-left:45px"></div>
+        <div class="arch-layer">
+          <div class="badge badge-gold" style="min-width:90px;text-align:center;font-size:10px">API GATEWAY</div>
+          <div>
+            <div style="font-weight:600;font-size:14px">Laravel 11 — REST API + JWT Auth</div>
+            <div class="muted" style="font-size:12px">Authentification stateless — Routing tenant-aware</div>
+          </div>
+        </div>
+        <div style="width:2px;height:14px;background:linear-gradient(var(--em2),transparent);margin-left:45px"></div>
+        <div class="arch-layer">
+          <div class="badge badge-em" style="min-width:90px;text-align:center;font-size:10px">TENANCY</div>
+          <div>
+            <div style="font-weight:600;font-size:14px">TenantScope + Middleware Isolation</div>
+            <div class="muted" style="font-size:12px">Isolation stricte des données par boutique artisan</div>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+        <div class="card" style="padding:20px">
+          <div class="h3" style="margin-bottom:12px">🔐 Sécurité</div>
+          <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:13px"><strong style="color:var(--em3)">RBAC</strong> — Permissions par rôle</span></div>
+          <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:13px"><strong style="color:var(--em3)">JWT</strong> — Tokens sécurisés</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: SCRUM -->
+<div class="slide slide-full" id="s6">
+  <div class="content">
+    <div class="tag" style="margin-bottom:16px">05 — Méthodologie</div>
+    <h1 class="h1" style="margin-bottom:6px">Agile / Scrum</h1>
+    <p class="subtitle" style="margin-bottom:28px">4 Sprints pour une livraison progressive du MVP</p>
+    <div class="timeline">
+      <div class="sprint-col">
+        <div class="sprint-num">01</div>
+        <div class="sprint-title">Fondation</div>
+        <div class="sprint-weeks">S1 – S3</div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+        <div class="sprint-task"><div class="sprint-dot"></div><span>Architecture API-First</span></div>
+        <div class="sprint-task"><div class="sprint-dot"></div><span>Authentification JWT</span></div>
+      </div>
+      <div class="sprint-col">
+        <div class="sprint-num" style="color:var(--gold)">02</div>
+        <div class="sprint-title" style="color:var(--gold2)">Multi-tenancy</div>
+        <div class="sprint-weeks">S4 – S6</div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--gold2),var(--gold))"></div></div>
+        <div class="sprint-task"><div class="sprint-dot" style="background:var(--gold)"></div><span>Moteur SaaS multi-tenant</span></div>
+        <div class="sprint-task"><div class="sprint-dot" style="background:var(--gold)"></div><span>Isolation des boutiques</span></div>
+      </div>
+      <div class="sprint-col">
+        <div class="sprint-num">03</div>
+        <div class="sprint-title">E-commerce</div>
+        <div class="sprint-weeks">S7 – S9</div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+        <div class="sprint-task"><div class="sprint-dot"></div><span>Marketplace publique</span></div>
+        <div class="sprint-task"><div class="sprint-dot"></div><span>Tunnel d'achat</span></div>
+      </div>
+      <div class="sprint-col" style="border-right:none">
+        <div class="sprint-num" style="color:var(--gold)">04</div>
+        <div class="sprint-title" style="color:var(--gold2)">Innovation</div>
+        <div class="sprint-weeks">S10 – S12</div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--gold2),var(--gold))"></div></div>
+        <div class="sprint-task"><div class="sprint-dot" style="background:var(--gold)"></div><span>IA pour descriptions</span></div>
+        <div class="sprint-task"><div class="sprint-dot" style="background:var(--gold)"></div><span>Design System final</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: UML USE CASE -->
+<div class="slide slide-full" id="s7">
+  <div class="content">
+    <div class="tag" style="margin-bottom:16px">06 — Diagrammes UML</div>
+    <h1 class="h1" style="margin-bottom:6px">Diagramme de Cas d'Utilisation</h1>
+    <p class="subtitle" style="margin-bottom:20px">Interactions et périmètre du Système SOUK</p>
+    <div style="display:flex;gap:16px;height:calc(100vh - 280px)">
+      <div class="img-frame" style="flex:1.4;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,1)">
+        <img id="ucImg" style="max-height:100%;max-width:100%;object-fit:contain" alt="Use Case Diagram">
+      </div>
+      <div style="flex:0.6;display:flex;flex-direction:column;gap:10px">
+        <div class="card card-sm">
+          <div class="h3" style="margin-bottom:8px">👑 SuperAdmin</div>
+          <span class="badge badge-em">Gestion RBAC globale</span>
+        </div>
+        <div class="card card-sm">
+          <div class="h3" style="margin-bottom:8px;color:var(--gold)">🏪 Vendeur</div>
+          <span class="badge badge-gold">Configurer Boutique</span>
+        </div>
+        <div class="card card-sm">
+          <div class="h3" style="margin-bottom:8px">🛍️ Client</div>
+          <span class="badge badge-em">Passer commande</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: UML CLASSES -->
+<div class="slide slide-full" id="s8">
+  <div class="content">
+    <div class="tag" style="margin-bottom:16px">06 — Diagrammes UML</div>
+    <h1 class="h1" style="margin-bottom:6px">Diagramme de Classes</h1>
+    <p class="subtitle" style="margin-bottom:20px">Modèle de données du Système SOUK</p>
+    <div style="display:flex;gap:16px;height:calc(100vh - 280px)">
+      <div class="img-frame" style="flex:1.4;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,1)">
+        <img id="classImg" style="max-height:100%;max-width:100%;object-fit:contain" alt="Class Diagram">
+      </div>
+      <div style="flex:0.6;display:flex;flex-direction:column;gap:10px">
+        <div class="card card-sm">
+          <div class="h3" style="margin-bottom:10px">Entités principales</div>
+          <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:12px"><strong style="color:var(--em3)">Vendor</strong> → Boutique artisan</span></div>
+          <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:12px"><strong style="color:var(--em3)">Product</strong> → Inventaire</span></div>
+          <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:12px"><strong style="color:var(--em3)">Subscription</strong> → Package SaaS</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: DEMO -->
+<div class="slide slide-full" id="s9">
+  <div class="content">
+    <div class="tag" style="margin-bottom:16px">07 — Démonstration</div>
+    <h1 class="h1" style="margin-bottom:6px">Interfaces & Dashboards</h1>
+    <div class="img-frame" style="width:100%;height:450px;background:black;display:flex;align-items:center;justify-content:center">
+      <video controls style="width:100%;height:100%;border-radius:10px" id="demoVideo">
+        <source src="docs/demo_souk.mp4" type="video/mp4">
+        Navigateur non compatible.
+      </video>
+    </div>
+    <div class="concl-box" style="text-align:center;padding:15px;margin-top:15px">
+      <span style="font-size:14px;color:var(--gold2);font-style:italic">DÉMONSTRATION EN DIRECT — Tunnel d'achat & Isolation Multi-tenant</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: CONCLUSION -->
+<div class="slide slide-full" id="s10">
+  <div class="content">
+    <div class="tag" style="margin-bottom:16px">08 — Conclusion</div>
+    <h1 class="h1" style="margin-bottom:24px">Défis & Conclusion</h1>
+    <div class="flex" style="gap:16px;align-items:stretch">
+      <div class="card" style="flex:1">
+        <div class="h3" style="margin-bottom:14px">⚡ Défis techniques</div>
+        <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:13px">Isolation des données (Tenant Isolation)</span></div>
+        <div class="bullet-row"><div class="bullet-dot"></div><span style="font-size:13px">Intégration de l'IA générative</span></div>
+      </div>
+      <div class="card card-gold" style="flex:1">
+        <div class="h3" style="margin-bottom:14px;color:var(--gold)">📚 Apprentissages</div>
+        <div class="bullet-row"><div class="bullet-dot gold"></div><span style="font-size:13px">Architecture SaaS multi-tenant</span></div>
+        <div class="bullet-row"><div class="bullet-dot gold"></div><span style="font-size:13px">Gestion agile avec Scrum</span></div>
+      </div>
+    </div>
+    <div class="concl-box" style="margin-top:18px">
+      <p style="font-size:13px;color:var(--muted);line-height:1.75">
+        <strong style="color:var(--text)">SOUK ✧</strong> valide la viabilité technique d'un modèle SaaS solidaire. Le projet ouvre la voie vers une marketplace intelligente avec paiement Stripe et expansion régionale.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 12: MERCI -->
+<div class="slide slide-center" id="s11">
+  <div class="content" style="text-align:center">
+    <span style="color:var(--gold);font-size:32px;display:block;margin-bottom:20px">✧</span>
+    <h2 class="h-display" style="font-size:clamp(40px,6vw,72px);margin-bottom:16px">Merci pour votre attention</h2>
+    <div class="divider" style="margin:24px auto;max-width:280px"></div>
+    <p class="subtitle" style="font-size:16px;margin-bottom:12px">SOUK ✧ — Soutenance Finale 2026</p>
+    <p style="color:var(--muted2);font-size:14px;margin-bottom:40px">Avez-vous des questions ?</p>
+  </div>
+</div>
+
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">‹</button>
+  <div class="nav-dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">›</button>
+  <span class="slide-counter" id="counter">1 / 12</span>
+</nav>
+
+<script>
+const TOTAL = 12;
+let current = 0;
+
+function showSlide(index) {
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  
+  slides.forEach((s, i) => {
+    s.classList.remove('active', 'exit');
+    if(i === index) s.classList.add('active');
+    if(i === current && i !== index) s.classList.add('exit');
+  });
+  
+  dots.forEach((d, i) => d.classList.toggle('active', i === index));
+  
+  document.getElementById('counter').innerText = `${index + 1} / ${TOTAL}`;
+  current = index;
+}
+
+function navigate(dir) {
+  let next = current + dir;
+  if(next >= 0 && next < TOTAL) showSlide(next);
+}
+
+// Keyboard nav
+window.addEventListener('keydown', (e) => {
+  if(e.key === 'ArrowRight' || e.key === ' ') navigate(1);
+  if(e.key === 'ArrowLeft') navigate(-1);
+});
+
+// Init dots
+const dotsContainer = document.getElementById('dots');
+for(let i=0; i<TOTAL; i++) {
+  const dot = document.createElement('div');
+  dot.className = `dot ${i === 0 ? 'active' : ''}`;
+  dot.onclick = () => showSlide(i);
+  dotsContainer.appendChild(dot);
+}
+
+// Inject actual images
+document.getElementById('ucImg').src = "docs/use_case.png";
+document.getElementById('classImg').src = "docs/class_diagram.png";
+</script>
+</body>
+</html>

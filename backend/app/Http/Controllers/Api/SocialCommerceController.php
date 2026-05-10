@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use App\Models\User;
 use App\Models\Product;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
 
 class SocialCommerceController extends Controller
@@ -17,19 +15,19 @@ class SocialCommerceController extends Controller
     public function followStore($store_id)
     {
         $client = Auth::user();
-        $store = \App\Models\Vendor::findOrFail($store_id);
+        $store = Vendor::findOrFail($store_id);
 
-        if ($client->id === $store->id) {
-            return response()->json(['message' => 'Vous ne pouvez pas vous suivre vous-même'], 400);
+        if ($client->id === $store->user_id) {
+            return response()->json(['message' => 'Vous ne pouvez pas vous suivre vous-meme'], 400);
         }
 
         $client->following()->toggle($store->id);
-        $isFollowing = $client->following()->where('following_id', $store->id)->exists();
+        $isFollowing = $client->following()->where('vendor_id', $store->id)->exists();
 
         return response()->json([
-            'message' => $isFollowing ? 'Abonnement réussi' : 'Désabonné',
+            'message' => $isFollowing ? 'Abonnement reussi' : 'Desabonne',
             'is_following' => $isFollowing,
-            'follower_count' => $store->followers()->count()
+            'follower_count' => $store->followers()->count(),
         ]);
     }
 
@@ -44,13 +42,16 @@ class SocialCommerceController extends Controller
         $client->likedProducts()->toggle($product->id);
         $isLiked = $client->likedProducts()->where('product_id', $product->id)->exists();
 
-        // Increment/Decrement counter in product table for fast access
-        $isLiked ? $product->increment('likes_count') : $product->decrement('likes_count');
+        if ($isLiked) {
+            $product->increment('likes_count');
+        } elseif ($product->likes_count > 0) {
+            $product->decrement('likes_count');
+        }
 
         return response()->json([
-            'message' => $isLiked ? 'Produit aimé' : 'J\'aime retiré',
+            'message' => $isLiked ? 'Produit aime' : 'J aime retire',
             'is_liked' => $isLiked,
-            'likes_count' => $product->likes_count
+            'likes_count' => $product->fresh()->likes_count,
         ]);
     }
 }

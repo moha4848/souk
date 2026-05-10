@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOUK - Presentation professionnelle</title>
+  <style>
+    :root {
+      --ink: #162017;
+      --muted: #657166;
+      --paper: #fbf7ef;
+      --green: #0f7a55;
+      --green-dark: #0b503b;
+      --gold: #c4942f;
+      --terracotta: #b66b3e;
+      --soft-green: #e6f3ec;
+      --soft-gold: #fbefd4;
+      --line: rgba(22,32,23,.14);
+      --shadow: 0 28px 90px rgba(0,0,0,.34);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(14,26,19,.97), rgba(15,122,85,.82)),
+        url("docs/annexes/page_accueil.png") center/cover fixed;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .deck { position: relative; width: 100vw; height: 100vh; }
+    .slide { position: absolute; inset: 0; display: none; padding: 34px; }
+    .slide.active { display: grid; place-items: center; }
+
+    .canvas {
+      width: min(1220px, calc(100vw - 56px));
+      height: min(710px, calc(100vh - 56px));
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.36);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    header, footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 34px;
+    }
+
+    header { border-bottom: 1px solid var(--line); }
+    footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+
+    .brand {
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .count { color: var(--muted); font-size: 13px; font-weight: 800; }
+
+    main {
+      display: grid;
+      align-content: center;
+      gap: 24px;
+      padding: 30px 34px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      max-width: 920px;
+      font-size: clamp(50px, 6vw, 80px);
+      line-height: .94;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      max-width: 980px;
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    h3 { margin-bottom: 8px; color: var(--green); font-size: 20px; }
+    .accent { color: var(--green); }
+    .gold { color: var(--gold); }
+    .terra { color: var(--terracotta); }
+
+    .lead {
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 23px;
+      line-height: 1.45;
+    }
+
+    .title-grid, .mockup-grid, .media-grid {
+      display: grid;
+      grid-template-columns: .92fr 1.08fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+    .card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.66);
+    }
+
+    .green-card { background: var(--soft-green); border-color: rgba(15,122,85,.22); }
+    .gold-card { background: var(--soft-gold); border-color: rgba(196,148,47,.3); }
+
+    .card p, li { color: var(--muted); font-size: 18px; line-height: 1.48; }
+    ul { margin: 0; padding-left: 22px; }
+    li + li { margin-top: 8px; }
+    .big-list li { font-size: 21px; margin-bottom: 8px; }
+
+    .shot {
+      width: 100%;
+      height: 430px;
+      object-fit: cover;
+      object-position: top center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 20px 50px rgba(0,0,0,.16);
+    }
+
+    .shot.contain { object-fit: contain; padding: 10px; }
+
+    .section { text-align: center; place-items: center; }
+    .section h2, .section .lead { margin-left: auto; margin-right: auto; }
+
+    .badge {
+      width: fit-content;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: var(--soft-green);
+      color: var(--green);
+      border: 1px solid rgba(15,122,85,.2);
+      font-weight: 900;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .pill-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(15,122,85,.09);
+      border: 1px solid rgba(15,122,85,.2);
+      color: var(--green);
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .diagram {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .box {
+      min-height: 120px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .arrow { color: var(--gold); font-size: 38px; font-weight: 900; }
+
+    .notes {
+      display: none;
+      margin-top: 4px;
+      padding: 13px 16px;
+      border-left: 4px solid var(--gold);
+      background: rgba(196,148,47,.1);
+      color: #5a4a2c;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    body.show-notes .notes { display: block; }
+
+    .controls {
+      position: fixed;
+      right: 24px;
+      bottom: 18px;
+      z-index: 20;
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 15px;
+      background: rgba(251,247,239,.94);
+      color: var(--ink);
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 28px rgba(0,0,0,.18);
+    }
+
+    .hint {
+      position: fixed;
+      left: 24px;
+      bottom: 22px;
+      z-index: 20;
+      color: rgba(251,247,239,.82);
+      font-size: 13px;
+    }
+
+    @media print {
+      body { overflow: visible; background: white; }
+      .deck { height: auto; }
+      .slide { position: relative; display: grid !important; height: 100vh; page-break-after: always; }
+      .canvas { width: 100%; height: 100%; box-shadow: none; }
+      .controls, .hint { display: none; }
+      .notes { display: block; }
+    }
+
+    @media (max-width: 850px) {
+      body { overflow: auto; }
+      .deck { height: auto; }
+      .slide { position: relative; min-height: 100vh; padding: 14px; }
+      .slide:not(.active) { display: none; }
+      .canvas { width: 100%; height: auto; min-height: calc(100vh - 28px); }
+      .title-grid, .mockup-grid, .media-grid, .grid-2, .grid-3, .grid-4, .diagram { grid-template-columns: 1fr; }
+      .arrow { text-align: center; transform: rotate(90deg); }
+      main, header, footer { padding-left: 20px; padding-right: 20px; }
+      .shot { height: 300px; }
+      .lead { font-size: 19px; }
+      .controls, .hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <section class="slide active">
+      <div class="canvas">
+        <header><div class="brand">1. Introduction</div><div class="count">01 / 28</div></header>
+        <main class="title-grid">
+          <div>
+            <div class="badge">Projet web - Soutenance</div>
+            <h1><span class="accent">SOUK</span><br />Marketplace SaaS marocaine</h1>
+            <p class="lead">Application web e-commerce qui aide les artisans, createurs et vendeurs marocains a creer une boutique en ligne, presenter leurs produits et recevoir des commandes.</p>
+            <div class="notes">Introduire le nom, le type et la vision : SOUK est une web application SaaS adaptee au commerce local marocain.</div>
+          </div>
+          <img class="shot" src="docs/annexes/page_accueil.png" alt="Accueil SOUK" />
+        </main>
+        <footer><span>Nom : SOUK</span><span>Type : Web application SaaS e-commerce</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">Plan</div><div class="count">02 / 28</div></header>
+        <main>
+          <h2>Structure de la presentation</h2>
+          <div class="grid-4">
+            <div class="card green-card"><h3>Projet</h3><p>Introduction, contexte marocain, problematique et objectifs.</p></div>
+            <div class="card gold-card"><h3>Fonctionnement</h3><p>Architecture, parcours utilisateur et logique fonctionnelle.</p></div>
+            <div class="card green-card"><h3>Maquettes</h3><p>Pages reelles du site avec analyse UX/UI et role dans le systeme.</p></div>
+            <div class="card gold-card"><h3>Analyse</h3><p>Technologies, avantages, valeur ajoutee, comparaison et conclusion.</p></div>
+          </div>
+          <div class="notes">Annoncer une structure claire de pitch professionnel.</div>
+        </main>
+        <footer><span>Startup pitch</span><span>Soutenance universitaire</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">1. Introduction</div><div class="count">03 / 28</div></header>
+        <main>
+          <h2>Description generale</h2>
+          <p class="lead">SOUK est une marketplace multi-boutique. Chaque vendeur dispose d'un espace pour gerer ses produits et commandes, tandis que les clients peuvent explorer, acheter et communiquer avec les vendeurs.</p>
+          <div class="grid-3">
+            <div class="card"><h3>Multi-boutique</h3><p>Plusieurs vendeurs peuvent presenter leurs produits sur une meme plateforme.</p></div>
+            <div class="card"><h3>SaaS</h3><p>Le vendeur utilise un service centralise sans devoir construire son propre site.</p></div>
+            <div class="card"><h3>Marocain</h3><p>Le positionnement vise les besoins locaux : artisans, createurs, petites boutiques et produits authentiques.</p></div>
+          </div>
+          <div class="notes">Expliquer le projet avec des mots simples mais professionnels.</div>
+        </main>
+        <footer><span>Marketplace</span><span>SaaS</span><span>Commerce marocain</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">2. Problematique</div><div class="count">04 / 28</div></header>
+        <main>
+          <h2>Contexte du besoin</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Marche local</h3>
+              <ul class="big-list">
+                <li>Beaucoup de vendeurs marocains ont une offre riche mais peu digitalisee.</li>
+                <li>Les clients recherchent des experiences d'achat rapides et fiables.</li>
+                <li>La visibilite en ligne devient essentielle pour rester competitif.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Besoin utilisateur</h3>
+              <ul class="big-list">
+                <li>Creer une boutique sans complexite technique.</li>
+                <li>Centraliser produits, commandes, clients et messages.</li>
+                <li>Gagner du temps dans la gestion quotidienne.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="notes">Ancrer le projet dans un contexte marocain moderne.</div>
+        </main>
+        <footer><span>Contexte marocain</span><span>Besoin local reel</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">2. Problematique</div><div class="count">05 / 28</div></header>
+        <main>
+          <h2>Probleme reel resolu</h2>
+          <p class="lead">Les vendeurs locaux ont besoin d'une solution unique pour transformer leur activite traditionnelle en activite digitale : boutique, catalogue, commande, communication et supervision.</p>
+          <div class="grid-3">
+            <div class="card"><h3>Avant</h3><p>Vente dispersee entre reseaux sociaux, appels, messages et notes manuelles.</p></div>
+            <div class="card"><h3>Besoin</h3><p>Un espace professionnel pour organiser le cycle de vente.</p></div>
+            <div class="card"><h3>Apres</h3><p>Une plateforme centralisee avec suivi, visibilite et parcours client clair.</p></div>
+          </div>
+          <div class="notes">Dire clairement quel probleme le projet resout.</div>
+        </main>
+        <footer><span>Probleme : dispersion</span><span>Solution : centralisation</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">2. Problematique</div><div class="count">06 / 28</div></header>
+        <main>
+          <h2>Importance du projet aujourd'hui</h2>
+          <div class="grid-3">
+            <div class="card green-card"><h3>Digitalisation</h3><p>Les petites activites ont besoin d'outils numeriques accessibles.</p></div>
+            <div class="card gold-card"><h3>Confiance</h3><p>Une interface professionnelle rassure le client et valorise le vendeur.</p></div>
+            <div class="card green-card"><h3>Developpement</h3><p>Le projet peut soutenir la croissance du commerce local marocain.</p></div>
+          </div>
+          <div class="notes">Relier le projet aux tendances actuelles : digitalisation, confiance, experience utilisateur.</div>
+        </main>
+        <footer><span>Contexte actuel</span><span>Transformation digitale</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">3. Objectifs</div><div class="count">07 / 28</div></header>
+        <main>
+          <h2>Objectif principal</h2>
+          <p class="lead">Developper une application web professionnelle qui permet aux vendeurs marocains de creer leur presence digitale, vendre leurs produits et gerer leur activite depuis un espace centralise.</p>
+          <div class="grid-3">
+            <div class="card"><h3>Vendre</h3><p>Mettre les produits en ligne et faciliter la commande.</p></div>
+            <div class="card"><h3>Gerer</h3><p>Suivre stock, commandes, clients et notifications.</p></div>
+            <div class="card"><h3>Evoluer</h3><p>Construire une base technique extensible vers paiement, IA et mobile.</p></div>
+          </div>
+          <div class="notes">Donner l'objectif principal avec impact business et technique.</div>
+        </main>
+        <footer><span>Objectif principal</span><span>Presence digitale + gestion commerciale</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">3. Objectifs</div><div class="count">08 / 28</div></header>
+        <main>
+          <h2>Objectifs secondaires</h2>
+          <div class="grid-2">
+            <ul class="big-list">
+              <li>Creer des espaces distincts : client, vendeur, administrateur.</li>
+              <li>Mettre en place un catalogue produit clair.</li>
+              <li>Automatiser le suivi des commandes et du stock.</li>
+              <li>Faciliter la communication client-vendeur.</li>
+            </ul>
+            <ul class="big-list">
+              <li>Securiser les routes avec JWT et RBAC.</li>
+              <li>Construire une API REST maintenable.</li>
+              <li>Structurer la base de donnees autour des entites metier.</li>
+              <li>Preparer une evolution vers une version production.</li>
+            </ul>
+          </div>
+          <div class="notes">Detailler les objectifs secondaires de maniere professionnelle.</div>
+        </main>
+        <footer><span>Objectifs metier</span><span>Objectifs techniques</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">3. Objectifs</div><div class="count">09 / 28</div></header>
+        <main>
+          <h2>Impact attendu</h2>
+          <div class="grid-3">
+            <div class="card green-card"><h3>Vendeur</h3><p>Plus d'autonomie, meilleure organisation et meilleure visibilite.</p></div>
+            <div class="card gold-card"><h3>Client</h3><p>Parcours d'achat plus clair, plus rapide et plus rassurant.</p></div>
+            <div class="card green-card"><h3>Marche local</h3><p>Valorisation du savoir-faire marocain et transition vers le commerce digital.</p></div>
+          </div>
+          <div class="notes">Montrer l'impact attendu sur les utilisateurs et sur le marche cible.</div>
+        </main>
+        <footer><span>Impact utilisateur</span><span>Impact marche</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">4. Fonctionnement</div><div class="count">10 / 28</div></header>
+        <main>
+          <h2>Architecture generale du systeme</h2>
+          <div class="diagram">
+            <div class="box">Frontend<br />React + Vite</div>
+            <div class="arrow">→</div>
+            <div class="box">API REST<br />Laravel 11</div>
+            <div class="arrow">→</div>
+            <div class="box">Database<br />MySQL / SQLite</div>
+          </div>
+          <p class="lead">Le frontend gere l'interface utilisateur. Le backend applique la logique metier et securise les operations. La base de donnees conserve les utilisateurs, produits, commandes et interactions.</p>
+          <div class="notes">Architecture expliquee simplement : interface, API, base de donnees.</div>
+        </main>
+        <footer><span>Architecture headless</span><span>Communication via API REST</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">4. Fonctionnement</div><div class="count">11 / 28</div></header>
+        <main>
+          <h2>Parcours utilisateur et logique metier</h2>
+          <div class="grid-4">
+            <div class="card"><h3>1. Decouverte</h3><p>Le client explore la marketplace et les produits.</p></div>
+            <div class="card"><h3>2. Achat</h3><p>Il consulte un produit, ajoute au panier et valide la commande.</p></div>
+            <div class="card"><h3>3. Traitement</h3><p>Le vendeur recoit la commande et suit le stock.</p></div>
+            <div class="card"><h3>4. Supervision</h3><p>L'administrateur controle les comptes et les operations sensibles.</p></div>
+          </div>
+          <div class="notes">Presenter le parcours comme une chaine de valeur.</div>
+        </main>
+        <footer><span>Decouverte</span><span>Achat</span><span>Traitement</span><span>Supervision</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">4. Fonctionnement</div><div class="count">12 / 28</div></header>
+        <main>
+          <h2>Logique des fonctionnalites</h2>
+          <div class="pill-row">
+            <span class="pill">Authentification JWT</span>
+            <span class="pill">Roles & permissions</span>
+            <span class="pill">Catalogue produits</span>
+            <span class="pill">Panier</span>
+            <span class="pill">Checkout</span>
+            <span class="pill">Commandes</span>
+            <span class="pill">Controle stock</span>
+            <span class="pill">Commissions</span>
+            <span class="pill">Chat</span>
+            <span class="pill">Notifications</span>
+            <span class="pill">Dashboard vendeur</span>
+            <span class="pill">Admin panel</span>
+          </div>
+          <div class="notes">Expliquer que chaque module correspond a une partie du parcours utilisateur.</div>
+        </main>
+        <footer><span>Fonctionnalites principales</span><span>Logique e-commerce</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">4. Fonctionnement</div><div class="count">13 / 28</div></header>
+        <main class="media-grid">
+          <div>
+            <h2>Modele de donnees</h2>
+            <p class="lead">La base de donnees est organisee autour des utilisateurs, vendeurs, produits, commandes, messages, notifications, roles et permissions.</p>
+            <div class="card"><h3>Explication simplifiee</h3><p>Chaque commande relie un client, un vendeur et des produits. Les roles controlent les droits d'acces. Les messages et notifications soutiennent la communication.</p></div>
+          </div>
+          <img class="shot contain" src="docs/annexes/2_classes_officiel.png" alt="Diagramme de classes" />
+        </main>
+        <footer><span>Base de donnees</span><span>Entites metier</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">5. Maquettes</div><div class="count">14 / 28</div></header>
+        <main class="section">
+          <div class="badge">Captures internes du projet</div>
+          <h2>Maquettes et pages du site</h2>
+          <p class="lead">Les images suivantes sont des captures reelles du projet, stockees localement dans `docs/annexes`. Elles ne proviennent pas d'internet et ne sont pas des visuels generiques.</p>
+          <div class="notes">Insister explicitement sur la contrainte : aucune image internet.</div>
+        </main>
+        <footer><span>Maquettes internes</span><span>Images locales uniquement</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">5. Maquettes - Home</div><div class="count">15 / 28</div></header>
+        <main class="mockup-grid">
+          <div>
+            <h2>Home / Accueil</h2>
+            <div class="card"><h3>Description</h3><p>Page d'entree qui presente SOUK, son identite et son positionnement comme marketplace marocaine.</p></div>
+            <div class="card"><h3>UX/UI</h3><p>Style elegant, couleurs inspirees du luxe marocain, visuel fort et hiérarchie claire pour guider l'utilisateur.</p></div>
+            <div class="card"><h3>Role</h3><p>Créer la confiance, expliquer rapidement la valeur du projet et orienter vers l'exploration.</p></div>
+          </div>
+          <img class="shot" src="docs/annexes/page_accueil.png" alt="Maquette Home" />
+        </main>
+        <footer><span>Image interne : docs/annexes/page_accueil.png</span><span>Ameliore la premiere impression</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">5. Maquettes - Login client</div><div class="count">16 / 28</div></header>
+        <main class="mockup-grid">
+          <div>
+            <h2>Login client</h2>
+            <div class="card"><h3>Description</h3><p>Interface permettant au client de se connecter a son compte personnel.</p></div>
+            <div class="card"><h3>UX/UI</h3><p>Formulaire direct, lisible et centré sur l'action principale : accéder à son espace.</p></div>
+            <div class="card"><h3>Role</h3><p>Securiser l'acces aux commandes, notifications et conversations du client.</p></div>
+          </div>
+          <img class="shot" src="docs/annexes/client_login.png" alt="Maquette Login client" />
+        </main>
+        <footer><span>Image interne : docs/annexes/client_login.png</span><span>Experience client personnalisee</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">5. Maquettes - Login vendeur</div><div class="count">17 / 28</div></header>
+        <main class="mockup-grid">
+          <div>
+            <h2>Login vendeur</h2>
+            <div class="card"><h3>Description</h3><p>Page d'authentification dediee aux vendeurs pour acceder a leur espace professionnel.</p></div>
+            <div class="card"><h3>UX/UI</h3><p>Interface claire qui separe le parcours vendeur du parcours client et reduit la confusion.</p></div>
+            <div class="card"><h3>Role</h3><p>Donner acces au dashboard, a la gestion des produits et au suivi des commandes.</p></div>
+          </div>
+          <img class="shot" src="docs/annexes/vendor_login.png" alt="Maquette Login vendeur" />
+        </main>
+        <footer><span>Image interne : docs/annexes/vendor_login.png</span><span>Acces professionnel vendeur</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">5. Maquettes - Marketplace</div><div class="count">18 / 28</div></header>
+        <main class="mockup-grid">
+          <div>
+            <h2>Marketplace / Explore</h2>
+            <div class="card"><h3>Description</h3><p>Page de decouverte ou le client explore les boutiques et les produits disponibles.</p></div>
+            <div class="card"><h3>UX/UI</h3><p>Organisation par cartes, navigation visuelle, zones de recherche et lecture rapide des produits.</p></div>
+            <div class="card"><h3>Role</h3><p>Connecter les clients aux vendeurs et declencher le parcours d'achat.</p></div>
+          </div>
+          <img class="shot" src="docs/annexes/explore.png" alt="Maquette Marketplace" />
+        </main>
+        <footer><span>Image interne : docs/annexes/explore.png</span><span>Decouverte et conversion</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">5. Maquettes - Produit</div><div class="count">19 / 28</div></header>
+        <main class="mockup-grid">
+          <div>
+            <h2>Page produit</h2>
+            <div class="card"><h3>Description</h3><p>Page detaillee qui presente un produit avant la decision d'achat.</p></div>
+            <div class="card"><h3>UX/UI</h3><p>Visuel produit, description, prix et action d'achat sont organises pour reduire l'effort de decision.</p></div>
+            <div class="card"><h3>Role</h3><p>Transformer l'interet du client en intention de commande.</p></div>
+          </div>
+          <img class="shot" src="docs/annexes/page_produit.png" alt="Maquette Page produit" />
+        </main>
+        <footer><span>Image interne : docs/annexes/page_produit.png</span><span>Decision d'achat</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">5. Maquettes - Dashboard</div><div class="count">20 / 28</div></header>
+        <main class="mockup-grid">
+          <div>
+            <h2>Dashboard vendeur</h2>
+            <div class="card"><h3>Description</h3><p>Espace de pilotage pour consulter ventes, commandes, produits et indicateurs.</p></div>
+            <div class="card"><h3>UX/UI</h3><p>Informations prioritaires visibles rapidement, structure orientee action et consultation frequente.</p></div>
+            <div class="card"><h3>Role</h3><p>Ameliorer l'autonomie du vendeur et faciliter la gestion quotidienne.</p></div>
+          </div>
+          <img class="shot" src="docs/annexes/dashboard_vendeur.png" alt="Maquette Dashboard vendeur" />
+        </main>
+        <footer><span>Image interne : docs/annexes/dashboard_vendeur.png</span><span>Gestion vendeur</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">5. Maquettes - Admin</div><div class="count">21 / 28</div></header>
+        <main class="mockup-grid">
+          <div>
+            <h2>Admin Panel</h2>
+            <div class="card"><h3>Description</h3><p>Espace de supervision reserve a l'administration de la plateforme.</p></div>
+            <div class="card"><h3>UX/UI</h3><p>Interface orientee controle : statistiques, navigation admin, moderation, roles et actions sensibles.</p></div>
+            <div class="card"><h3>Role</h3><p>Garantir la gouvernance, la securite et la qualite d'une marketplace multi-vendeur.</p></div>
+          </div>
+          <img class="shot" src="docs/annexes/admin_panel.png" alt="Maquette Admin Panel" />
+        </main>
+        <footer><span>Image interne : docs/annexes/admin_panel.png</span><span>Supervision globale</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">6. Technologies</div><div class="count">22 / 28</div></header>
+        <main>
+          <h2>Technologies utilisees</h2>
+          <div class="grid-2">
+            <div class="card green-card"><h3>Frontend</h3><p>React.js, Vite, React Router, Context API, Axios et CSS.</p></div>
+            <div class="card gold-card"><h3>Backend</h3><p>Laravel 11, PHP, API REST, Eloquent ORM, Form Requests et Services.</p></div>
+            <div class="card gold-card"><h3>Base de donnees</h3><p>MySQL pour production possible, SQLite pour tests, migrations Laravel.</p></div>
+            <div class="card green-card"><h3>Outils</h3><p>GitHub, VS Code, Postman, Figma, JWT, RBAC et documentation Markdown.</p></div>
+          </div>
+          <div class="notes">Presenter la stack de maniere claire et professionnelle.</div>
+        </main>
+        <footer><span>Stack technique</span><span>Frontend + Backend + Database + Outils</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">7. Analyse professionnelle</div><div class="count">23 / 28</div></header>
+        <main>
+          <h2>Points forts du projet</h2>
+          <div class="grid-2">
+            <ul class="big-list">
+              <li>Solution adaptee au marche marocain.</li>
+              <li>Parcours complet client, vendeur et administrateur.</li>
+              <li>Architecture claire et evolutive.</li>
+              <li>Gestion des roles et permissions.</li>
+            </ul>
+            <ul class="big-list">
+              <li>Dashboard vendeur oriente productivite.</li>
+              <li>Commande avec controle du stock.</li>
+              <li>Chat et notifications pour la relation client.</li>
+              <li>Base solide pour une future version production.</li>
+            </ul>
+          </div>
+          <div class="notes">Mettre en avant les forces produit et techniques.</div>
+        </main>
+        <footer><span>Points forts</span><span>Valeur technique et business</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">7. Analyse professionnelle</div><div class="count">24 / 28</div></header>
+        <main>
+          <h2>Innovations et valeur ajoutee</h2>
+          <div class="grid-3">
+            <div class="card green-card"><h3>Approche SaaS</h3><p>Le vendeur utilise une solution prete a l'emploi au lieu de creer son propre site.</p></div>
+            <div class="card gold-card"><h3>Experience locale</h3><p>Le design et le positionnement valorisent le commerce marocain.</p></div>
+            <div class="card green-card"><h3>Centralisation</h3><p>Boutique, produits, commandes, chat et administration sont reunis dans un seul ecosysteme.</p></div>
+          </div>
+          <div class="notes">Donner la valeur ajoutee sous forme de benefices concrets.</div>
+        </main>
+        <footer><span>Innovation pratique</span><span>Valeur ajoutee locale</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">7. Analyse professionnelle</div><div class="count">25 / 28</div></header>
+        <main>
+          <h2>Comparaison avec les solutions existantes</h2>
+          <div class="grid-3">
+            <div class="card"><h3>Reseaux sociaux</h3><p>Bon pour la visibilite, mais limites pour le stock, les commandes et le suivi structure.</p></div>
+            <div class="card"><h3>Sites e-commerce classiques</h3><p>Puissants, mais souvent couteux ou complexes pour un petit vendeur.</p></div>
+            <div class="card"><h3>SOUK</h3><p>Solution specialisee, accessible, multi-boutique et adaptee aux besoins locaux.</p></div>
+          </div>
+          <div class="notes">Comparer sans attaquer : montrer que SOUK repond a un besoin specifique.</div>
+        </main>
+        <footer><span>Positionnement</span><span>Alternative adaptee au contexte marocain</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">8. Conclusion</div><div class="count">26 / 28</div></header>
+        <main>
+          <h2>Resume du projet</h2>
+          <p class="lead">SOUK est une application web e-commerce qui regroupe marketplace, boutiques vendeur, catalogue, commandes, chat, notifications, dashboard et administration.</p>
+          <div class="grid-3">
+            <div class="card"><h3>Produit</h3><p>Une plateforme claire pour vendre et acheter.</p></div>
+            <div class="card"><h3>Technique</h3><p>React, Laravel, API REST, database et securite par roles.</p></div>
+            <div class="card"><h3>Marche</h3><p>Une solution adaptee aux besoins du commerce marocain.</p></div>
+          </div>
+          <div class="notes">Faire un resume synthetique avant les perspectives.</div>
+        </main>
+        <footer><span>Resume</span><span>Projet web professionnel</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">8. Conclusion</div><div class="count">27 / 28</div></header>
+        <main>
+          <h2>Impact attendu au Maroc</h2>
+          <div class="grid-3">
+            <div class="card green-card"><h3>Digitalisation</h3><p>Aider les vendeurs locaux a passer vers le commerce en ligne.</p></div>
+            <div class="card gold-card"><h3>Valorisation</h3><p>Mettre en avant les produits marocains et le savoir-faire local.</p></div>
+            <div class="card green-card"><h3>Croissance</h3><p>Offrir une base pour developper de nouvelles opportunites commerciales.</p></div>
+          </div>
+          <div class="notes">Conclure sur l'impact local et le potentiel du projet.</div>
+        </main>
+        <footer><span>Impact local</span><span>Commerce digital marocain</span></footer>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas">
+        <header><div class="brand">8. Conclusion</div><div class="count">28 / 28</div></header>
+        <main>
+          <h2>Perspectives futures</h2>
+          <div class="grid-3">
+            <div class="card"><h3>Paiement & livraison</h3><p>Integration du paiement en ligne, gestion des zones et suivi logistique.</p></div>
+            <div class="card"><h3>IA & optimisation</h3><p>Generation de descriptions produits, recommandations et recherche intelligente.</p></div>
+            <div class="card"><h3>Scalabilite</h3><p>Application mobile, analytics avances et amelioration de la performance.</p></div>
+          </div>
+          <p class="lead">SOUK constitue une base solide pour une solution commerciale evolutive, moderne et adaptee au marche marocain.</p>
+          <div class="notes">Finir avec les perspectives et remercier le jury.</div>
+        </main>
+        <footer><span>Merci pour votre attention</span><span>Questions ?</span></footer>
+      </div>
+    </section>
+  </div>
+
+  <div class="hint">Fleches gauche/droite - N pour notes - Ctrl+P pour PDF</div>
+  <div class="controls">
+    <button type="button" id="prev">Precedent</button>
+    <button type="button" id="notes">Notes</button>
+    <button type="button" id="next">Suivant</button>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    let current = 0;
+
+    function show(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => slide.classList.toggle("active", i === current));
+    }
+
+    document.getElementById("prev").addEventListener("click", () => show(current - 1));
+    document.getElementById("next").addEventListener("click", () => show(current + 1));
+    document.getElementById("notes").addEventListener("click", () => document.body.classList.toggle("show-notes"));
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") show(current + 1);
+      if (event.key === "ArrowLeft" || event.key === "PageUp") show(current - 1);
+      if (event.key.toLowerCase() === "n") document.body.classList.toggle("show-notes");
+      if (event.key === "Home") show(0);
+      if (event.key === "End") show(slides.length - 1);
+    });
+  </script>
+</body>
+</html>

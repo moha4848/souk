@@ -16,7 +16,14 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where('vendor_id', Auth::user()->vendor->id)->latest()->get();
+        $vendor = Auth::user()->vendor;
+        if (!$vendor) {
+            return response()->json(['error' => 'No vendor profile found'], 403);
+        }
+        
+        $products = Product::where('vendor_id', $vendor->id)
+            ->latest()
+            ->paginate(15);
         return response()->json($products);
     }
 
@@ -25,17 +32,22 @@ class ProductController extends Controller
      */
     public function store(\App\Http\Requests\ProductRequest $request)
     {
+        $vendor = Auth::user()->vendor;
+        if (!$vendor) {
+            return response()->json(['error' => 'No vendor profile found'], 403);
+        }
+        
         $validated = $request->validated();
 
         $product = Product::create([
             ...$validated,
-            'vendor_id' => Auth::user()->vendor->id,
+            'vendor_id' => $vendor->id,
             'is_promo' => $request->is_promo ?? false,
         ]);
 
         // Clear cache
         Cache::forget('marketplace_explore');
-        Cache::forget("store_" . Auth::user()->vendor->store_slug);
+        Cache::forget("store_" . $vendor->store_slug);
 
         return response()->json($product, 201);
     }
@@ -45,16 +57,30 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::where('vendor_id', Auth::user()->vendor->id)->findOrFail($id);
+        $vendor = Auth::user()->vendor;
+        if (!$vendor) {
+            return response()->json(['error' => 'No vendor profile found'], 403);
+        }
+        
+        $product = Product::where('vendor_id', $vendor->id)->findOrFail($id);
         return response()->json($product);
     }
+
+    /**
+     * Display the specified product.
+     */
 
     /**
      * Update the specified product in storage.
      */
     public function update(\App\Http\Requests\ProductRequest $request, $id)
     {
-        $product = Product::where('vendor_id', Auth::user()->vendor->id)->findOrFail($id);
+        $vendor = Auth::user()->vendor;
+        if (!$vendor) {
+            return response()->json(['error' => 'No vendor profile found'], 403);
+        }
+        
+        $product = Product::where('vendor_id', $vendor->id)->findOrFail($id);
 
         $validated = $request->validated();
 
@@ -65,7 +91,7 @@ class ProductController extends Controller
 
         // Clear cache
         Cache::forget('marketplace_explore');
-        Cache::forget("store_" . Auth::user()->vendor->store_slug);
+        Cache::forget("store_" . $vendor->store_slug);
 
         return response()->json($product);
     }
@@ -75,12 +101,17 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::where('vendor_id', Auth::user()->vendor->id)->findOrFail($id);
+        $vendor = Auth::user()->vendor;
+        if (!$vendor) {
+            return response()->json(['error' => 'No vendor profile found'], 403);
+        }
+
+        $product = Product::where('vendor_id', $vendor->id)->findOrFail($id);
         $product->delete();
 
         // Clear cache
         Cache::forget('marketplace_explore');
-        Cache::forget("store_" . Auth::user()->vendor->store_slug);
+        Cache::forget("store_" . $vendor->store_slug);
 
         return response()->json(['message' => 'Produit supprimé avec succès']);
     }

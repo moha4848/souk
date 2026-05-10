@@ -21,6 +21,11 @@ class OnboardingController extends Controller
         ]);
 
         $user = Auth::user();
+        $vendor = $user->vendor;
+
+        if (!$vendor) {
+            return response()->json(['message' => 'Aucun profil vendeur associe a ce compte'], 403);
+        }
         $user->update(['project_type' => $request->project_type]);
 
         return response()->json(['message' => 'Type de projet mis à jour', 'user' => $user]);
@@ -37,7 +42,7 @@ class OnboardingController extends Controller
         // Deactivate any existing pending/active subscriptions if needed 
         // (Simplified for now: just create a new pending one)
         $subscription = Subscription::create([
-            'vendor_id' => $user->vendor->id,
+            'vendor_id' => $vendor->id,
             'package_id' => $request->package_id,
             'status' => 'pending',
             'starts_at' => now(),

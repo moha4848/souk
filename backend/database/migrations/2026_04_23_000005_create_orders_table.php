@@ -26,6 +26,8 @@ return new class extends Migration
             // Financier
             $table->decimal('total', 10, 2);
             $table->decimal('discount', 10, 2)->default(0);
+            $table->integer('points_used')->default(0);
+            $table->integer('points_earned')->default(0);
             $table->string('payment_method')->default('cod'); // cod, card, virement
             $table->string('coupon_code')->nullable(); // code promo utilisé
 
@@ -34,6 +36,7 @@ return new class extends Migration
 
             // Affiliation
             $table->string('affiliate_code')->nullable();
+            $table->text('notes')->nullable();
 
             $table->timestamps();
         });

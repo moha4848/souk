@@ -23,7 +23,7 @@ class OrderRequest extends FormRequest
             'client_phone' => 'required|string',
             'shipping_address' => 'required|string',
             'shipping_city' => 'required|string',
-            'payment_method' => 'required|string|in:cod,online',
+            'payment_method' => 'required|string|in:cod,online,card',
             'delivery_method' => 'required|string',
             'notes' => 'nullable|string',
             'points_used' => 'nullable|integer|min:0',

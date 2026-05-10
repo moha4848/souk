@@ -13,6 +13,7 @@ class Commission extends Model
         'order_id',
         'vendor_id',
         'amount',
+        'rate',
         'status',
     ];
 

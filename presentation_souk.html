@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOUK ✦ — Présentation Professionnelle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════════
+           LOADING SCREEN
+        ═══════════════════════════════════════════════ */
+        #loader {
+            position: fixed; inset: 0; z-index: 9999;
+            background: #030303;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 20px;
+            transition: opacity 0.6s ease, visibility 0.6s;
+        }
+        #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 72px; font-weight: 700;
+            color: transparent;
+            background: linear-gradient(135deg, #10b981, #e5c44a);
+            -webkit-background-clip: text; background-clip: text;
+            animation: logo-pulse 1.5s ease-in-out infinite alternate;
+        }
+        .loader-bar-wrap { width: 200px; height: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+        .loader-bar { height: 100%; background: linear-gradient(90deg, #059669, #c9a227); border-radius: 2px; animation: load-fill 1.5s ease forwards; }
+        .loader-hint { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(245,240,232,0.3); letter-spacing: 0.2em; text-transform: uppercase; }
+        @keyframes logo-pulse { from { opacity: 0.7; transform: scale(0.97); } to { opacity: 1; transform: scale(1.03); } }
+        @keyframes load-fill { from { width: 0; } to { width: 100%; } }
+
+        /* ═══════════════════════════════════════════════
+           DESIGN TOKENS
+        ═══════════════════════════════════════════════ */
+        :root {
+            --em: #059669;
+            --em-light: #10b981;
+            --em-glow: rgba(5, 150, 105, 0.15);
+            --gold: #c9a227;
+            --gold-light: #e5c44a;
+            --gold-glow: rgba(201, 162, 39, 0.12);
+            --bg: #030303;
+            --surface: rgba(255,255,255,0.028);
+            --surface-hover: rgba(255,255,255,0.05);
+            --border: rgba(255,255,255,0.07);
+            --border-em: rgba(5, 150, 105, 0.25);
+            --border-gold: rgba(201, 162, 39, 0.25);
+            --text: #f5f0e8;
+            --text-2: rgba(245, 240, 232, 0.6);
+            --text-3: rgba(245, 240, 232, 0.35);
+        }
+
+        /* ═══════════════════════════════════════════════
+           RESET & BASE
+        ═══════════════════════════════════════════════ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            cursor: auto; /* Accessibility: keep native cursor visible */
+        }
+
+        /* ── Performance Toggle ── */
+        .perf-btn {
+            position: fixed; top: 36px; left: 44px; z-index: 200;
+            font-family: 'JetBrains Mono', monospace; font-size: 9px;
+            color: var(--text-3); background: transparent;
+            border: 1px solid var(--border); border-radius: 20px;
+            padding: 4px 10px; cursor: pointer; transition: 0.3s;
+        }
+        .perf-btn:hover { color: var(--em-light); border-color: var(--border-em); }
+        body.low-perf #ambient-canvas,
+        body.low-perf .grain { display: none; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .slide { padding: 56px 24px 80px; }
+            .display { font-size: 36px !important; }
+            .hero-title { font-size: 60px !important; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+            .screen-grid { grid-template-columns: 1fr !important; }
+            .nav-bar { bottom: 16px; padding: 8px 14px; gap: 12px; }
+            .slide-idx { top: 16px; right: 16px; }
+            .perf-btn { display: none; }
+        }
+        @media (max-width: 480px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+            .tech-pill .name { font-size: 12px; }
+        }
+
+        /* ═══════════════════════════════════════════════
+           CUSTOM CURSOR
+        ═══════════════════════════════════════════════ */
+        .cursor {
+            position: fixed;
+            width: 8px; height: 8px;
+            background: var(--em-light);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s;
+            mix-blend-mode: screen;
+        }
+        .cursor-ring {
+            position: fixed;
+            width: 32px; height: 32px;
+            border: 1px solid rgba(5,150,105,0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* ═══════════════════════════════════════════════
+           AMBIENT CANVAS
+        ═══════════════════════════════════════════════ */
+        #ambient-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* ═══════════════════════════════════════════════
+           GRAIN OVERLAY
+        ═══════════════════════════════════════════════ */
+        .grain {
+            position: fixed;
+            inset: -200%;
+            width: 400%;
+            height: 400%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none;
+            z-index: 1;
+            animation: grain-move 8s steps(10) infinite;
+        }
+
+        @keyframes grain-move {
+            0%   { transform: translate(0, 0); }
+            10%  { transform: translate(-2%, -3%); }
+            20%  { transform: translate(1%, 2%); }
+            30%  { transform: translate(-1%, -1%); }
+            40%  { transform: translate(2%, 1%); }
+            50%  { transform: translate(-2%, 2%); }
+            60%  { transform: translate(1%, -2%); }
+            70%  { transform: translate(-1%, 3%); }
+            80%  { transform: translate(2%, -1%); }
+            90%  { transform: translate(-2%, 1%); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* ═══════════════════════════════════════════════
+           ZELLIGE PATTERN
+        ═══════════════════════════════════════════════ */
+        .zellige-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.03;
+            background-image:
+                repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%),
+                repeating-linear-gradient(-45deg, var(--em) 0, var(--em) 1px, transparent 0, transparent 50%);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        /* ═══════════════════════════════════════════════
+           SLIDE SYSTEM
+        ═══════════════════════════════════════════════ */
+        .deck {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 72px 80px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(24px) scale(0.98);
+            transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0) scale(1);
+        }
+
+        .slide.exit {
+            opacity: 0;
+            transform: translateY(-24px) scale(0.98);
+        }
+
+        .slide-inner {
+            width: 100%;
+            max-width: 1160px;
+        }
+
+        /* ═══════════════════════════════════════════════
+           SECTION TAG
+        ═══════════════════════════════════════════════ */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            color: var(--em-light);
+            text-transform: uppercase;
+        }
+        .tag::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 1px;
+            background: var(--em-light);
+        }
+
+        /* ═══════════════════════════════════════════════
+           TYPOGRAPHY
+        ═══════════════════════════════════════════════ */
+        .display {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(48px, 5.5vw, 72px);
+            font-weight: 300;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+        .display em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+        .display strong {
+            font-weight: 700;
+            color: var(--em-light);
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(88px, 14vw, 160px);
+            font-weight: 700;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+        }
+
+        .body-text {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-2);
+            font-weight: 300;
+        }
+
+        /* ═══════════════════════════════════════════════
+           CARD
+        ═══════════════════════════════════════════════ */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .card:hover {
+            background: var(--surface-hover);
+            border-color: rgba(255,255,255,0.12);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--em-light), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .card:hover::before { opacity: 0.6; }
+
+        .card-em { border-color: var(--border-em); }
+        .card-gold { border-color: var(--border-gold); }
+
+        .card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        /* ═══════════════════════════════════════════════
+           GRID
+        ═══════════════════════════════════════════════ */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+        /* ═══════════════════════════════════════════════
+           LIST
+        ═══════════════════════════════════════════════ */
+        ul.styled { list-style: none; }
+        ul.styled li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 15px;
+            color: var(--text-2);
+            border-bottom: 1px solid var(--border);
+        }
+        ul.styled li:last-child { border-bottom: none; }
+        ul.styled li::before {
+            content: '✦';
+            color: var(--gold-light);
+            font-size: 10px;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        /* ═══════════════════════════════════════════════
+           STEP
+        ═══════════════════════════════════════════════ */
+        .step {
+            display: flex;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .step:last-child { border-bottom: none; }
+        .step-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--em-light);
+            font-weight: 500;
+            min-width: 24px;
+        }
+        .step-content strong {
+            display: block;
+            font-size: 15px;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+        .step-content p {
+            font-size: 13px;
+            color: var(--text-2);
+            line-height: 1.4;
+        }
+
+        /* ═══════════════════════════════════════════════
+           SCREENSHOT STYLES
+        ═══════════════════════════════════════════════ */
+        .screen-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 10px;
+        }
+        .screen-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .screen-img {
+            width: 100%;
+            height: 200px;
+            background: #111;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+        .screen-img img {
+            width: 100%; height: 100%; object-fit: cover; transition: 0.6s;
+        }
+        .screen-card:hover img { transform: scale(1.08); }
+        .screen-body { padding: 16px; }
+        .screen-body h4 { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--em-light); margin-bottom: 4px; }
+        .screen-body p { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+
+        /* ═══════════════════════════════════════════════
+           NAV
+        ═══════════════════════════════════════════════ */
+        .nav-bar {
+            position: fixed;
+            bottom: 36px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex; align-items: center; gap: 20px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 10px 20px;
+        }
+        .nav-btn {
+            width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
+            background: transparent; color: var(--text-2); cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: 0.25s;
+        }
+        .nav-btn:hover { background: var(--em-glow); border-color: var(--border-em); color: var(--em-light); }
+        .dots { display: flex; gap: 6px; }
+        .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); transition: 0.3s; cursor: pointer; }
+        .dot.active { background: var(--em-light); width: 18px; border-radius: 3px; }
+
+        /* ═══════════════════════════════════════════════
+           MISC
+        ═══════════════════════════════════════════════ */
+        .ornament { display: flex; align-items: center; gap: 14px; margin: 20px 0; }
+        .ornament::before, .ornament::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border)); }
+        .ornament::after { background: linear-gradient(90deg, var(--border), transparent); }
+        .ornament-gem { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); }
+
+        .progress-rail { position: fixed; bottom: 0; left: 0; height: 2px; background: var(--em-light); transition: width 0.4s; z-index: 200; box-shadow: 0 0 12px var(--em-light); }
+        .slide-idx { position: fixed; top: 36px; right: 44px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-3); z-index: 100; }
+        .slide-idx span { color: var(--em-light); }
+
+        .stagger > * { opacity: 0; transform: translateY(16px); }
+        .slide.active .stagger > * { animation: stagger-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .slide.active .stagger > *:nth-child(1) { animation-delay: 0.05s; }
+        .slide.active .stagger > *:nth-child(2) { animation-delay: 0.12s; }
+        .slide.active .stagger > *:nth-child(3) { animation-delay: 0.19s; }
+        .slide.active .stagger > *:nth-child(4) { animation-delay: 0.26s; }
+        .slide.active .stagger > *:nth-child(5) { animation-delay: 0.33s; }
+        .slide.active .stagger > *:nth-child(6) { animation-delay: 0.4s; }
+
+        @keyframes stagger-in { to { opacity: 1; transform: translateY(0); } }
+
+        .tech-pill {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+            padding: 16px; text-align: center; transition: 0.3s;
+        }
+        .tech-pill:hover { border-color: var(--border-em); background: var(--em-glow); transform: translateY(-2px); }
+        .tech-pill .label { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--em-light); text-transform: uppercase; margin-bottom: 4px; }
+        .tech-pill .name { font-size: 14px; font-weight: 600; color: var(--text); }
+
+        .role-badge { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+        .role-badge .role-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold-light); text-transform: uppercase; margin-bottom: 4px; }
+        .role-badge p { font-size: 12px; color: var(--text-2); line-height: 1.4; }
+
+        .thanks-glyph { font-family: 'Cormorant Garamond', serif; font-size: 200px; font-weight: 700; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.06); position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+
+    </style>
+</head>
+<body>
+
+<!-- ═════ LOADING SCREEN ═════ -->
+<div id="loader">
+    <div class="loader-logo">SOUK ✦</div>
+    <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+    <div class="loader-hint">Initialisation de la présentation…</div>
+</div>
+
+<!-- ═════ PERFORMANCE TOGGLE ═════ -->
+<button class="perf-btn" id="perf-toggle">🔋 Éco Mode</button>
+
+<div class="grain"></div>
+<div class="zellige-bg"></div>
+<canvas id="ambient-canvas"></canvas>
+
+<div class="progress-rail" id="progress-rail"></div>
+<div class="slide-idx" id="slide-idx"><span>01</span> / 13</div>
+
+<!-- ═════════════════════════════════════════════════ SLIDES -->
+<div class="deck" id="deck">
+
+    <!-- ──── SLIDE 01 : TITRE ──── -->
+    <div class="slide active" id="s0">
+        <div class="slide-inner">
+            <div class="stagger" style="display:flex; flex-direction:column;">
+                <div style="display:flex; align-items:baseline; gap:12px;">
+                    <div class="hero-title">SOUK</div>
+                    <div class="hero-title" style="color:var(--gold-light); font-size:0.55em;">✦</div>
+                </div>
+                <div style="font-family:'Cormorant Garamond',serif; font-size:24px; font-style:italic; color:var(--text-2); margin-top:8px;">Propulsez votre Génie Digital.</div>
+                <p class="body-text" style="max-width: 600px; margin-top:8px;">
+                    Plateforme SaaS Multi-Tenant Marketplace pour l'Artisanat.
+                </p>
+                <div class="ornament"><div class="ornament-gem"></div></div>
+                <div style="display:flex; gap:48px; margin-top:48px; padding-top:32px; border-top:1px solid var(--border);">
+                    <div><div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--em-light); text-transform:uppercase; margin-bottom:4px;">Auteur</div><div style="font-size:16px;">Mohammed Yousfi</div></div>
+                    <div><div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--em-light); text-transform:uppercase; margin-bottom:4px;">Établissement</div><div style="font-size:16px;">ISTA OFPPT — Oujda</div></div>
+                    <div><div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--em-light); text-transform:uppercase; margin-bottom:4px;">Type</div><div style="font-size:16px;">Application Web Fullstack</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── SOMMAIRE ──── -->
+    <div class="slide" id="sommaire">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:18px;">
+        <div>
+          <div class="tag">Plan de Présentation</div>
+          <div class="display">Sommaire <em>✦</em></div>
+        </div>
+        <div class="grid-2" style="gap:20px;">
+          <!-- Colonne 1 -->
+          <div style="display:flex;flex-direction:column;">
+            <div onclick="goTo(2)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--em-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--em-light);min-width:24px;">01</span>
+              <span style="font-size:13px;color:var(--text);">Introduction — L'artisanat digital</span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+            <div onclick="goTo(3)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--em-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--em-light);min-width:24px;">02</span>
+              <span style="font-size:13px;color:var(--text);">Problématique & Défis</span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+            <div onclick="goTo(4)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--em-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--em-light);min-width:24px;">03</span>
+              <span style="font-size:13px;color:var(--text);">Mission & Objectifs</span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+            <div onclick="goTo(5)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--em-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--em-light);min-width:24px;">04</span>
+              <span style="font-size:13px;color:var(--text);">Stack Technique — Laravel · React · SOLID</span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+            <div onclick="goTo(6)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--gold-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold-light);min-width:24px;">05</span>
+              <span style="font-size:13px;color:var(--text);">Le Cycle SOUK — Workflow complet</span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+            <div onclick="goTo(7)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--gold-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold-light);min-width:24px;">06</span>
+              <span style="font-size:13px;color:var(--text);">Description du Projet & Rôles</span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+          </div>
+          <!-- Colonne 2 -->
+          <div style="display:flex;flex-direction:column;">
+            <div onclick="goTo(8)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--em-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--em-light);min-width:24px;">07</span>
+              <span style="font-size:13px;color:var(--text);">Pages de l'Application <span style="font-size:10px;color:var(--text-3);">(9 pages)</span></span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+            <div onclick="goTo(17)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--em-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--em-light);min-width:24px;">08</span>
+              <span style="font-size:13px;color:var(--text);">Fonctionnalités & Valeur Ajoutée</span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+            <div onclick="goTo(18)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--em-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--em-light);min-width:24px;">09</span>
+              <span style="font-size:13px;color:var(--text);">Public Cible & Points Forts</span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+            <div onclick="goTo(19)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--gold-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold-light);min-width:24px;">10</span>
+              <span style="font-size:13px;color:var(--text);">Vision Future & Conclusion</span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+            <div onclick="goTo(20)" style="cursor:pointer;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background='var(--em-glow)'" onmouseout="this.style.background='transparent'">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--em-light);min-width:24px;">11</span>
+              <span style="font-size:13px;color:var(--text);">Métriques Clés — Le Projet en chiffres</span>
+              <span style="margin-left:auto;color:var(--text-3);">→</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <span style="background:var(--em-glow);border:1px solid var(--border-em);border-radius:20px;padding:4px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--em-light);">Laravel 11</span>
+          <span style="background:var(--em-glow);border:1px solid var(--border-em);border-radius:20px;padding:4px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--em-light);">React + Vite</span>
+          <span style="background:var(--gold-glow);border:1px solid var(--border-gold);border-radius:20px;padding:4px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold-light);">SaaS Multi-Tenant</span>
+          <span style="background:var(--em-glow);border:1px solid var(--border-em);border-radius:20px;padding:4px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--em-light);">MySQL</span>
+          <span style="background:var(--gold-glow);border:1px solid var(--border-gold);border-radius:20px;padding:4px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold-light);">Architecture SOLID</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── SLIDE 02 : INTRODUCTION ──── -->
+    <div class="slide" id="s1">
+        <div class="slide-inner stagger" style="display:flex; flex-direction:column; gap:24px;">
+            <div>
+                <div class="tag">01 — Introduction</div>
+                <div class="display">L'artisanat <em>digital</em>.</div>
+            </div>
+            <div class="grid-2">
+                <div class="card card-em">
+                    <h3>Vision du Projet</h3>
+                    <p class="body-text" style="font-size:14px;">
+                        SOUK est une infrastructure logicielle cloud distribuée (SaaS) dédiée à la création de places de marché multi-vendeurs. Elle dote chaque artisan d'une boutique autonome intelligente opérant au sein d'un écosystème global unifié et performant.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>Architecture SaaS</h3>
+                    <ul class="styled" style="font-size:13px;">
+                        <li><strong>API-Centric :</strong> Architecture découplée basée sur une API RESTful (Laravel).</li>
+                        <li><strong>Multi-Tenancy :</strong> Isolation stricte des données locataires pour une sécurité maximale.</li>
+                        <li><strong>Centralisation :</strong> Supervision globale et monitoring des instances boutiques.</li>
+                        <li><strong>Scalabilité :</strong> Déploiement modulaire conçu pour absorber de hauts volumes de trafic.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── SLIDE 03 : PROBLÉMATIQUE ──── -->
+    <div class="slide" id="s2">
+        <div class="slide-inner stagger" style="display:flex; flex-direction:column; gap:24px;">
+            <div>
+                <div class="tag">02 — Problématique</div>
+                <div class="display">Défis <em>majeurs</em>.</div>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-color: rgba(239,68,68,0.2);">
+                    <h3 style="color:rgba(252,165,165,0.9);">Les Obstacles</h3>
+                    <ul class="styled" style="font-size:14px;">
+                        <li><strong>Fracture numérique :</strong> Manque crucial de compétences techniques pour opérer la transition vers le web.</li>
+                        <li><strong>Barrière financière :</strong> Coûts de développement et de maintenance prohibitifs pour les créateurs indépendants.</li>
+                        <li><strong>Déficit de visibilité :</strong> Isolement des artisans face à l'hégémonie des grandes plateformes e-commerce.</li>
+                        <li><strong>Complexité opérationnelle :</strong> Absence d'outils centralisés et adaptés pour la gestion conjointe des stocks et des commandes.</li>
+                    </ul>
+                </div>
+                <div class="card card-em">
+                    <h3>L'Impact Direct</h3>
+                    <p class="body-text" style="font-size:14px;">
+                        Ces frictions technologiques freinent l'expansion de l'artisanat traditionnel. SOUK intervient comme un catalyseur digital, transformant ces contraintes systémiques en vecteurs de croissance grâce à l'automatisation intelligente.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── SLIDE 04 : OBJECTIFS ──── -->
+    <div class="slide" id="s3">
+        <div class="slide-inner stagger" style="display:flex; flex-direction:column; gap:24px;">
+            <div>
+                <div class="tag">03 — Objectifs</div>
+                <div class="display">Mission <em>&</em> Vision.</div>
+            </div>
+            <div class="grid-2">
+                <div class="card card-gold">
+                    <h3 style="color:var(--gold-light);">Objectif Principal</h3>
+                    <p class="body-text" style="font-size:15px; font-weight:500; color:var(--text);">
+                        Démocratiser l'accès au e-commerce via une infrastructure SaaS robuste, permettant un déploiement instantané de vitrines digitales sur mesure sans friction technique.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>Objectifs Secondaires</h3>
+                    <ul class="styled" style="font-size:13px;">
+                        <li><strong>Génération IA :</strong> Automatiser la création d'identité visuelle (logos, palettes) via l'intelligence artificielle.</li>
+                        <li><strong>Expérience UX/UI :</strong> Délivrer une interface utilisateur immersive, moderne et parfaitement responsive (Mobile-First).</li>
+                        <li><strong>Fidélisation (Gamification) :</strong> Implémenter un programme de fidélité incitatif basé sur l'accumulation de "Points SOUK".</li>
+                        <li><strong>Haute Sécurité :</strong> Garantir l'intégrité des données et des flux via Laravel Sanctum (Authentification par Token).</li>
+                        <li><strong>Internationalisation (i18n) :</strong> Supporter nativement une architecture multilingue (AR, FR, EN) incluant le mode Right-To-Left.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── SLIDE 05 : TECHNOLOGIES ──── -->
+    <div class="slide" id="s4">
+        <div class="slide-inner stagger" style="display:flex; flex-direction:column; gap:24px;">
+            <div>
+                <div class="tag">04 — Stack Technique</div>
+                <div class="display">Stack <em>Technique</em>.</div>
+            </div>
+            <div class="grid-4">
+                <div class="tech-pill"><div class="label">Architecture</div><div class="name">Service Layer (SOLID)</div></div>
+                <div class="tech-pill"><div class="label">Reliability</div><div class="name">Feature Testing</div></div>
+                <div class="tech-pill"><div class="label">Frontend</div><div class="name">React.js (Vite)</div></div>
+                <div class="tech-pill"><div class="label">Backend</div><div class="name">Laravel 11</div></div>
+                <div class="tech-pill"><div class="label">Database</div><div class="name">MySQL + Pagination</div></div>
+                <div class="tech-pill"><div class="label">Auth</div><div class="name">Sanctum + JWT</div></div>
+                <div class="tech-pill"><div class="label">UX Logic</div><div class="name">Axios Interceptors</div></div>
+                <div class="tech-pill"><div class="label">Design</div><div class="name">Figma</div></div>
+            </div>
+            <div class="card card-em" style="padding:20px;">
+                <p style="font-size:13px; color:var(--text-2); text-align:center;">Une architecture API-First garantissant une séparation nette entre l'interface utilisateur et la logique métier.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ──── SLIDE 07 : FONCTIONNEMENT ──── -->
+
+
+    <div class="slide" id="s6">
+        <div class="slide-inner stagger" style="display:flex; flex-direction:column; gap:20px;">
+            <div>
+                <div class="tag">05 — Le Cycle SOUK</div>
+                <div class="display">Le <em>Cycle</em> SOUK.</div>
+            </div>
+            <div class="card" style="padding:24px;">
+                <div class="grid-2">
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div class="step"><div class="step-num">01</div><div class="step-content"><strong>Onboarding SaaS</strong><p>Souscription et provisionnement selon le tier d'abonnement (Free/Pro)</p></div></div>
+                        <div class="step"><div class="step-num">02</div><div class="step-content"><strong>Génération IA</strong><p>Instanciation automatisée du branding (logo, UI, layout vitrine)</p></div></div>
+                        <div class="step"><div class="step-num">03</div><div class="step-content"><strong>Data Management</strong><p>Opérations CRUD intuitives pour la gestion du catalogue produits</p></div></div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div class="step"><div class="step-num">04</div><div class="step-content"><strong>Distribution</strong><p>Exposition cross-canal via le flux global et le endpoint Store dédié</p></div></div>
+                        <div class="step"><div class="step-num">05</div><div class="step-content"><strong>Rétention</strong><p>Gamification des conversions clients via l'algorithme "Points SOUK"</p></div></div>
+                        <div class="step"><div class="step-num">06</div><div class="step-content"><strong>Monitoring</strong><p>Supervision globale, audit des flux et collecte automatique des commissions</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── SLIDE : DESCRIPTION DU PROJET ──── -->
+    <div class="slide" id="s6b">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:20px;overflow-y:auto;max-height:calc(100vh - 144px);">
+        <div>
+          <div class="tag">06 — Description du Projet</div>
+          <div class="display">SOUK <em>✦</em> — C'est quoi ?</div>
+        </div>
+
+        <div class="card card-em" style="padding:28px;">
+          <p style="font-size:17px; line-height:1.9; color:var(--text); font-weight:300;">
+            <strong style="color:var(--em-light);">SOUK ✦</strong> se positionne comme une <em style="color:var(--gold-light);">infrastructure SaaS multi-tenant</em> de pointe, conçue spécifiquement pour disrupter le secteur de l'artisanat. Elle offre aux créateurs marocains un écosystème e-commerce clé en main, scalable et entièrement automatisé, abolissant ainsi toute barrière technique.
+            <br><br>
+            Propulsée par l'<strong style="color:var(--em-light);">intelligence artificielle</strong>, la plateforme orchestre la génération instantanée de l'identité de marque (branding, logo, colorimétrie). Côté acheteurs, SOUK déploie une marketplace centralisée hautement performante, intégrant des filtres algorithmiques avancés et un puissant moteur de fidélisation via les <strong style="color:var(--gold-light);">Points SOUK</strong>.
+          </p>
+        </div>
+
+        <div class="grid-3" style="gap:16px;">
+          <div class="card" style="padding:20px; text-align:center;">
+            <div style="font-size:32px; margin-bottom:8px;">🏪</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:700; color:var(--em-light);">Artisan</div>
+            <div style="font-size:12px; color:var(--text-2); margin-top:4px;">Orchestre son inventaire (CRUD),<br>pilote ses ventes et ses métriques</div>
+          </div>
+          <div class="card" style="padding:20px; text-align:center;">
+            <div style="font-size:32px; margin-bottom:8px;">🛍️</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:700; color:var(--gold-light);">Client</div>
+            <div style="font-size:12px; color:var(--text-2); margin-top:4px;">Navigue le catalogue global,<br>finalise le checkout et cumule des points</div>
+          </div>
+          <div class="card" style="padding:20px; text-align:center;">
+            <div style="font-size:32px; margin-bottom:8px;">⚙️</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:700; color:var(--text-2);">Admin</div>
+            <div style="font-size:12px; color:var(--text-2); margin-top:4px;">Supervise l'écosystème,<br>modère les tenants et analyse les flux</div>
+          </div>
+        </div>
+
+        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-3); text-align:center; letter-spacing:0.15em;">
+          ↓ &nbsp; DÉTAIL DES 9 PAGES DE L'APPLICATION &nbsp; ↓
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── PAGE 01: HOME ──── -->
+    <div class="slide" id="s7">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:20px;">
+        <div><div class="tag">07/A — Page 1</div><div class="display">🏠 Home / <em>Landing</em> <span style="font-size:14px;color:var(--text-3);">الصفحة الرئيسية</span></div></div>
+        <div class="grid-2" style="gap:24px;align-items:start;">
+          <div style="background:#111;border:1px solid #333;border-radius:12px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;">
+            <div style="color:#10b981;margin-bottom:8px;">■ SOUK ✦ &nbsp;&nbsp;&nbsp; [Menu] &nbsp;&nbsp;&nbsp; [Login]</div>
+            <div style="background:#222;border:1px solid #059669;border-radius:6px;padding:8px;color:#666;">🔍 Rechercher artisans, produits...</div>
+            <div style="background:#059669;opacity:.3;border-radius:6px;padding:8px;margin-top:8px;color:#e5c44a;">✦ Artisans en Vedette</div>
+            <div style="display:flex;gap:8px;margin-top:12px;">
+              <div style="flex:1;height:50px;background:#222;border-radius:4px;border:1px solid #333;"></div>
+              <div style="flex:1;height:50px;background:#222;border-radius:4px;border:1px solid #333;"></div>
+              <div style="flex:1;height:50px;background:#222;border-radius:4px;border:1px solid #333;"></div>
+              <div style="flex:1;height:50px;background:#222;border-radius:4px;border:1px solid #333;"></div>
+            </div>
+          </div>
+          <div class="card card-em"><h3>Description</h3><ul class="styled" style="font-size:13px;"><li>Présentation de la plateforme et son concept</li><li>Barre de recherche intelligente en hero</li><li>Section artisans en vedette</li><li>Catégories de produits populaires</li><li>Bouton CTA vers l'inscription artisan</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── PAGE 02: MARKETPLACE ──── -->
+    <div class="slide" id="s7b">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:20px;">
+        <div><div class="tag">07/B — Page 2</div><div class="display">🛍️ <em>Marketplace</em> <span style="font-size:14px;color:var(--text-3);">السوق العالمي</span></div></div>
+        <div class="grid-2" style="gap:24px;align-items:start;">
+          <div style="background:#111;border:1px solid #333;border-radius:12px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;">
+            <div style="display:flex;gap:6px;margin-bottom:12px;"><span style="background:#059669;border-radius:4px;padding:2px 8px;color:#fff;font-size:10px;">Tous</span><span style="background:#222;border-radius:4px;padding:2px 8px;color:#888;font-size:10px;">Tapis</span><span style="background:#222;border-radius:4px;padding:2px 8px;color:#888;font-size:10px;">Poterie</span><span style="background:#222;border-radius:4px;padding:2px 8px;color:#888;font-size:10px;">Bijoux</span></div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+              <div style="height:60px;background:#222;border:1px solid #c9a227;border-radius:4px;"></div>
+              <div style="height:60px;background:#222;border:1px solid #c9a227;border-radius:4px;"></div>
+              <div style="height:60px;background:#222;border:1px solid #c9a227;border-radius:4px;"></div>
+            </div>
+          </div>
+          <div class="card card-gold"><h3>Description</h3><ul class="styled" style="font-size:13px;"><li>Flux global de tous les produits artisans</li><li>Filtres : catégorie, prix, note, vendeur</li><li>Cards produits avec image, prix et note</li><li>Pagination et infinite scroll</li><li>Bouton ajout au panier / favoris</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── PAGE 03: STORE ──── -->
+    <div class="slide" id="s7c">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:20px;">
+        <div><div class="tag">07/C — Page 3</div><div class="display">🏪 Store <em>Page</em> <span style="font-size:14px;color:var(--text-3);">متجر الحرفي</span></div></div>
+        <div class="grid-2" style="gap:24px;align-items:start;">
+          <div style="background:#111;border:1px solid #333;border-radius:12px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;">
+            <div style="background:linear-gradient(135deg,#c9a22720,#05966920);border-radius:8px;padding:12px;text-align:center;margin-bottom:12px;"><div style="color:#e5c44a;font-size:20px;">🏪</div><div style="color:#e5c44a;">Art &amp; Craft Store</div><div style="color:#888;font-size:10px;">⭐⭐⭐⭐⭐ · 48 produits</div></div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"><div style="height:45px;background:#222;border-radius:4px;border:1px solid #c9a227;"></div><div style="height:45px;background:#222;border-radius:4px;border:1px solid #c9a227;"></div><div style="height:45px;background:#222;border-radius:4px;border:1px solid #c9a227;"></div></div>
+          </div>
+          <div class="card card-gold"><h3>Description</h3><ul class="styled" style="font-size:13px;"><li>Logo et identité visuelle propre au vendeur</li><li>Bannière et couleurs générées par IA</li><li>Catalogue des produits du vendeur uniquement</li><li>Note globale et avis clients</li><li>Bouton contact / suivre la boutique</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── PAGE 04: DASHBOARD ──── -->
+    <div class="slide" id="s7d">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:20px;">
+        <div><div class="tag">07/D — Page 4</div><div class="display">📊 Dashboard <em>Vendor</em> <span style="font-size:14px;color:var(--text-3);">لوحة تحكم البائع</span></div></div>
+        <div class="grid-2" style="gap:24px;align-items:start;">
+          <div style="background:#111;border:1px solid #333;border-radius:12px;padding:16px;font-family:'JetBrains Mono',monospace;font-size:11px;">
+            <div style="display:flex;gap:8px;margin-bottom:12px;"><div style="width:80px;background:#0a0a0a;border-right:1px solid #333;padding:8px;border-radius:4px;"><div style="color:#059669;margin-bottom:6px;">Dashboard</div><div style="color:#555;">Produits</div><div style="color:#555;margin-top:4px;">Commandes</div><div style="color:#555;margin-top:4px;">Stats</div></div><div style="flex:1;"><div style="display:flex;gap:6px;margin-bottom:8px;"><div style="flex:1;background:#222;border-radius:4px;padding:6px;text-align:center;"><div style="color:#10b981;font-size:14px;">48</div><div style="color:#555;font-size:9px;">Produits</div></div><div style="flex:1;background:#222;border-radius:4px;padding:6px;text-align:center;"><div style="color:#e5c44a;font-size:14px;">12</div><div style="color:#555;font-size:9px;">Commandes</div></div><div style="flex:1;background:#222;border-radius:4px;padding:6px;text-align:center;"><div style="color:#10b981;font-size:14px;">3.2k</div><div style="color:#555;font-size:9px;">DH/mois</div></div></div><div style="background:#222;border-radius:4px;height:60px;"></div></div></div>
+          </div>
+          <div class="card card-em"><h3>Description</h3><ul class="styled" style="font-size:13px;"><li>Gestion complète des produits (CRUD)</li><li>Suivi et mise à jour des commandes</li><li>Statistiques : ventes, revenus, visites</li><li>Gestion du stock en temps réel</li><li>Upload d'images et éditeur de fiche produit</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── PAGE 05: CART ──── -->
+    <div class="slide" id="s7e">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:20px;">
+        <div><div class="tag">07/E — Page 5</div><div class="display">🛒 Cart / <em>Checkout</em> <span style="font-size:14px;color:var(--text-3);">السلة والدفع</span></div></div>
+        <div class="grid-2" style="gap:24px;align-items:start;">
+          <div style="background:#111;border:1px solid #333;border-radius:12px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;">
+            <div style="color:#10b981;margin-bottom:8px;">🛒 Mon Panier (2 articles)</div>
+            <div style="background:#222;border-radius:4px;padding:8px;margin-bottom:6px;display:flex;justify-content:space-between;"><span style="color:#fff;">Tapis Berbère × 1</span><span style="color:#10b981;">450 DH</span></div>
+            <div style="background:#222;border-radius:4px;padding:8px;margin-bottom:6px;display:flex;justify-content:space-between;"><span style="color:#fff;">Poterie × 2</span><span style="color:#10b981;">560 DH</span></div>
+            <div style="border-top:1px solid #333;padding-top:8px;display:flex;justify-content:space-between;"><span style="color:#888;">Total</span><span style="color:#e5c44a;font-weight:bold;">1 010 DH</span></div>
+            <div style="background:#059669;border-radius:4px;padding:8px;text-align:center;margin-top:10px;color:#fff;">Confirmer la Commande</div>
+          </div>
+          <div class="card"><h3>Description</h3><ul class="styled" style="font-size:13px;"><li>Liste des articles sélectionnés</li><li>Modification de quantité en temps réel</li><li>Calcul automatique du total</li><li>Sélection du mode de livraison</li><li>Confirmation et historique de commande</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── PAGE 06: AUTH ──── -->
+    <div class="slide" id="s7f">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:20px;">
+        <div><div class="tag">07/F — Page 6</div><div class="display">👤 Auth / <em>Login</em> <span style="font-size:14px;color:var(--text-3);">الحساب والولوج</span></div></div>
+        <div class="grid-2" style="gap:24px;align-items:start;">
+          <div style="background:#111;border:1px solid #333;border-radius:12px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:12px;">
+            <div style="text-align:center;color:#10b981;font-size:22px;margin-bottom:16px;">SOUK ✦</div>
+            <div style="background:#0a0a0a;border:1.5px solid #059669;border-radius:8px;padding:16px;">
+              <div style="background:#222;border-radius:4px;padding:10px;margin-bottom:8px;color:#666;">📧 Email</div>
+              <div style="background:#222;border-radius:4px;padding:10px;margin-bottom:12px;color:#666;">🔒 Mot de passe</div>
+              <div style="background:#059669;border-radius:4px;padding:10px;text-align:center;color:#fff;font-weight:bold;">Se Connecter</div>
+            </div>
+            <div style="text-align:center;color:#059669;margin-top:10px;font-size:10px;">Pas de compte ? S'inscrire →</div>
+          </div>
+          <div class="card card-em"><h3>Description</h3><ul class="styled" style="font-size:13px;"><li>Connexion sécurisée (Sanctum + JWT)</li><li>Inscription Client ou Artisan</li><li>3 rôles : Admin, Artisan, Client</li><li>Validation du statut (pending/approved)</li><li>Redirection automatique selon le rôle</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── PAGE 07: ADMIN ──── -->
+    <div class="slide" id="s7g">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:20px;">
+        <div><div class="tag">07/G — Page 7</div><div class="display">⚙️ Admin <em>Panel</em> <span style="font-size:14px;color:var(--text-3);">لوحة الإدارة</span></div></div>
+        <div class="grid-2" style="gap:24px;align-items:start;">
+          <div style="background:#111;border:1px solid #333;border-radius:12px;padding:16px;font-family:'JetBrains Mono',monospace;font-size:11px;display:flex;gap:10px;">
+            <div style="width:90px;background:#0a0a0a;border-radius:6px;padding:8px;"><div style="color:#059669;margin-bottom:8px;">⚙ Admin</div><div style="color:#555;font-size:10px;">Accueil</div><div style="color:#555;font-size:10px;margin-top:4px;">Boutiques</div><div style="color:#555;font-size:10px;margin-top:4px;">Utilisateurs</div><div style="color:#555;font-size:10px;margin-top:4px;">Commissions</div></div>
+            <div style="flex:1;"><div style="color:#fff;margin-bottom:8px;">Validation Boutiques</div><div style="background:#222;border-radius:3px;padding:6px;margin-bottom:4px;color:#10b981;font-size:10px;">✓ Art &amp; Craft — Approuvée</div><div style="background:#222;border:1px solid #c9a227;border-radius:3px;padding:6px;margin-bottom:4px;color:#e5c44a;font-size:10px;">⏳ Pottery House — En attente</div><div style="background:#222;border-radius:3px;padding:6px;color:#ef4444;font-size:10px;">✗ BijouOrg — Rejetée</div></div>
+          </div>
+          <div class="card card-gold"><h3>Description</h3><ul class="styled" style="font-size:13px;"><li>Validation et rejet des boutiques artisans</li><li>Gestion des utilisateurs (suspend/activate)</li><li>Suivi des commissions SaaS perçues</li><li>Rapports et tableaux de bord globaux</li><li>Modération du contenu de la plateforme</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── PAGE 08: WISHLIST ──── -->
+    <div class="slide" id="s7h">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:20px;">
+        <div><div class="tag">07/H — Page 8</div><div class="display">❤️ <em>Wishlist</em> <span style="font-size:14px;color:var(--text-3);">المفضلة</span></div></div>
+        <div class="grid-2" style="gap:24px;align-items:start;">
+          <div style="background:#111;border:1px solid #333;border-radius:12px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;">
+            <div style="color:#e5c44a;margin-bottom:12px;">❤️ Mes Favoris (3)</div>
+            <div style="background:#222;border-radius:4px;padding:10px;display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:#fff;">Tapis Bleu Berbère</span><span style="color:#e5c44a;">450 DH</span></div>
+            <div style="background:#222;border-radius:4px;padding:10px;display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:#fff;">Bijoux Argent 925</span><span style="color:#e5c44a;">320 DH</span></div>
+            <div style="background:#222;border-radius:4px;padding:10px;display:flex;justify-content:space-between;"><span style="color:#fff;">Poterie Traditionelle</span><span style="color:#e5c44a;">280 DH</span></div>
+          </div>
+          <div class="card card-em"><h3>Description</h3><ul class="styled" style="font-size:13px;"><li>Sauvegarde des produits coups de cœur</li><li>Accès rapide depuis le profil utilisateur</li><li>Notification si le prix change</li><li>Déplacement direct vers le panier</li><li>Partage de liste de favoris</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── PAGE 09: SMART SEARCH ──── -->
+    <div class="slide" id="s7i">
+      <div class="slide-inner stagger" style="display:flex;flex-direction:column;gap:20px;">
+        <div><div class="tag">07/I — Page 9</div><div class="display">🔍 Smart <em>Search</em> <span style="font-size:14px;color:var(--text-3);">البحث الذكي</span></div></div>
+        <div class="grid-2" style="gap:24px;align-items:start;">
+          <div style="background:#111;border:1px solid #333;border-radius:12px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;">
+            <div style="background:#222;border:1.5px solid #059669;border-radius:8px;padding:10px;margin-bottom:12px;color:#666;">🔍 Recherche intelligente...</div>
+            <div style="color:#e5c44a;font-size:10px;margin-bottom:8px;">Suggestions :</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
+              <div style="background:#222;border-radius:4px;padding:6px;color:#fff;font-size:10px;">Tapis Berbère bleu</div>
+              <div style="background:#222;border-radius:4px;padding:6px;color:#fff;font-size:10px;">Bijoux argent 925</div>
+              <div style="background:#222;border-radius:4px;padding:6px;color:#fff;font-size:10px;">Poterie marocaine</div>
+              <div style="background:#222;border-radius:4px;padding:6px;color:#fff;font-size:10px;">Textiles artisanaux</div>
+            </div>
+            <div style="display:flex;gap:6px;"><span style="background:#059669;opacity:.6;border-radius:3px;padding:3px 8px;color:#fff;font-size:10px;">500-1000 DH</span><span style="background:#222;border-radius:3px;padding:3px 8px;color:#888;font-size:10px;">1000+ DH</span></div>
+          </div>
+          <div class="card"><h3>Description</h3><ul class="styled" style="font-size:13px;"><li>Recherche par mots-clés en temps réel</li><li>Suggestions automatiques intelligentes</li><li>Filtrage par prix, catégorie, vendeur</li><li>Recherche dans nom, description, tags</li><li>Historique et recherches récentes</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── SLIDE 09 : FONCTIONNALITÉS ──── -->
+
+    <div class="slide" id="s8">
+        <div class="slide-inner stagger" style="display:flex; flex-direction:column; gap:24px;">
+            <div>
+                <div class="tag">08 — Fonctionnalités</div>
+                <div class="display">Valeur <em>Ajoutée</em>.</div>
+            </div>
+            <div class="grid-2">
+                <div class="card card-em">
+                    <h3>Technique ✦</h3>
+                    <ul class="styled" style="font-size:13px;">
+                        <li><strong>RBAC :</strong> Authentification et autorisations granulaires multi-rôles (Admin, Vendor, Client) via Sanctum.</li>
+                        <li><strong>Generative AI :</strong> Moteur "AI Store Creator" pour le déploiement de vitrines en "Zero-Config".</li>
+                        <li><strong>Data Management :</strong> Architecture CRUD complète avec gestion avancée des relations Eloquent.</li>
+                        <li><strong>Monétisation :</strong> Mécanisme de souscription SaaS multi-niveaux pour les tenants.</li>
+                    </ul>
+                </div>
+                <div class="card card-gold">
+                    <h3>Expérience ✦</h3>
+                    <ul class="styled" style="font-size:13px;">
+                        <li><strong>Smart Search :</strong> Moteur de recherche heuristique avec filtres dynamiques multicritères.</li>
+                        <li><strong>Business Intelligence :</strong> Tableaux de bord analytiques générant des KPIs de vente en temps réel.</li>
+                        <li><strong>Gamification :</strong> Algorithme de fidélisation (Points SOUK) pour maximiser la LTV (Life-Time Value).</li>
+                        <li><strong>Responsive UI :</strong> Design system fluide, adaptatif et hautement optimisé pour l'écosystème mobile.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── SLIDE 10 : POINTS FORTS ──── -->
+    <div class="slide" id="s9">
+        <div class="slide-inner stagger" style="display:flex; flex-direction:column; gap:24px;">
+            <div>
+                <div class="tag">09 — Public Cible & Points Forts</div>
+                <div class="display">Public <em>&</em> Atouts.</div>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Cœur de Cible</h3>
+                    <ul class="styled" style="font-size:13px;">
+                        <li><strong>Créateurs (B2B) :</strong> Artisans et coopératives locales entamant leur transition vers l'économie digitale.</li>
+                        <li><strong>TPE/PME (B2B) :</strong> Petites structures cherchant une infrastructure e-commerce scalable sans CAPEX initial lourd.</li>
+                        <li><strong>Acheteurs (B2C) :</strong> Consommateurs locaux et internationaux recherchant la traçabilité et l'authenticité de l'artisanat.</li>
+                    </ul>
+                </div>
+                <div class="card card-em">
+                    <h3>Avantages Compétitifs</h3>
+                    <ul class="styled" style="font-size:13px;">
+                        <li><strong>Software Craftsmanship :</strong> Implémentation stricte des principes SOLID et du design pattern Service Layer.</li>
+                        <li><strong>Assurance Qualité (QA) :</strong> Validation des flux critiques par l'écriture de Feature Tests automatisés (Pest/PHPUnit).</li>
+                        <li><strong>Architecture Scalable :</strong> Optimisation des requêtes (Eager Loading) et isolation sécurisée des données (Multi-tenancy).</li>
+                        <li><strong>Friction Zéro :</strong> Processus d'onboarding propulsé par l'IA supprimant la courbe d'apprentissage technique pour les vendeurs.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── SLIDE 11 : CONCLUSION ──── -->
+    <div class="slide" id="s10">
+        <div class="slide-inner stagger" style="display:flex; flex-direction:column; gap:24px;">
+            <div>
+                <div class="tag">10 — Vision</div>
+                <div class="display">Futur <em>&</em> Conclusion.</div>
+            </div>
+            <div class="grid-2">
+                <div class="card card-gold">
+                    <h3 style="color:var(--gold-light);">Roadmap Évolutive</h3>
+                    <ul class="styled" style="font-size:12px;">
+                        <li><strong>Communication Temps Réel :</strong> Implémentation de WebSockets (Pusher/Reverb) pour le chat interactif Artisan ↔ Client.</li>
+                        <li><strong>Écosystème Mobile :</strong> Développement d'une application cross-platform (React Native / Flutter) basée sur la même API.</li>
+                        <li><strong>Immersivité (AR) :</strong> Intégration de modèles 3D / Réalité Augmentée pour la prévisualisation spatiale des articles (ex: tapis).</li>
+                        <li><strong>IA Conversationnelle :</strong> Déploiement d'un bot d'assistance NLP pour automatiser l'upselling et le support de niveau 1.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Conclusion</h3>
+                    <p class="body-text" style="font-size:14px;">
+                        <strong>SOUK ✦</strong> transcende le simple concept de marketplace. C'est une infrastructure logicielle souveraine, conçue pour intégrer l'artisanat traditionnel dans l'économie numérique de demain, tout en respectant les standards les plus exigeants de l'ingénierie logicielle et de l'architecture cloud.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── SLIDE 12 : MÉTRIQUES ──── -->
+    <div class="slide" id="s11">
+        <div class="slide-inner stagger" style="display:flex; flex-direction:column; gap:24px;">
+            <div>
+                <div class="tag">11 — Métriques Clés</div>
+                <div class="display">Le Projet <em>en chiffres</em>.</div>
+            </div>
+            <div class="grid-4" style="gap:20px;">
+                <div class="card" style="padding:28px; text-align:center;">
+                    <div style="font-family:'Cormorant Garamond',serif; font-size:56px; font-weight:700; color:var(--em-light); line-height:1;">9</div>
+                    <div style="font-size:12px; color:var(--text-2); margin-top:4px;">Pages & Modules</div>
+                </div>
+                <div class="card" style="padding:28px; text-align:center;">
+                    <div style="font-family:'Cormorant Garamond',serif; font-size:56px; font-weight:700; color:var(--gold-light); line-height:1;">3</div>
+                    <div style="font-size:12px; color:var(--text-2); margin-top:4px;">Rôles (Admin/Vendor/Client)</div>
+                </div>
+                <div class="card" style="padding:28px; text-align:center;">
+                    <div style="font-family:'Cormorant Garamond',serif; font-size:56px; font-weight:700; color:var(--em-light); line-height:1;">30+</div>
+                    <div style="font-size:12px; color:var(--text-2); margin-top:4px;">Endpoints API REST</div>
+                </div>
+                <div class="card" style="padding:28px; text-align:center;">
+                    <div style="font-family:'Cormorant Garamond',serif; font-size:56px; font-weight:700; color:var(--gold-light); line-height:1;">13</div>
+                    <div style="font-size:12px; color:var(--text-2); margin-top:4px;">Migrations BD</div>
+                </div>
+            </div>
+            <div class="grid-3" style="gap:16px;">
+                <div class="card card-em" style="padding:20px; text-align:center;">
+                    <div style="font-size:24px; margin-bottom:8px;">🤖</div>
+                    <div style="font-size:13px; font-weight:600; color:var(--text);">AI Store Creator</div>
+                    <div style="font-size:11px; color:var(--text-2);">Génération automatique en 1 prompt</div>
+                </div>
+                <div class="card card-gold" style="padding:20px; text-align:center;">
+                    <div style="font-size:24px; margin-bottom:8px;">🏗️</div>
+                    <div style="font-size:13px; font-weight:600; color:var(--text);">Architecture SOLID</div>
+                    <div style="font-size:11px; color:var(--text-2);">Service Layer + Feature Tests</div>
+                </div>
+                <div class="card" style="padding:20px; text-align:center;">
+                    <div style="font-size:24px; margin-bottom:8px;">🌐</div>
+                    <div style="font-size:13px; font-weight:600; color:var(--text);">Multi-Langue</div>
+                    <div style="font-size:11px; color:var(--text-2);">AR / FR / EN avec RTL</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── SLIDE 13 : MERCI ──── -->
+    <div class="slide" id="s12" style="text-align:center;">
+        <div class="thanks-glyph">✦</div>
+        <div class="slide-inner stagger" style="display:flex; flex-direction:column; align-items:center; gap:20px; position:relative; z-index:2;">
+            <div class="tag" style="justify-content:center;">Fin de Présentation</div>
+            <div class="hero-title" style="font-size:clamp(64px, 10vw, 120px);">Merci<span style="color:var(--gold-light);">✦</span></div>
+            <p class="body-text" style="font-size:20px; color:var(--em-light); font-weight:400;">
+                SOUK — Bâtir le pont entre tradition et futur.
+            </p>
+            <div class="ornament" style="width:240px;"><div class="ornament-gem"></div></div>
+            <p class="body-text" style="font-size:16px; color:var(--text-3);">Des questions ?</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═════════════════ NAV BAR -->
+<div class="nav-bar">
+    <button class="nav-btn" id="btn-prev">←</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn" id="btn-next">→</button>
+</div>
+
+<script>
+    /* ─── LOADING SCREEN ─── */
+    const loader = document.getElementById('loader');
+    window.addEventListener('load', () => {
+        setTimeout(() => loader.classList.add('hidden'), 1600);
+    });
+
+    /* ─── PERFORMANCE TOGGLE ─── */
+    document.getElementById('perf-toggle').addEventListener('click', function() {
+        document.body.classList.toggle('low-perf');
+        this.textContent = document.body.classList.contains('low-perf') ? '⚡ Mode Normal' : '🔋 Éco Mode';
+    });
+
+    /* ─── AMBIENT CANVAS (optimized: 28 particles instead of 60) ─── */
+    const canvas = document.getElementById('ambient-canvas'), ctx = canvas.getContext('2d');
+    let W, H, rafId;
+    function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    const particles = Array.from({length: 28}, () => ({
+        x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+        vx: (Math.random()-0.5)*0.25, vy: (Math.random()-0.5)*0.25,
+        r: Math.random()*1.8+0.4,
+        color: Math.random()>0.5 ? '#059669' : '#c9a227',
+        alpha: Math.random()*0.4+0.08
+    }));
+    function drawParticles() {
+        if (document.body.classList.contains('low-perf')) { ctx.clearRect(0,0,W,H); rafId = requestAnimationFrame(drawParticles); return; }
+        ctx.clearRect(0,0,W,H);
+        particles.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+            ctx.fillStyle = p.color; ctx.globalAlpha = p.alpha; ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+        rafId = requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+    /* ─── SLIDE SYSTEM (clean, no bug) ─── */
+    const slides = document.querySelectorAll('.slide');
+    const dotsEl = document.getElementById('dots');
+    const progressRail = document.getElementById('progress-rail');
+    const slideIdxEl = document.getElementById('slide-idx');
+    const TOTAL = slides.length;
+    let cur = 0;
+    let isAnimating = false;
+
+    slides.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(d);
+    });
+
+    function goTo(n) {
+        if (n === cur || isAnimating) return;
+        isAnimating = true;
+        const prev = cur;
+        // Mark old slide as exiting
+        slides[prev].classList.add('exit');
+        slides[prev].classList.remove('active');
+        // Activate new slide
+        cur = n;
+        slides[cur].classList.add('active');
+        // Clean up exit class after animation
+        setTimeout(() => {
+            slides[prev].classList.remove('exit');
+            isAnimating = false;
+        }, 680);
+        // Update UI
+        document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+        progressRail.style.width = ((cur + 1) / TOTAL * 100) + '%';
+        slideIdxEl.innerHTML = `<span>${String(cur + 1).padStart(2,'0')}</span> / ${String(TOTAL).padStart(2,'0')}`;
+    }
+
+    progressRail.style.width = (1 / TOTAL * 100) + '%';
+    document.getElementById('btn-next').addEventListener('click', () => cur < TOTAL - 1 && goTo(cur + 1));
+    document.getElementById('btn-prev').addEventListener('click', () => cur > 0 && goTo(cur - 1));
+    window.addEventListener('keydown', e => {
+        if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); cur < TOTAL - 1 && goTo(cur + 1); }
+        if (['ArrowLeft','ArrowUp'].includes(e.key)) { e.preventDefault(); cur > 0 && goTo(cur - 1); }
+    });
+
+    /* ─── TOUCH SWIPE ─── */
+    let tx = 0;
+    document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - tx;
+        if (Math.abs(dx) > 50) dx < 0 ? (cur < TOTAL-1 && goTo(cur+1)) : (cur > 0 && goTo(cur-1));
+    }, { passive: true });
+</script>
+
+</body>
+</html>
